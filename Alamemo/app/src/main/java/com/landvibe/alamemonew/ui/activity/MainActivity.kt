@@ -27,7 +27,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             backKeyWaitingTime = System.currentTimeMillis()
             Toast.makeText(this, getString(R.string.one_more_back_exit), 1 * 200).show()
         } else {
-            finish()
+            super.onBackPressed()
         }
     }
 

@@ -8,6 +8,7 @@ import com.landvibe.alamemonew.databinding.FragmentMainBinding
 import com.landvibe.alamemonew.databinding.TabButtonBinding
 import com.landvibe.alamemonew.model.TabButtonViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
+import com.landvibe.alamemonew.ui.fragment.add.MemoAddFragment
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
@@ -22,10 +23,15 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
 
     private fun setUpBtnOnClickListener() {
         viewDataBinding.mainAddMemoButton.setOnClickListener {
-            //startActivity(Intent(this, AddMemoActivity::class.java))
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left)
+                .replace(R.id.main_container, MemoAddFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
-        viewDataBinding.mainHelperButton.setOnClickListener {
+        viewDataBinding.mainSettingButton.setOnClickListener {
             //startActivity(Intent(this, HelperActivity::class.java))
         }
     }

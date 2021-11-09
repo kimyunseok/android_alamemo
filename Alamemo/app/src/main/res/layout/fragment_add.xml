@@ -10,6 +10,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             android:paddingHorizontal="16dp"
             android:paddingTop="15dp"
             android:paddingBottom="55dp">
@@ -24,33 +26,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/LightGrey"
-                app:layout_constraintTop_toBottomOf="@id/add_date_picker"/>
-
-
-            <TimePicker
-                android:id="@+id/add_time_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:timePickerMode="spinner"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_show_date_dialog_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/add_time_picker"
-                app:layout_constraintEnd_toEndOf="@+id/add_time_picker"
-                app:layout_constraintStart_toStartOf="@+id/add_time_picker" >
+                android:padding="10dp"
+                android:background="@drawable/selector_radius_background"
+                android:elevation="10dp"
+                android:clickable="true"
+                app:layout_constraintTop_toBottomOf="@+id/add_date_picker"
+                app:layout_constraintEnd_toEndOf="@+id/add_date_picker"
+                app:layout_constraintStart_toStartOf="@+id/add_date_picker" >
 
                 <ImageView
                     android:id="@+id/add_show_date_dialog_img"
@@ -69,7 +56,7 @@
                     android:text="@string/show_dialog"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toEndOf="@+id/add_show_date_dialog_img"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -77,12 +64,38 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@id/add_show_date_dialog_btn"
+                app:layout_constraintBottom_toTopOf="@+id/add_time_picker"/>
+
+            <TimePicker
+                android:id="@+id/add_time_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:timePickerMode="spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_show_date_dialog_btn" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_time_picker"
+                app:layout_constraintBottom_toTopOf="@+id/add_date_layout"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_date_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                app:layout_constraintTop_toBottomOf="@+id/add_show_date_dialog_btn">
+                app:layout_constraintTop_toBottomOf="@+id/add_time_picker">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,6 +118,14 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_date_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_type_layout"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_type_layout"
@@ -154,6 +175,14 @@
                 </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_type_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_repeat_schedule_set_day_layout"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_repeat_schedule_set_day_layout"
@@ -233,6 +262,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_repeat_schedule_set_day_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_notify_fix_layout"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_notify_fix_layout"
                 android:layout_width="match_parent"
@@ -274,6 +311,14 @@
                 </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_notify_fix_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_alarm_layout"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_alarm_layout"
@@ -317,6 +362,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/divider7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_time_layout"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/add_alarm_set_time_layout"
                 android:layout_width="match_parent"
@@ -336,61 +389,132 @@
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <RadioGroup
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toEndOf="@+id/add_set_alarm_time_tv"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/add_alarm_set_time_top_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_every_day_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/everyday"/>
 
-                        <RadioButton
-                            android:id="@+id/add_alarm_time_every_day_rb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/everyday"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/add_alarm_time_one_week_rb"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_one_week_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/before_one_week"/>
 
-                        <RadioButton
-                            android:id="@+id/add_alarm_time_one_week_rb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/before_one_week"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_three_day_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/before_three_day"/>
 
-                        <RadioButton
-                            android:id="@+id/add_alarm_time_three_day_rb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/before_three_day"
-                            app:layout_constraintStart_toStartOf="@+id/add_alarm_time_every_day_rb"
-                            app:layout_constraintTop_toBottomOf="@+id/add_alarm_time_every_day_rb"/>
-
-                        <RadioButton
-                            android:id="@+id/add_alarm_time_one_day_rb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/before_one_day"
-                            app:layout_constraintStart_toStartOf="@id/add_alarm_time_one_week_rb"
-                            app:layout_constraintTop_toBottomOf="@+id/add_alarm_time_one_week_rb" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_one_day_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/before_one_day" />
 
                 </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <View
+                android:id="@+id/divider8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_time_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_memo_input_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_memo_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:clipToPadding="false"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_time_layout">
+
+                <TextView
+                    android:id="@+id/add_icon_select_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_radius_background"
+                    android:elevation="20dp"
+                    android:padding="10dp"
+                    android:text="@string/memo_emoji"
+                    android:textAlignment="center"
+                    android:textSize="36sp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="@+id/memo_edit_text"
+                    app:layout_constraintEnd_toStartOf="@+id/memo_edit_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/memo_edit_text" />
+
+                <EditText
+                    android:id="@+id/memo_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/selector_radius_background"
+                    android:elevation="10dp"
+                    android:hint="@string/memo_hint"
+                    android:lines="3"
+                    android:paddingVertical="5dp"
+                    android:paddingStart="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_icon_select_btn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                app:layout_constraintTop_toBottomOf="@+id/add_memo_input_layout">
+
+                <Button
+                    android:id="@+id/add_delete_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/outline_delete_black_48"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/add_cancel_btn"/>
+
+                <Button
+                    android:id="@+id/add_cancel_btn"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/outline_close_black_48"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/add_delete_btn"
+                    app:layout_constraintEnd_toStartOf="@id/add_ok_btn" />
+
+                <Button
+                    android:id="@+id/add_ok_btn"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/outline_check_black_48"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/add_cancel_btn"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

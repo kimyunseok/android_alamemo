@@ -13,7 +13,7 @@
     <string name="one_more_back_exit">뒤로가기를 한번 더 누르시면 종료됩니다.</string>
 
     <!-- TabFragment -->
-    <string name="no_schedule">🙅‍♂‍📋🙅\n등록된\n일정이나 메모가\n없습니다!</string>
+    <string name="no_schedule">🙅‍♂‍📋📝🙅\n등록된\n일정이나 메모가\n없습니다!</string>
     <string name="past_schedule">지난 일정</string>
     <string name="memo">메모</string>
     <string name="today_schedule">오늘의 일정</string>
@@ -26,13 +26,14 @@
     <string name="schedule">일정</string>
     <string name="date">날짜</string>
     <string name="repeat_day">반복 요일</string>
-    <string name="fix_notify">상단바 고정표기 사용</string>
+    <string name="fix_notify">상단바\n고정표기 사용</string>
     <string name="what_is_fix_notify">상단바 고정표기 사용이란?</string>
-    <string name="use_alarm">알람기능 사용</string>
+    <string name="use_alarm">알람기능\n사용</string>
     <string name="what_is_use_alarm">알람기능이란?</string>
     <string name="use">사용</string>
     <string name="no_use">사용 안함</string>
     <string name="set_alarm_time">알람시간 설정</string>
+    <string name="memo_hint">추가할 일정/메모를 입력하세요.</string>
 
     <!-- 요일 -->
     <string name="mon">월</string>
