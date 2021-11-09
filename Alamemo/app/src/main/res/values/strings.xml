@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Alamemo</string>
+    <string name="app_name_add_kor">알람메모(Alamemo)</string>
+    <string name="text">텍스트</string>
+    <string name="memo_emoji">📝</string>
+    <string name="today_emoji">📋</string>
+    <string name="future_emoji">📅</string>
+    <string name="repeat_emoji">⏰</string>
+
+    <!-- MainActivity -->
+    <string name="helper">도움말</string>
+    <string name="setting">⚙</string>
+    <string name="one_more_back_exit">뒤로가기를 한번 더 누르시면 종료됩니다.</string>
+
+    <!-- TabFragment -->
+    <string name="no_schedule">🙅‍♂‍📋🙅\n등록된\n일정이나 메모가\n없습니다!</string>
+    <string name="past_schedule">지난 일정</string>
+    <string name="memo">메모</string>
+    <string name="today_schedule">오늘의 일정</string>
+    <string name="future_schedule">미래 일정</string>
+    <string name="repeat_schedule">반복 일정</string>
+
+    <!-- AddFragment -->
+    <string name="show_dialog">달력으로 보기(날짜)</string>
+    <string name="type">유형</string>
+    <string name="schedule">일정</string>
+    <string name="date">날짜</string>
+    <string name="repeat_day">반복 요일</string>
+    <string name="fix_notify">상단바 고정표기 사용</string>
+    <string name="what_is_fix_notify">상단바 고정표기 사용이란?</string>
+    <string name="use_alarm">알람기능 사용</string>
+    <string name="what_is_use_alarm">알람기능이란?</string>
+    <string name="use">사용</string>
+    <string name="no_use">사용 안함</string>
+    <string name="set_alarm_time">알람시간 설정</string>
+
+    <!-- 요일 -->
+    <string name="mon">월</string>
+    <string name="tue">화</string>
+    <string name="wed">수</string>
+    <string name="thu">목</string>
+    <string name="fri">금</string>
+    <string name="sat">토</string>
+    <string name="sun">일</string>
+
+    <!-- 알람시간설정 -->
+    <string name="before_one_week">일주일 전부터</string>
+    <string name="before_three_day">삼일 전부터</string>
+    <string name="before_one_day">하루 전부터</string>
+    <string name="everyday">매일</string>
+
+</resources>
