@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Alamemo</string>
-    <string name="app_name_add_kor">알람메모(Alamemo)</string>
+    <string name="app_name_add_kor">Alamemo - 알람메모</string>
     <string name="text">텍스트</string>
     <string name="memo_emoji">📝</string>
     <string name="today_emoji">📋</string>
@@ -30,9 +30,11 @@
     <string name="what_is_fix_notify">상단바 고정표기 사용이란?</string>
     <string name="use_alarm">알람기능\n사용</string>
     <string name="what_is_use_alarm">알람기능이란?</string>
+    <string name="save">저장하기</string>
     <string name="use">사용</string>
     <string name="no_use">사용 안함</string>
-    <string name="set_alarm_time">알람시간 설정</string>
+    <string name="set_alarm_start_time">알람시작시간\n설정</string>
+    <string name="set_alarm_time">알람시간\n설정</string>
     <string name="memo_hint">추가할 일정/메모를 입력하세요.</string>
 
     <!-- 요일 -->
