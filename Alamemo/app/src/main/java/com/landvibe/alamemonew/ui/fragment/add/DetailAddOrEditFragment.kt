@@ -1,4 +1,4 @@
 package com.landvibe.alamemonew.ui.fragment.add
 
-class ContentAddFragment {
+class DetailAddOrEditFragment {
 }

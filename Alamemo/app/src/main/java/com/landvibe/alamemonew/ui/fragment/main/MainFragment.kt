@@ -6,9 +6,9 @@ import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.adapter.FragmentPageAdapter
 import com.landvibe.alamemonew.databinding.FragmentMainBinding
 import com.landvibe.alamemonew.databinding.TabButtonBinding
-import com.landvibe.alamemonew.model.TabButtonViewModel
+import com.landvibe.alamemonew.model.uimodel.TabButtonViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
-import com.landvibe.alamemonew.ui.fragment.add.MemoAddFragment
+import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
@@ -26,7 +26,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left)
-                .replace(R.id.main_container, MemoAddFragment())
+                .replace(R.id.main_container, MemoAddOrEditFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -40,11 +40,12 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         val pagerAdapter = FragmentPageAdapter(requireActivity())
         pagerAdapter.apply {
             addFragment(MemoFragment())
-            addFragment(TodayFragment())
-            addFragment(FutureFragment())
+            addFragment(ScheduleFragment())
             addFragment(RepeatFragment())
+            addFragment(FinishFragment())
         }
         viewDataBinding.mainViewPager.adapter = pagerAdapter
+        viewDataBinding.mainViewPager.isUserInputEnabled = false // 스와이프 막기
     }
 
     private fun initTabLayout() {
@@ -71,14 +72,14 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
                 tabBtnBinding.root
             }
             2 -> {
-                tabBtnModel.emoji.value = getString(R.string.future_emoji)
-                tabBtnModel.title.value = getString(R.string.future_schedule)
+                tabBtnModel.emoji.value = getString(R.string.repeat_emoji)
+                tabBtnModel.title.value = getString(R.string.repeat_schedule)
                 tabBtnBinding.model = tabBtnModel
                 tabBtnBinding.root
             }
             3 -> {
-                tabBtnModel.emoji.value = getString(R.string.repeat_emoji)
-                tabBtnModel.title.value = getString(R.string.repeat_schedule)
+                tabBtnModel.emoji.value = getString(R.string.finish_emoji)
+                tabBtnModel.title.value = getString(R.string.finish_schedule)
                 tabBtnBinding.model = tabBtnModel
                 tabBtnBinding.root
             }

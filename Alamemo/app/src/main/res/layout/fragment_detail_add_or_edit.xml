@@ -6,7 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +24,6 @@
                 android:background="@drawable/outline_close_black_48"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
 
             <DatePicker
                 android:id="@+id/add_date_picker"

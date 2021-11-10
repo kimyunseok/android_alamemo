@@ -4,9 +4,8 @@
     <string name="text">텍스트</string>
     <string name="memo_emoji">📝</string>
     <string name="today_emoji">📋</string>
-    <string name="future_emoji">📅</string>
     <string name="repeat_emoji">⏰</string>
-
+    <string name="finish_emoji">🏁</string>
     <!-- MainActivity -->
     <string name="helper">도움말</string>
     <string name="setting">⚙</string>
@@ -14,11 +13,10 @@
 
     <!-- TabFragment -->
     <string name="no_schedule">🙅‍♂‍📋📝🙅\n등록된\n일정이나 메모가\n없습니다!</string>
-    <string name="past_schedule">지난 일정</string>
     <string name="memo">메모</string>
-    <string name="today_schedule">오늘의 일정</string>
-    <string name="future_schedule">미래 일정</string>
+    <string name="today_schedule">일정</string>
     <string name="repeat_schedule">반복 일정</string>
+    <string name="finish_schedule">종료된 일정</string>
 
     <!-- AddFragment -->
     <string name="show_dialog">달력으로 보기(날짜)</string>

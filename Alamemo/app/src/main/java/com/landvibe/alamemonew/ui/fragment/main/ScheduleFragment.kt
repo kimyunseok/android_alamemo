@@ -4,7 +4,7 @@ import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
 import com.landvibe.alamemonew.ui.BaseTabFragment
 
-class PastFragment: BaseTabFragment<TabFragmentBinding>() {
+class ScheduleFragment: BaseTabFragment<TabFragmentBinding>() {
     override val layoutId: Int = R.layout.tab_fragment
 
     override fun init() {
@@ -12,7 +12,8 @@ class PastFragment: BaseTabFragment<TabFragmentBinding>() {
     }
 
     override fun setTitle() {
-
+        viewDataBinding.model?.title?.value = context?.getString(R.string.today_emoji) + " " + context?.getString(R.string.today_schedule)
     }
+
 
 }

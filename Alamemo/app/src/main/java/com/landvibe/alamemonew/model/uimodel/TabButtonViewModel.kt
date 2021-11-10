@@ -1,4 +1,4 @@
-package com.landvibe.alamemonew.model
+package com.landvibe.alamemonew.model.uimodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

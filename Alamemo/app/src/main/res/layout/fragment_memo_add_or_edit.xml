@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="model"
+            type="com.landvibe.alamemonew.model.data.memo.Memo" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="55dp">
+
+            <Button
+                android:id="@+id/add_cancel_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/outline_close_black_48"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_set_date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_cancel_btn">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/add_date_picker_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:visibility="@{model.type == 3 ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintTop_toTopOf="parent" >
+
+                    <DatePicker
+                        android:id="@+id/add_date_picker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:calendarViewShown="false"
+                        android:datePickerMode="spinner"
+                        android:minDate="@{System.currentTimeMillis()}"
+                        android:onDateChanged="@{(_, year, month, day) -> model.setScheduleDate(year, month, day)}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/add_show_date_dialog_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="10dp"
+                        android:background="@drawable/selector_radius_background"
+                        android:elevation="10dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toBottomOf="@+id/add_date_picker"
+                        app:layout_constraintEnd_toEndOf="@+id/add_date_picker"
+                        app:layout_constraintStart_toStartOf="@+id/add_date_picker" >
+
+                        <ImageView
+                            android:id="@+id/add_show_date_dialog_img"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/outline_calendar_today_black_48"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/add_show_date_dialog_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:text="@string/show_dialog"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/add_show_date_dialog_img"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"
+                    app:layout_constraintTop_toBottomOf="@id/add_date_picker_layout"
+                    app:layout_constraintBottom_toTopOf="@+id/add_time_picker"/>
+
+                <TimePicker
+                    android:id="@+id/add_time_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:timePickerMode="spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/add_date_picker_layout" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/LightGrey"
+                    android:visibility="@{model.type == 3 ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintTop_toBottomOf="@+id/add_time_picker"
+                    app:layout_constraintBottom_toTopOf="@+id/add_date_layout"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/add_date_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:visibility="@{model.type == 3 ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintTop_toBottomOf="@+id/add_time_picker">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/date"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.valueOf(model.scheduleDate.year)}"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_set_date_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_type_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_type_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/add_set_date_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/add_type_repeat_schedule_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:checked="@{model.type == 3}"
+                        android:onClick="@{() -> model.setType(3)}"
+                        android:text="@string/repeat_schedule"/>
+
+                    <RadioButton
+                        android:id="@+id/add_type_schedule_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:checked="@{model.type == 2}"
+                        android:onClick="@{() -> model.setType(2)}"
+                        android:text="@string/schedule" />
+
+                    <RadioButton
+                        android:id="@+id/add_type_memo_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{model.type == 1}"
+                        android:onClick="@{() -> model.setType(1)}"
+                        android:text="@string/memo" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                android:visibility="@{model.type == 3 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_type_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_repeat_schedule_set_day_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_repeat_schedule_set_day_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:visibility="@{model.type == 3 ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_type_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/repeat_day"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/add_mon_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mon"
+                    android:checked="@{model.repeatDay.contains('월')}"
+                    android:onClick="@{() -> model.setRepeatDay('월')}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/add_tue_cb"/>
+
+                <CheckBox
+                    android:id="@+id/add_tue_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tue"
+                    android:checked="@{model.repeatDay.contains('화')}"
+                    android:onClick="@{() -> model.setRepeatDay('화')}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/add_wed_cb"/>
+
+                <CheckBox
+                    android:id="@+id/add_wed_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wed"
+                    android:checked="@{model.repeatDay.contains('수')}"
+                    android:onClick="@{() -> model.setRepeatDay('수')}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/add_thu_cb"/>
+
+                <CheckBox
+                    android:id="@+id/add_thu_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/thu"
+                    android:checked="@{model.repeatDay.contains('목')}"
+                    android:onClick="@{() -> model.setRepeatDay('목')}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <CheckBox
+                    android:id="@+id/add_fri_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fri"
+                    android:checked="@{model.repeatDay.contains('금')}"
+                    android:onClick="@{() -> model.setRepeatDay('금')}"
+                    app:layout_constraintTop_toBottomOf="@+id/add_tue_cb"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/add_sat_cb"/>
+
+                <CheckBox
+                    android:id="@+id/add_sat_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sat"
+                    android:checked="@{model.repeatDay.contains('토')}"
+                    android:onClick="@{() -> model.setRepeatDay('토')}"
+                    app:layout_constraintTop_toBottomOf="@+id/add_wed_cb"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/add_sun_cb"/>
+
+                <CheckBox
+                    android:id="@+id/add_sun_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sun"
+                    android:checked="@{model.repeatDay.contains('일')}"
+                    android:onClick="@{() -> model.setRepeatDay('일')}"
+                    app:layout_constraintTop_toBottomOf="@+id/add_wed_cb"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_repeat_schedule_set_day_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_notify_fix_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_notify_fix_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/add_repeat_schedule_set_day_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fix_notify"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/add_use_fix_notify_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/use"/>
+
+                    <RadioButton
+                        android:id="@+id/add_no_use_fix_notify_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_use" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_notify_fix_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_alarm_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_alarm_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_notify_fix_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/use_alarm"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/add_use_alarm_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/use"/>
+
+                    <RadioButton
+                        android:id="@+id/add_no_use_alarm_radio_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_use" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider7"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_start_time_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_alarm_set_start_time_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout">
+
+                <TextView
+                    android:id="@+id/add_set_alarm_time_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_alarm_start_time"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_every_day_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/everyday"/>
+
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_one_week_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/before_one_week"/>
+
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_three_day_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/before_three_day"/>
+
+                    <RadioButton
+                        android:id="@+id/add_alarm_time_one_day_rb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/before_one_day" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider8"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_start_time_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_time_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_alarm_set_time_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_start_time_layout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/set_alarm_time"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TimePicker
+                    android:id="@+id/add_set_alarm_time_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:timePickerMode="spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/divider9"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_time_layout"
+                app:layout_constraintBottom_toTopOf="@+id/add_memo_input_layout"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_memo_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:clipToPadding="false"
+                android:layout_marginTop="25dp"
+                app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_time_layout">
+
+                <TextView
+                    android:id="@+id/add_icon_select_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_radius_background"
+                    android:elevation="20dp"
+                    android:padding="10dp"
+                    android:text="@string/memo_emoji"
+                    android:textAlignment="center"
+                    android:textSize="36sp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="@+id/memo_edit_text"
+                    app:layout_constraintEnd_toStartOf="@+id/memo_edit_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/memo_edit_text" />
+
+                <EditText
+                    android:id="@+id/memo_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/selector_radius_background"
+                    android:elevation="10dp"
+                    android:hint="@string/memo_hint"
+                    android:lines="3"
+                    android:paddingVertical="5dp"
+                    android:paddingStart="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_icon_select_btn"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_ok_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_memo_input_layout">
+
+                <ImageView
+                    android:id="@+id/add_ok_img"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/outline_check_black_48"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/add_ok_tv"/>
+
+                <TextView
+                    android:id="@+id/add_ok_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    app:layout_constraintTop_toTopOf="@+id/add_ok_img"
+                    app:layout_constraintBottom_toBottomOf="@+id/add_ok_img"
+                    app:layout_constraintStart_toEndOf="@id/add_ok_img"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>
