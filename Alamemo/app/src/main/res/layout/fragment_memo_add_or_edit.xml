@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemonew.model.data.memo.Memo" />
+            type="com.landvibe.alamemonew.model.uimodel.MemoViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -114,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:timePickerMode="spinner"
+                    android:onTimeChanged="@{(_, hour, minute) -> model.setSceduleTime(hour, minute)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/add_date_picker_layout" />
@@ -363,12 +364,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        android:checked="@{model.fixNotify == true}"
+                        android:onClick="@{() -> model.setNotify(true)}"
                         android:text="@string/use"/>
 
                     <RadioButton
                         android:id="@+id/add_no_use_fix_notify_radio_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="@{model.fixNotify == false}"
+                        android:onClick="@{() -> model.setNotify(false)}"
                         android:text="@string/no_use" />
 
                 </RadioGroup>
@@ -415,12 +420,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
+                        android:checked="@{model.setAlarm == true}"
+                        android:onClick="@{() -> model.setAlarm(true)}"
                         android:text="@string/use"/>
 
                     <RadioButton
                         android:id="@+id/add_no_use_alarm_radio_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="@{model.setAlarm == false}"
+                        android:onClick="@{() -> model.setAlarm(false)}"
                         android:text="@string/no_use" />
 
                 </RadioGroup>
@@ -441,7 +450,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{model.type == 1 ? View.GONE : model.setAlarm ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout">
 
                 <TextView
@@ -467,24 +476,32 @@
                         android:id="@+id/add_alarm_time_every_day_rb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="@{model.alarmStartTimeType == 1}"
+                        android:onClick="@{() -> model.setAlarmStartType(1)}"
                         android:text="@string/everyday"/>
 
                     <RadioButton
                         android:id="@+id/add_alarm_time_one_week_rb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="@{model.alarmStartTimeType == 2}"
+                        android:onClick="@{() -> model.setAlarmStartType(2)}"
                         android:text="@string/before_one_week"/>
 
                     <RadioButton
                         android:id="@+id/add_alarm_time_three_day_rb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="@{model.alarmStartTimeType == 3}"
+                        android:onClick="@{() -> model.setAlarmStartType(3)}"
                         android:text="@string/before_three_day"/>
 
                     <RadioButton
                         android:id="@+id/add_alarm_time_one_day_rb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="@{model.alarmStartTimeType == 4}"
+                        android:onClick="@{() -> model.setAlarmStartType(4)}"
                         android:text="@string/before_one_day" />
 
                 </RadioGroup>
@@ -496,7 +513,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/LightGrey"
-                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{model.type == 1 ? View.GONE : model.setAlarm ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_start_time_layout"
                 app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_time_layout"/>
 
@@ -505,7 +522,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{model.type == 1 ? View.GONE : model.setAlarm ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_start_time_layout">
 
                 <TextView
@@ -524,6 +541,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:timePickerMode="spinner"
+                    android:onTimeChanged="@{(_, hour, minute) -> model.setAlarmStartTime(hour, minute)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
@@ -554,7 +572,7 @@
                     android:background="@drawable/selector_radius_background"
                     android:elevation="20dp"
                     android:padding="10dp"
-                    android:text="@string/memo_emoji"
+                    android:text="@{model.icon}"
                     android:textAlignment="center"
                     android:textSize="36sp"
                     android:clickable="true"
@@ -574,6 +592,7 @@
                     android:lines="3"
                     android:paddingVertical="5dp"
                     android:paddingStart="15dp"
+                    android:text="@={model.title}"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:clickable="true"

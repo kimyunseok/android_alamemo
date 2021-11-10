@@ -6,6 +6,7 @@ import com.landvibe.alamemonew.ui.BaseTabFragment
 
 class FinishFragment: BaseTabFragment<TabFragmentBinding>() {
     override val layoutId: Int = R.layout.tab_fragment
+    override val type: Int = 4
 
     override fun init() {
 
@@ -14,5 +15,6 @@ class FinishFragment: BaseTabFragment<TabFragmentBinding>() {
     override fun setTitle() {
         viewDataBinding.model?.title?.value = context?.getString(R.string.finish_emoji) + " " + context?.getString(R.string.finish_schedule)
     }
+
 
 }

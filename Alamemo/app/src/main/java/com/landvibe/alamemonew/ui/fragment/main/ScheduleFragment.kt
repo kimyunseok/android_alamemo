@@ -6,6 +6,7 @@ import com.landvibe.alamemonew.ui.BaseTabFragment
 
 class ScheduleFragment: BaseTabFragment<TabFragmentBinding>() {
     override val layoutId: Int = R.layout.tab_fragment
+    override val type: Int = 2
 
     override fun init() {
 

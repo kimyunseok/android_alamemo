@@ -21,7 +21,7 @@ abstract class AppDataBase: RoomDatabase() {
             .build()
     }
 
-    inner class Converter {
+    class Converter {
         @TypeConverter
         fun convertTimeToDate(time: Long): Date {
             return Date(time)

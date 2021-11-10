@@ -6,6 +6,7 @@ import com.landvibe.alamemonew.ui.BaseTabFragment
 
 class RepeatFragment: BaseTabFragment<TabFragmentBinding>() {
     override val layoutId: Int = R.layout.tab_fragment
+    override val type: Int = 3
 
     override fun init() {
 
