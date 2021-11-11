@@ -3,7 +3,7 @@ package com.landvibe.alamemonew.model.data.memo
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.landvibe.alamemonew.util.DayCompare
+import com.landvibe.alamemonew.util.AboutDay
 import java.util.*
 
 @Entity
@@ -73,38 +73,13 @@ class Memo (
         scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
         scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
         scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
-        val dayOfWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
-            1 -> {
-                "일"
-            }
-            2 -> {
-                "월"
-            }
-            3 -> {
-                "화"
-            }
-            4 -> {
-                "수"
-            }
-            5 -> {
-                "목"
-            }
-            6 -> {
-                "금"
-            }
-            7 -> {
-                "토"
-            }
-            else -> {
-                ""
-            }
-        }
+        val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
 
         if (type.value != 3) {
             showDateFormat.value =
                 "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일" + "\n${scheduleDateHour.value}:${scheduleDateMinute.value}"
         } else {
-            repeatDay.sortWith(DayCompare())
+            repeatDay.sortWith(AboutDay.DayCompare())
             showDateFormat.value =
                 repeatDay.toString() + " - " + "\n${scheduleDateHour.value}:${scheduleDateMinute.value}"
         }
@@ -112,6 +87,22 @@ class Memo (
     }
 
     fun getDDay(): String {
+        val dDay = getDDayInteger()
+
+        return when {
+            dDay > 0 -> {
+                "D - $dDay"
+            }
+            dDay < 0 -> {
+                "D + $dDay"
+            }
+            else -> {
+                "D - DAY"
+            }
+        }
+    }
+
+    fun getDDayInteger(): Int {
         val calendar = Calendar.getInstance()
         scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
         scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
@@ -119,16 +110,11 @@ class Memo (
         val today = (System.currentTimeMillis() + (60 * 60 * 9 * 1000)) / (60 * 60 * 24 * 1000)
         val setDateDay = (calendar.time.time.plus((60 * 60 * 9 * 1000)).div((60 * 60 * 24 * 1000)))
 
-        return when {
-            setDateDay - today > 0 -> {
-                "D - ${(setDateDay - today)}"
-            }
-            setDateDay - today < 0 -> {
-                "D + ${(setDateDay - today)}"
-            }
-            else -> {
-                "D - DAY"
-            }
-        }
+        return (setDateDay - today).toInt()
     }
+
+    fun checkRepeatDay(): Boolean {
+        return AboutDay.AboutDayOfWeek().checkRepeatDayToday(repeatDay)
+    }
+
 }

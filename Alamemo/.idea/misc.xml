@@ -23,7 +23,10 @@
         <entry key="..\:/Development/Android/Alamemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1675925925925926" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/emoji_background.xml" value="0.26481481481481484" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.26481481481481484" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_light_grey_radius_background.xml" value="0.21388888888888888" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_today_radius_background.xml" value="0.21388888888888888" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/selector_radius_background.xml" value="0.22083333333333333" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/selector_radius_today_background.xml" value="0.21388888888888888" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/text_background.xml" value="0.26481481481481484" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_main.xml" value="0.3292572463768116" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_add.xml" value="0.16666666666666666" />

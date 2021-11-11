@@ -4,8 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.data.memo.MemoDao
-import com.landvibe.alamemonew.util.DayCompare
-import java.util.*
 
 @Database(entities = [Memo::class], version = 1)
 @TypeConverters(AppDataBase.Converter::class)

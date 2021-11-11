@@ -7,7 +7,6 @@ import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.FragmentMemoAddOrEditBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.BaseFragment
-import com.landvibe.alamemonew.util.DayCompare
 import java.util.*
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
