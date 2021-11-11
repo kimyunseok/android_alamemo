@@ -7,7 +7,7 @@ import com.landvibe.alamemonew.util.AboutDay
 import java.util.*
 
 @Entity
-class DetailMemo (
+class DetailMemo(
     @PrimaryKey(autoGenerate = true) var id: Long,
     val memoId: Long,
     var type: MutableLiveData<Int>, // 1 : 메모, 2 : 일정
@@ -18,6 +18,10 @@ class DetailMemo (
     var scheduleDateDay: MutableLiveData<Int>,
     var scheduleDateHour: MutableLiveData<Int>,
     var scheduleDateMinute: MutableLiveData<Int>,
+    //아래는 세부메모 최대날짜 설정하기 용도.
+    var memoScheduleDateYear: Int?,
+    var memoScheduleDateMonth: Int?,
+    var memoScheduleDateDay: Int?,
 ) {
     var showDateFormat = MutableLiveData("")
 
@@ -105,5 +109,14 @@ class DetailMemo (
         scheduleDateDay.value = calendar.get(Calendar.DAY_OF_MONTH)
         scheduleDateHour.value = calendar.get(Calendar.HOUR_OF_DAY)
         scheduleDateMinute.value = calendar.get(Calendar.MINUTE)
+    }
+
+    fun getMaxDate(): Long {
+        val calendar = Calendar.getInstance()
+        memoScheduleDateYear?.let { calendar.set(Calendar.YEAR, it) }
+        memoScheduleDateMonth?.let { calendar.set(Calendar.MONTH, it) }
+        memoScheduleDateDay?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+
+        return calendar.time.time
     }
 }

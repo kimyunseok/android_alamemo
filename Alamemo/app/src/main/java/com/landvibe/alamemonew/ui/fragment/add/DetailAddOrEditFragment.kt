@@ -29,7 +29,11 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
         } else {
             val calendar = Calendar.getInstance()
             memoId?.let { memoId ->
-                DetailMemo(id = 0,
+
+                val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
+
+                DetailMemo(
+                    id = 0,
                     memoId = memoId,
                     type = MutableLiveData(type),
                     icon = MutableLiveData( getString(R.string.memo_emoji) ),
@@ -38,7 +42,10 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
                     scheduleDateMonth = MutableLiveData(calendar.get(Calendar.MONTH)),
                     scheduleDateDay = MutableLiveData(calendar.get(Calendar.DAY_OF_MONTH)),
                     scheduleDateHour = MutableLiveData(calendar.get(Calendar.HOUR_OF_DAY)),
-                    scheduleDateMinute = MutableLiveData(calendar.get(Calendar.MINUTE))
+                    scheduleDateMinute = MutableLiveData(calendar.get(Calendar.MINUTE)),
+                    memoScheduleDateYear = memo.scheduleDateYear.value,
+                    memoScheduleDateMonth = memo.scheduleDateMonth.value,
+                    memoScheduleDateDay = memo.scheduleDateDay.value
                 )
             }
         }
@@ -128,7 +135,11 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
 
         if(yearValue != null && monthValue != null && dayOfMonthValue != null) {
             val calendarDialog = DatePickerDialog(requireContext(), calendarOnDateSetListener, yearValue, monthValue, dayOfMonthValue)
-                .apply { datePicker.minDate = System.currentTimeMillis() }
+                .apply {
+                    datePicker.minDate = System.currentTimeMillis()
+                    val maxDate = viewDataBinding.model?.getMaxDate()
+                    maxDate?.let { datePicker.maxDate = it }
+                }
             calendarDialog.show()
         }
     }

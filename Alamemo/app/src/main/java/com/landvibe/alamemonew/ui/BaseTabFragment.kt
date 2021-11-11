@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
@@ -42,6 +43,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
         viewDataBinding.lifecycleOwner = this
 
         init()
+        setAnimation()
         setRecyclerView()
 
         return viewDataBinding.root
@@ -52,6 +54,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
         //화면 재구성 시 필요.
         if(this::viewDataBinding.isInitialized) {
+            setAnimation()
             setRecyclerView()
         }
     }
@@ -93,5 +96,12 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
             }
 
         }
+    }
+
+    private fun setAnimation() {
+        val fadeAnimation = AlphaAnimation(0F, 1F)
+        fadeAnimation.duration = 500
+        viewDataBinding.tabMemoRecycler.animation = fadeAnimation
+        viewDataBinding.tabMemoEmptyText.animation = fadeAnimation
     }
 }

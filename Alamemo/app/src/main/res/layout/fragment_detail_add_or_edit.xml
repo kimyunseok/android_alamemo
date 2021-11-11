@@ -59,6 +59,7 @@
                         android:month="@={model.scheduleDateMonth}"
                         android:day="@={model.scheduleDateDay}"
                         android:minDate="@{System.currentTimeMillis()}"
+                        android:maxDate="@{model.maxDate}"
                         android:onDateChanged="@{(_, year, month, day) -> model.setScheduleDate(year, month, day)}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
