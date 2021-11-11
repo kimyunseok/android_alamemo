@@ -1,5 +1,6 @@
 package com.landvibe.alamemonew.ui.fragment.add
 
+import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemonew.R
@@ -15,8 +16,6 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override fun init() {
         setUpBtnOnClickListener()
         initMemoModel()
-
-        setUpObserver()
     }
 
     private fun setUpBtnOnClickListener() {
@@ -80,6 +79,11 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                 SelectIconDialog(requireContext(), iconLiveData).show()
             }
         }
+        
+        //달력으로 보기 버튼
+        viewDataBinding.addShowDateDialogBtn.setOnClickListener {
+            showCalendarDialogBtn()
+        }
 
     }
 
@@ -112,10 +116,23 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         viewDataBinding.model = memo
     }
 
-    private fun setUpObserver() {
-        viewDataBinding.model?.scheduleDateYear?.observe(this) {
-            viewDataBinding.addDateShowTv.text = viewDataBinding.model?.showDateFormat?.value
+    private fun showCalendarDialogBtn() {
+        val yearValue = viewDataBinding.model?.scheduleDateYear?.value
+        val monthValue = viewDataBinding.model?.scheduleDateMonth?.value
+        val dayOfMonthValue = viewDataBinding.model?.scheduleDateDay?.value
+
+        val calendarOnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            viewDataBinding.model?.scheduleDateYear?.value = year
+            viewDataBinding.model?.scheduleDateMonth?.value = month
+            viewDataBinding.model?.scheduleDateDay?.value = dayOfMonth
+            viewDataBinding.model?.getDateFormat()
         }
+
+        if(yearValue != null && monthValue != null && dayOfMonthValue != null) {
+            val calendarDialog = DatePickerDialog(requireContext(), calendarOnDateSetListener, yearValue, monthValue, dayOfMonthValue)
+            calendarDialog.show()
+        }
+
     }
 
 }
