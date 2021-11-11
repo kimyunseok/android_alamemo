@@ -34,10 +34,6 @@ class DetailMemo (
         getDateFormat()
     }
 
-    fun setType(type: Int) {
-        this.type.value = type
-    }
-
     fun getDateFormat(): String {
         val calendar = Calendar.getInstance()
         scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }

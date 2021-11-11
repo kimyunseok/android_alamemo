@@ -41,6 +41,7 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
                     putLong("memoId", item.id)
                     putString("memoIcon", item.icon.value.toString())
                     putString("memoTitle", item.title.value.toString())
+                    item.type.value?.let { type -> putInt("memoType", type) }
                 }
 
                 (context as MainActivity).supportFragmentManager

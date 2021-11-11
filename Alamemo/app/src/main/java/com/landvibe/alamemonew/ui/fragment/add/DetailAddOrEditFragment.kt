@@ -22,6 +22,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     private fun initDetailMemoModel() {
         val memoId = arguments?.getLong("memoId")
         val detailMemoId = arguments?.getLong("detailMemoId")
+        val type = arguments?.getInt("memoType")
 
         val detailMemo = if(detailMemoId != null && detailMemoId != (0).toLong()) {
             AppDataBase.instance.detailMemoDao().getDetailMemoById(detailMemoId)
@@ -30,7 +31,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
             memoId?.let { memoId ->
                 DetailMemo(id = 0,
                     memoId = memoId,
-                    type = MutableLiveData(1),
+                    type = MutableLiveData(type),
                     icon = MutableLiveData( getString(R.string.memo_emoji) ),
                     title = MutableLiveData(""),
                     scheduleDateYear = MutableLiveData(calendar.get(Calendar.YEAR)),

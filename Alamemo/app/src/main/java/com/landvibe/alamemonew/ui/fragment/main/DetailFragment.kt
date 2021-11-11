@@ -48,7 +48,12 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     private fun setBtnOnClickListener() {
         //세부일정 적기 버튼
         viewDataBinding.detailAddContentButton.setOnClickListener {
-            val bundle = Bundle().apply { memoId?.let { memoId -> putLong("memoId", memoId) } }
+            val memoType = arguments?.getInt("memoType")
+
+            val bundle = Bundle().apply {
+                memoId?.let { memoId -> putLong("memoId", memoId) }
+                memoType?.let { memoType -> putInt("memoType", memoType) }
+            }
 
             requireActivity().supportFragmentManager
                 .beginTransaction()
