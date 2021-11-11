@@ -14,26 +14,22 @@ class MemoDeleteDialog(context: Context, recyclerViewAdapter: MemoRecyclerViewAd
         setMessage(context.getString(R.string.delete_didalog_message))
         setIcon(R.drawable.iconfinder_warn)
 
-        val dialogListener = object:DialogInterface.OnClickListener {
-            override fun onClick(p0: DialogInterface?, p1: Int) {
-                when(p1) {
-                    DialogInterface.BUTTON_POSITIVE -> {
-                        //TODO : 알람삭제
-                        //TODO : 상단바 고정 삭제
-                        //TODO : 세부일정도 다 삭제하기
-                        val memoID = recyclerViewAdapter.itemList[position].id
+        val dialogListener = DialogInterface.OnClickListener { _, button ->
+            when(button) {
+                DialogInterface.BUTTON_POSITIVE -> {
+                    //TODO : 알람삭제
+                    //TODO : 상단바 고정 삭제
+                    //TODO : 세부일정도 다 삭제하기
+                    val memoID = recyclerViewAdapter.itemList[position].id
 
-                        AppDataBase.instance.memoDao().deleteMemoByID(memoID)
-                        recyclerViewAdapter.itemList.removeAt(position)
-                        recyclerViewAdapter.notifyItemRemoved(position)
-                    }
-                    DialogInterface.BUTTON_NEGATIVE -> {
-                        //아니요 버튼
-                    }
+                    AppDataBase.instance.memoDao().deleteMemoByID(memoID)
                 }
-                (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
+                DialogInterface.BUTTON_NEGATIVE -> {
+                    //아니요 버튼
+                }
             }
-
+            //버튼 누른 후 onResume
+            (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
         }
 
         setPositiveButton(context.getString(R.string.yes), dialogListener)

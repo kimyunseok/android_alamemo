@@ -22,6 +22,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     private fun setUpBtnOnClickListener() {
         viewDataBinding.addCancelBtn.setOnClickListener { requireActivity().onBackPressed() }
 
+        //저장하기 버튼
         viewDataBinding.addOkBtn.setOnClickListener {
             if(viewDataBinding.model?.title?.value.toString().trim() == "") {
                 Toast.makeText(requireContext(), getString(R.string.warn_empty_title_message), Toast.LENGTH_SHORT).show()
@@ -70,6 +71,13 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                     Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
                 }
                 requireActivity().supportFragmentManager.popBackStack()
+            }
+        }
+
+        //아이콘 선택 버튼
+        viewDataBinding.addIconSelectBtn.setOnClickListener {
+            viewDataBinding.model?.icon?.let { iconLiveData ->
+                SelectIconDialog(requireContext(), iconLiveData).show()
             }
         }
 

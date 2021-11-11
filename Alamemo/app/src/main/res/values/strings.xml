@@ -42,6 +42,7 @@
     <string name="memo_save_complete">메모/일정 저장이 완료되었습니다.</string>
     <string name="memo_modify_complete">메모/일정 수정이 완료되었습니다.</string>
     <string name="error">에러가 발생했습니다.</string>
+    <string name="select_icon">아이콘을 선택해 주세요.</string>
 
     <!-- 요일 -->
     <string name="mon">월</string>
