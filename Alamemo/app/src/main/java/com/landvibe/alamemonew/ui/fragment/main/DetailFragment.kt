@@ -105,6 +105,6 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     private fun setAnimation() {
         val fadeAnimation = AlphaAnimation(0F, 1F)
         fadeAnimation.duration = 500
-        viewDataBinding.detailRecycler.itemAnimator = fadeAnimation
+        viewDataBinding.detailRecycler.animation = fadeAnimation
     }
 }

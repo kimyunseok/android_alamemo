@@ -70,6 +70,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         }
 
         viewDataBinding.mainViewPager.adapter = pagerAdapter
+        viewDataBinding.mainViewPager.offscreenPageLimit = 2
         viewDataBinding.mainViewPager.isUserInputEnabled = false // 스와이프 막기
     }
 
