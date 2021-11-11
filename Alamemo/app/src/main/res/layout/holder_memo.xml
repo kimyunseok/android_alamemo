@@ -62,6 +62,7 @@
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/memo_edit_btn"
                 app:layout_constraintStart_toEndOf="@+id/holder_memo_icon"
+                app:layout_constraintBottom_toTopOf="@+id/holder_memo_date_layout"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
