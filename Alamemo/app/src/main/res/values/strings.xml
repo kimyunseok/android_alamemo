@@ -8,6 +8,7 @@
     <string name="finish_emoji">🏁</string>
     <string name="yes">예</string>
     <string name="no">아니오</string>
+    <string name="sry_making">죄송합니다.\n아직 해당 기능을\n이용하실 수 없습니다.</string>
 
 
     <!-- MainActivity -->
