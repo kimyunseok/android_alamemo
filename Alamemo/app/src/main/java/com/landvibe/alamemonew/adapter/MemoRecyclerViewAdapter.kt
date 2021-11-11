@@ -77,6 +77,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                     scheduleDateMinute = item.scheduleDateMinute,
                     alarmStartTimeHour = item.alarmStartTimeHour,
                     alarmStartTimeMinute = item.alarmStartTimeMinute,
+                    scheduleFinish = MutableLiveData(true),
                     fixNotify = MutableLiveData(false),
                     setAlarm = MutableLiveData(false),
                     repeatDay = item.repeatDay,

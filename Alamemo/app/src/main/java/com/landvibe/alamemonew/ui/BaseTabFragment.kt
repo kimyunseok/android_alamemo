@@ -1,16 +1,12 @@
 package com.landvibe.alamemonew.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.*
 import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
@@ -18,7 +14,6 @@ import com.landvibe.alamemonew.databinding.TabFragmentBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
 import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteDialog
-import com.landvibe.alamemonew.util.AboutDay
 import com.landvibe.alamemonew.util.MemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 import java.util.*
@@ -66,7 +61,11 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
     private fun setRecyclerView() {
         setAnimation()
-        val itemList = AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
+        val itemList = if(type != 4) {
+            AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
+        } else {
+            AppDataBase.instance.memoDao().getFinishMemo().toMutableList()
+        }
 
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
             .thenBy { it.scheduleDateMonth.value }
@@ -87,7 +86,12 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     }
 
     private fun refreshRecyclerView() {
-        val itemList = AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
+        val itemList = if(type != 4) {
+            AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
+        } else {
+            AppDataBase.instance.memoDao().getFinishMemo().toMutableList()
+        }
+
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
             .thenBy { it.scheduleDateMonth.value }
             .thenBy { it.scheduleDateDay.value }

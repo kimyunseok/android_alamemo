@@ -9,7 +9,7 @@ import java.util.*
 @Entity
 class Memo (
     @PrimaryKey(autoGenerate = true) var id: Long,
-    var type: MutableLiveData<Int>, // 1 : 메모, 2 : 일정, 3 : 반복일정, 4 : 종료된 일정
+    var type: MutableLiveData<Int>, // 1 : 메모, 2 : 일정, 3 : 반복일정, 4: 종료된 일정(프래그먼트에서 불러올 때만 사용. 실제 4란 type을 저장하지는 않음)
     var icon: MutableLiveData<String>,
     var title: MutableLiveData<String>,
     var scheduleDateYear: MutableLiveData<Int>,
@@ -19,6 +19,7 @@ class Memo (
     var scheduleDateMinute: MutableLiveData<Int>,
     var alarmStartTimeHour: MutableLiveData<Int>,
     var alarmStartTimeMinute: MutableLiveData<Int>,
+    var scheduleFinish: MutableLiveData<Boolean>, // 종료됐는지 Check true : 종료, false : 종료 X
     var fixNotify: MutableLiveData<Boolean>,
     var setAlarm: MutableLiveData<Boolean>,
     var alarmStartTimeType: MutableLiveData<Int>, // 1 : 매일, 2 : 1주일 전, 3 : 3일 전, 4 : 하루 전

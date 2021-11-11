@@ -14,8 +14,11 @@ interface MemoDao {
     @Query("SELECT * FROM Memo Where id = :id")
     fun getMemoById(id: Long): Memo
 
-    @Query("SELECT * FROM Memo Where type = :type")
+    @Query("SELECT * FROM Memo Where type = :type and scheduleFinish = ${false}")
     fun getMemoByType(type: Int): List<Memo>
+
+    @Query("SELECT * FROM Memo Where scheduleFinish = ${true}")
+    fun getFinishMemo(): List<Memo>
 
     @Insert
     fun insertMemo(memo: Memo)
@@ -29,11 +32,11 @@ interface MemoDao {
     @Query("UPDATE Memo SET type = :type Where id = :id")
     fun modifyMemoType(id: Long, type: MutableLiveData<Int>)
 
-    @Query("UPDATE Memo SET type = :type, icon = :icon, title = :title, scheduleDateYear = :scheduleDateYear, scheduleDateMonth = :scheduleDateMonth, scheduleDateDay = :scheduleDateDay, scheduleDateHour = :scheduleDateHour, scheduleDateMinute = :scheduleDateMinute, alarmStartTimeHour = :alarmStartTimeHour, alarmStartTimeMinute = :alarmStartTimeMinute, fixNotify = :fixNotify, setAlarm = :setAlarm, repeatDay = :repeatDay, alarmStartTimeType = :alarmStartTimeType Where id = :id")
+    @Query("UPDATE Memo SET type = :type, icon = :icon, title = :title, scheduleDateYear = :scheduleDateYear, scheduleDateMonth = :scheduleDateMonth, scheduleDateDay = :scheduleDateDay, scheduleDateHour = :scheduleDateHour, scheduleDateMinute = :scheduleDateMinute, alarmStartTimeHour = :alarmStartTimeHour, alarmStartTimeMinute = :alarmStartTimeMinute, scheduleFinish = :scheduleFinish, fixNotify = :fixNotify, setAlarm = :setAlarm, repeatDay = :repeatDay, alarmStartTimeType = :alarmStartTimeType Where id = :id")
     fun modifyMemo(id: Long, type: MutableLiveData<Int>, icon: MutableLiveData<String>,
                    title: MutableLiveData<String>, scheduleDateYear: MutableLiveData<Int>,
                    scheduleDateMonth: MutableLiveData<Int>, scheduleDateDay: MutableLiveData<Int>,
                    scheduleDateHour: MutableLiveData<Int>, scheduleDateMinute: MutableLiveData<Int>,
-                   alarmStartTimeHour: MutableLiveData<Int>, alarmStartTimeMinute: MutableLiveData<Int>,
+                   alarmStartTimeHour: MutableLiveData<Int>, alarmStartTimeMinute: MutableLiveData<Int>, scheduleFinish: MutableLiveData<Boolean>,
                    fixNotify: MutableLiveData<Boolean>, setAlarm: MutableLiveData<Boolean>, repeatDay: MutableList<Char>, alarmStartTimeType: MutableLiveData<Int>)
 }
