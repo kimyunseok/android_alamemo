@@ -23,19 +23,26 @@ class GlobalApplication : Application() {
             private set //
 
         fun memoToMemoViewModel(memo: Memo, memoViewModel: MemoViewModel) {
+            var calendar: Calendar
             memoViewModel.apply {
                 id = memo.id
-
-                type = if(memo.type != 4) {
-                    MutableLiveData(memo.type)
-                } else {
-                    MutableLiveData(1)
-                }
-                
+                type = MutableLiveData(memo.type)
                 icon = MutableLiveData<String>(memo.icon)
                 title = MutableLiveData<String>(memo.title)
-                scheduleDate = MutableLiveData<Date>(memo.scheduleDate)
-                alarmStartTime = MutableLiveData<Date>(memo.alarmStartTime)
+
+                calendar = Calendar.getInstance()
+                calendar.time = memo.scheduleDate
+                scheduleDateYear = MutableLiveData<Int>(calendar.get(Calendar.YEAR))
+                scheduleDateMonth = MutableLiveData<Int>(calendar.get(Calendar.MONTH) + 1)
+                scheduleDateDay = MutableLiveData<Int>(calendar.get(Calendar.DAY_OF_MONTH))
+                scheduleDateHour = MutableLiveData<Int>(calendar.get(Calendar.HOUR_OF_DAY))
+                scheduleDateMinute = MutableLiveData<Int>(calendar.get(Calendar.MINUTE))
+
+                calendar = Calendar.getInstance()
+                calendar.time = memo.alarmStartTime
+                alarmStartTimeHour = MutableLiveData<Int>(calendar.get(Calendar.HOUR_OF_DAY))
+                alarmStartTimeMinute = MutableLiveData<Int>(calendar.get(Calendar.MINUTE))
+
                 fixNotify = MutableLiveData<Boolean>(memo.fixNotify)
                 setAlarm = MutableLiveData<Boolean>(memo.setAlarm)
                 repeatDay = memo.repeatDay.toCharArray().toMutableList()
@@ -44,20 +51,34 @@ class GlobalApplication : Application() {
         }
 
         fun memoViewModelToMemo(memo: Memo, memoViewModel: MemoViewModel?) {
+            var calendar: Calendar
+
             memo.apply {
                 if(memoViewModel != null) {
                     id = memoViewModel.id
                     memoViewModel.type.value?.let {memo.type = it}
                     memoViewModel.icon.value?.let {memo.icon = it}
                     memoViewModel.title.value?.let {memo.title = it}
-                    memoViewModel.scheduleDate.value?.let {memo.scheduleDate = it}
-                    memoViewModel.alarmStartTime.value?.let {memo.alarmStartTime = it}
+                    
+                    calendar = Calendar.getInstance()
+                    memoViewModel.scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
+                    memoViewModel.scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
+                    memoViewModel.scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
+                    memoViewModel.scheduleDateHour.value?.let { hour -> calendar.set(Calendar.HOUR_OF_DAY, hour) }
+                    memoViewModel.scheduleDateMinute.value?.let { minute -> calendar.set(Calendar.MINUTE, minute) }
+                    memo.scheduleDate = calendar.time
+                    
+                    calendar = Calendar.getInstance()
+                    memoViewModel.alarmStartTimeHour.value?.let { hour -> calendar.set(Calendar.HOUR_OF_DAY, hour) }
+                    memoViewModel.alarmStartTimeMinute.value?.let { minute -> calendar.set(Calendar.MINUTE, minute) }
+                    memo.alarmStartTime = calendar.time
+
                     memoViewModel.fixNotify.value?.let {memo.fixNotify = it}
                     memoViewModel.setAlarm.value?.let {memo.setAlarm = it}
                     memoViewModel.alarmStartTimeType.value?.let {memo.alarmStartTimeType = it}
                     memo.repeatDay = ""
                     for(day in memoViewModel.repeatDay) {
-                        repeatDay += memoViewModel.repeatDay
+                        repeatDay += day
                     }
                 }
             }

@@ -2,6 +2,7 @@ package com.landvibe.alamemonew.ui.activity
 
 import android.widget.Toast
 import com.landvibe.alamemonew.R
+import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.ActivityMainBinding
 import com.landvibe.alamemonew.ui.BaseActivity
 import com.landvibe.alamemonew.ui.fragment.main.MainFragment

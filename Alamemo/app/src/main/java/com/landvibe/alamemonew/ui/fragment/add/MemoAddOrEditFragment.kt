@@ -18,6 +18,8 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override fun init() {
         setUpBtnOnClickListener()
         initMemoModel()
+
+        setUpObserver()
     }
 
     private fun setUpBtnOnClickListener() {
@@ -84,8 +86,13 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
             type = MutableLiveData<Int>(1),
             icon = MutableLiveData<String>(getString(R.string.memo_emoji)),
             title = MutableLiveData<String>(""),
-            scheduleDate = MutableLiveData<Date>(Date(System.currentTimeMillis() ) ),
-            alarmStartTime = MutableLiveData<Date>(Date(System.currentTimeMillis() ) ),
+            scheduleDateYear = MutableLiveData<Int>(0),
+            scheduleDateMonth = MutableLiveData<Int>(0),
+            scheduleDateDay = MutableLiveData<Int>(0),
+            scheduleDateHour = MutableLiveData<Int>(0),
+            scheduleDateMinute = MutableLiveData<Int>(0),
+            alarmStartTimeHour = MutableLiveData<Int>(0),
+            alarmStartTimeMinute = MutableLiveData<Int>(0),
             fixNotify = MutableLiveData<Boolean>(false),
             setAlarm = MutableLiveData<Boolean>(false),
             repeatDay = mutableListOf(),
@@ -95,7 +102,18 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         if(memoId != null) {
             val getMemo = AppDataBase.instance.memoDao().getMemoById(memoId)
             memoToMemoViewModel(getMemo, memoViewModel)
+
+            if(memoViewModel.type.value == 4) {
+                memoViewModel.type.value = 1
+            }
         }
         viewDataBinding.model = memoViewModel
     }
+
+    private fun setUpObserver() {
+        viewDataBinding.model?.scheduleDateYear?.observe(this) {
+            viewDataBinding.addDateShowTv.text = viewDataBinding.model?.showDateFormat?.value
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package com.landvibe.alamemonew.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.landvibe.alamemonew.databinding.TabFragmentBinding
+import com.landvibe.alamemonew.ui.BaseTabFragment
 
 /**
  * FragmentStatePagerAdapter Deprecated.
@@ -10,7 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  * https://furang-note.tistory.com/26
  * */
 class FragmentPageAdapter(fragmentActivity : FragmentActivity) : FragmentStateAdapter(fragmentActivity){
-    private var fragmentList : ArrayList<Fragment> = ArrayList()
+    var fragmentList : ArrayList<BaseTabFragment<TabFragmentBinding>> = ArrayList()
 
     override fun getItemCount(): Int {
         return fragmentList.size
@@ -20,7 +22,7 @@ class FragmentPageAdapter(fragmentActivity : FragmentActivity) : FragmentStateAd
         return fragmentList[position]
     }
 
-    fun addFragment(fragment: Fragment) {
+    fun addFragment(fragment: BaseTabFragment<TabFragmentBinding>) {
         fragmentList.add(fragment)
         notifyItemInserted(fragmentList.size - 1)
     }

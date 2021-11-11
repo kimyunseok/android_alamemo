@@ -1,6 +1,8 @@
 package com.landvibe.alamemonew.ui.fragment.main
 
+import android.util.Log
 import android.view.View
+import androidx.databinding.ViewDataBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.adapter.FragmentPageAdapter
@@ -20,6 +22,17 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         initTabLayout()
     }
 
+    override fun onResume() {
+        super.onResume()
+        resumeViewPagerFragment()
+    }
+
+    private fun resumeViewPagerFragment() {
+        val adapter = viewDataBinding.mainViewPager.adapter as FragmentPageAdapter
+        for(fragment in adapter.fragmentList) {
+            fragment.onResume()
+        }
+    }
 
     private fun setUpBtnOnClickListener() {
         viewDataBinding.mainAddMemoButton.setOnClickListener {
@@ -29,6 +42,8 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
                 .replace(R.id.main_container, MemoAddOrEditFragment())
                 .addToBackStack(null)
                 .commit()
+
+            onStop()
         }
 
         viewDataBinding.mainSettingButton.setOnClickListener {

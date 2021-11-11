@@ -2,6 +2,7 @@ package com.landvibe.alamemonew.adapter
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
@@ -31,8 +32,13 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
             type = MutableLiveData<Int>(1),
             icon = MutableLiveData<String>(context.getString(R.string.memo_emoji)),
             title = MutableLiveData<String>(""),
-            scheduleDate = MutableLiveData<Date>(Date(System.currentTimeMillis() ) ),
-            alarmStartTime = MutableLiveData<Date>(Date(System.currentTimeMillis() ) ),
+            scheduleDateYear = MutableLiveData<Int>(0),
+            scheduleDateMonth = MutableLiveData<Int>(0),
+            scheduleDateDay = MutableLiveData<Int>(0),
+            scheduleDateHour = MutableLiveData<Int>(0),
+            scheduleDateMinute = MutableLiveData<Int>(0),
+            alarmStartTimeHour = MutableLiveData<Int>(0),
+            alarmStartTimeMinute = MutableLiveData<Int>(0),
             fixNotify = MutableLiveData<Boolean>(false),
             setAlarm = MutableLiveData<Boolean>(false),
             repeatDay = mutableListOf(),
@@ -75,7 +81,7 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
                     memo.repeatDay,
                     memo.alarmStartTimeType
                 )
-                notifyItemRemoved(position)
+                binding.invalidateAll()
             }
         }
     }

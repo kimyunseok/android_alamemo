@@ -1,5 +1,6 @@
 package com.landvibe.alamemonew.ui.fragment.main
 
+import android.util.Log
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
 import com.landvibe.alamemonew.ui.BaseTabFragment

@@ -1,5 +1,7 @@
 package com.landvibe.alamemonew.model.uimodel
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,45 +13,36 @@ data class MemoViewModel (
     var type: MutableLiveData<Int>, // 1 : 메모, 2 : 일정, 3 : 반복일정, 4 : 종료된 일정
     var icon: MutableLiveData<String>,
     var title: MutableLiveData<String>,
-    var scheduleDate: MutableLiveData<Date>,
-    var alarmStartTime: MutableLiveData<Date>,
+    var scheduleDateYear: MutableLiveData<Int>,
+    var scheduleDateMonth: MutableLiveData<Int>,
+    var scheduleDateDay: MutableLiveData<Int>,
+    var scheduleDateHour: MutableLiveData<Int>,
+    var scheduleDateMinute: MutableLiveData<Int>,
+    var alarmStartTimeHour: MutableLiveData<Int>,
+    var alarmStartTimeMinute: MutableLiveData<Int>,
     var fixNotify: MutableLiveData<Boolean>,
     var setAlarm: MutableLiveData<Boolean>,
     var alarmStartTimeType: MutableLiveData<Int>, // 1 : 매일, 2 : 1주일 전, 3 : 3일 전, 4 : 하루 전
     var repeatDay: MutableList<Char> // 반복일정에서 사용하는 반복 요일
 ) {
-    val calendar = Calendar.getInstance()
+    var showDateFormat = MutableLiveData("")
 
     fun setScheduleDate(year: Int, month: Int, day: Int) {
-        scheduleDate.value?.let { curSetTime ->
-
-            calendar.time = curSetTime
-            calendar.set(year, month, day)
-
-            scheduleDate.value = calendar.time
-        }
+        scheduleDateYear.value = (year)
+        scheduleDateMonth.value = (month)
+        scheduleDateDay.value = (day)
+        getDateFormat()
     }
 
     fun setSceduleTime(hour: Int, minute: Int) {
-        scheduleDate.value?.let { curSetTime ->
-
-            calendar.time = curSetTime
-            calendar.set(Calendar.HOUR, hour)
-            calendar.set(Calendar.MINUTE, minute)
-
-            scheduleDate.value = calendar.time
-        }
+        scheduleDateHour.value = hour
+        scheduleDateMinute.value = (minute)
+        getDateFormat()
     }
 
     fun setAlarmStartTime(hour: Int, minute: Int) {
-        alarmStartTime.value?.let { curSetTime ->
-
-            calendar.time = curSetTime
-            calendar.set(Calendar.HOUR, hour)
-            calendar.set(Calendar.MINUTE, minute)
-
-            alarmStartTime.value = calendar.time
-        }
+        alarmStartTimeHour.value = (hour)
+        alarmStartTimeMinute.value = (minute)
     }
 
     fun setType(type: Int) {
@@ -77,29 +70,63 @@ data class MemoViewModel (
     }
 
     fun getDateFormat(): String {
-        val setTime = scheduleDate.value?.time
-        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale("ko", "KR"))
-        return dateFormat.format(setTime)
-    }
-
-    fun getDDay(): String {
-        val today = ( System.currentTimeMillis() + (60 * 60 * 9 * 1000) ) / (60 * 60 * 24 * 1000)
-        val setDateDay = ( scheduleDate.value?.time?.plus((60 * 60 * 9 * 1000) )?.div((60 * 60 * 24 * 1000)))
-
-        if(setDateDay != null) {
-            return when {
-                setDateDay - today > 0 -> {
-                    "D - ${(setDateDay - today)}"
-                }
-                setDateDay - today < 0 -> {
-                    "D + ${(setDateDay - today)}"
-                }
-                else -> {
-                    "D - DAY"
-                }
+        val calendar = Calendar.getInstance()
+        scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
+        scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
+        scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
+        val dayOfWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
+            1 -> {
+                "일"
+            }
+            2 -> {
+                "월"
+            }
+            3 -> {
+                "화"
+            }
+            4 -> {
+                "수"
+            }
+            5 -> {
+                "목"
+            }
+            6 -> {
+                "금"
+            }
+            7 -> {
+                "토"
+            }
+            else -> {
+                ""
             }
         }
 
-        return ""
+        if(type.value != 3) {
+            showDateFormat.value = "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일" + "\n${scheduleDateHour.value}:${scheduleDateMinute.value}"
+        } else {
+            showDateFormat.value = repeatDay.toString() + " - " + "\n${scheduleDateHour.value}:${scheduleDateMinute.value}"
+        }
+        return showDateFormat.value.toString()
+    }
+
+    fun getDDay(): String {
+        val calendar = Calendar.getInstance()
+        scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
+        scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
+        scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
+        val today = ( System.currentTimeMillis() + (60 * 60 * 9 * 1000) ) / (60 * 60 * 24 * 1000)
+        val setDateDay = ( calendar.time.time.plus((60 * 60 * 9 * 1000) ).div((60 * 60 * 24 * 1000)))
+
+        return when {
+            setDateDay - today > 0 -> {
+                "D - ${(setDateDay - today)}"
+            }
+            setDateDay - today < 0 -> {
+                "D + ${(setDateDay - today)}"
+            }
+            else -> {
+                "D - DAY"
+            }
+        }
     }
 }

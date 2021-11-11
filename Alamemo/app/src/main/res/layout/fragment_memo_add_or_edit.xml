@@ -55,6 +55,9 @@
                         android:layout_height="wrap_content"
                         android:calendarViewShown="false"
                         android:datePickerMode="spinner"
+                        android:year="@={model.scheduleDateYear}"
+                        android:month="@={model.scheduleDateMonth}"
+                        android:day="@={model.scheduleDateDay}"
                         android:minDate="@{System.currentTimeMillis()}"
                         android:onDateChanged="@{(_, year, month, day) -> model.setScheduleDate(year, month, day)}"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -147,9 +150,10 @@
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
                     <TextView
+                        android:id="@+id/add_date_show_tv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(model.scheduleDate.year)}"
+                        android:text="@{model.showDateFormat}"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"

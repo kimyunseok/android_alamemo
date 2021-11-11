@@ -37,18 +37,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
-            <ImageView
-                android:id="@+id/tab_pm_icon_img"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginStart="15dp"
-                android:visibility="@{model.memoEmpty ? View.GONE : View.VISIBLE}"
-                android:src="@{model.memoOpen ? @drawable/minus : @drawable/plus}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/tab_title_tv"
-                app:layout_constraintTop_toTopOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
