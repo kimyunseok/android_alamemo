@@ -60,6 +60,7 @@
                 android:id="@+id/tab_memo_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="@{model.memoEmpty ? View.GONE : View.VISIBLE}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView

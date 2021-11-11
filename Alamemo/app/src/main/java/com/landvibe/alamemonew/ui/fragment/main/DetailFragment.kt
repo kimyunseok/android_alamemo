@@ -1,8 +1,8 @@
 package com.landvibe.alamemonew.ui.fragment.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.AlphaAnimation
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,12 +15,15 @@ import com.landvibe.alamemonew.model.uimodel.DetailFragmentViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemonew.ui.fragment.dialog.DetailMemoDeleteDialog
+import com.landvibe.alamemonew.util.DetailMemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 
 class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     override val layoutId: Int = R.layout.fragment_detail
 
     private var memoId: Long? = -1
+
+    lateinit var recyclerViewAdapter: DetailMemoRecyclerViewAdapter
 
     override fun init() {
         setBtnOnClickListener()
@@ -30,7 +33,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
     override fun onResume() {
         super.onResume()
-        setUpRecyclerView()
+        refreshRecyclerView()
     }
 
     private fun getMemoInfo() {
@@ -80,14 +83,14 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
             .thenBy { it.scheduleDateHour.value }
             .thenBy { it.scheduleDateMinute.value }
         )
-        viewDataBinding.model?.memoEmpty?.value = itemList?.isEmpty()
 
         if(itemList != null) {
-            val adapter = DetailMemoRecyclerViewAdapter(requireContext(), itemList)
-            viewDataBinding.detailRecycler.adapter = adapter
+            recyclerViewAdapter = DetailMemoRecyclerViewAdapter(requireContext(), itemList)
+            viewDataBinding.detailRecycler.adapter = recyclerViewAdapter
             viewDataBinding.detailRecycler.layoutManager = LinearLayoutManager(context)
-            ItemTouchHelper(setSwipeToDelete(adapter)).attachToRecyclerView(viewDataBinding.detailRecycler)
+            ItemTouchHelper(setSwipeToDelete(recyclerViewAdapter)).attachToRecyclerView(viewDataBinding.detailRecycler)
         }
+        viewDataBinding.model?.memoEmpty?.value = itemList?.isEmpty()
     }
 
     private fun setSwipeToDelete(adapter: DetailMemoRecyclerViewAdapter): SwipeAction {
@@ -106,5 +109,29 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         val fadeAnimation = AlphaAnimation(0F, 1F)
         fadeAnimation.duration = 500
         viewDataBinding.detailRecycler.animation = fadeAnimation
+    }
+
+    private fun refreshRecyclerView() {
+        val itemList = memoId?.let { memoId -> AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList() }
+
+        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
+            .thenBy { it.scheduleDateMonth.value }
+            .thenBy { it.scheduleDateDay.value }
+            .thenBy { it.scheduleDateHour.value }
+            .thenBy { it.scheduleDateMinute.value }
+        )
+
+        //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
+
+        //대체 코드
+        val oldItemList = recyclerViewAdapter.itemList
+        if(itemList != null) {
+            val diffUtil = DiffUtil.calculateDiff(DetailMemoDiffUtil(oldItemList, itemList), false)
+            diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
+            recyclerViewAdapter.itemList = itemList
+        }
+
+        viewDataBinding.model?.memoEmpty?.value = itemList?.isEmpty()
+
     }
 }

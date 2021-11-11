@@ -11,10 +11,7 @@ import android.view.animation.AlphaAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.recyclerview.widget.*
 import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
@@ -22,6 +19,7 @@ import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
 import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteDialog
 import com.landvibe.alamemonew.util.AboutDay
+import com.landvibe.alamemonew.util.MemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 import java.util.*
 
@@ -29,6 +27,8 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     lateinit var viewDataBinding: T
     abstract val layoutId: Int
     abstract val type: Int
+
+    lateinit var recyclerViewAdapter: MemoRecyclerViewAdapter
 
     abstract fun setTitle()
     abstract fun init()
@@ -53,7 +53,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
         //화면 재구성 시 필요.
         if(this::viewDataBinding.isInitialized) {
-            setRecyclerView()
+            refreshRecyclerView()
         }
     }
 
@@ -77,12 +77,34 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
             .thenBy { it.alarmStartTimeMinute.value }
         )
 
+        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList)
+        viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
+        viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
+        ItemTouchHelper(setSwipeToDelete(recyclerViewAdapter)).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
+
+        viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()
+    }
+
+    private fun refreshRecyclerView() {
+        val itemList = AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
+        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
+            .thenBy { it.scheduleDateMonth.value }
+            .thenBy { it.scheduleDateDay.value }
+            .thenBy { it.scheduleDateHour.value }
+            .thenBy { it.scheduleDateMinute.value }
+            .thenBy { it.alarmStartTimeHour.value }
+            .thenBy { it.alarmStartTimeMinute.value }
+        )
+        //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
+
+        //대체 코드
+        val oldItemList = recyclerViewAdapter.itemList
+        val diffUtil = DiffUtil.calculateDiff(MemoDiffUtil(oldItemList, itemList), false)
+        diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
+        recyclerViewAdapter.itemList = itemList
+
         viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()
 
-        val adapter = MemoRecyclerViewAdapter(requireContext(), itemList)
-        viewDataBinding.tabMemoRecycler.adapter = adapter
-        viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
-        ItemTouchHelper(setSwipeToDelete(adapter)).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
     }
 
     private fun setSwipeToDelete(adapter: MemoRecyclerViewAdapter): SwipeAction {

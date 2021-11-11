@@ -71,6 +71,8 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                             getString(R.string.memo_save_complete),
                             Toast.LENGTH_SHORT
                         ).show()
+
+
                     }
                 } else {
                     Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
@@ -139,7 +141,6 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                 .apply { datePicker.minDate = System.currentTimeMillis() }
             calendarDialog.show()
         }
-
     }
 
 }

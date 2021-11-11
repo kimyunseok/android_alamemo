@@ -50,8 +50,6 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
             }
         }
 
-        Log.d("checkModel::", detailMemo.toString())
-
         viewDataBinding.model = detailMemo
     }
 

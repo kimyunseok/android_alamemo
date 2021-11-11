@@ -19,21 +19,20 @@ class MemoDeleteDialog(context: Context, recyclerViewAdapter: MemoRecyclerViewAd
                 DialogInterface.BUTTON_POSITIVE -> {
                     //TODO : 알람삭제
                     //TODO : 상단바 고정 삭제
-                    //TODO : 세부일정도 다 삭제하기
                     val memoID = recyclerViewAdapter.itemList[position].id
 
                     AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(memoID)
                     AppDataBase.instance.memoDao().deleteMemoByID(memoID)
+                    (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
                 }
-                DialogInterface.BUTTON_NEGATIVE -> {
-                    //아니요 버튼
+                else -> {
+                    //아니요 버튼, 뒤로가기 등
                 }
             }
-            //버튼 누른 후 onResume
-            (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
         }
 
         setPositiveButton(context.getString(R.string.yes), dialogListener)
         setNegativeButton(context.getString(R.string.no), dialogListener)
+        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
     }
 }

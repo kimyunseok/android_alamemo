@@ -15,7 +15,7 @@ import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
 import java.util.*
 
-class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
+class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HolderMemoBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -11,7 +11,7 @@ import com.landvibe.alamemonew.model.data.detail.DetailMemo
 import com.landvibe.alamemonew.ui.activity.MainActivity
 import com.landvibe.alamemonew.ui.fragment.add.DetailAddOrEditFragment
 
-class DetailMemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<DetailMemo>):
+class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<DetailMemo>):
     RecyclerView.Adapter<DetailMemoRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
