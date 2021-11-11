@@ -88,6 +88,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
             recyclerViewAdapter = DetailMemoRecyclerViewAdapter(requireContext(), itemList)
             viewDataBinding.detailRecycler.adapter = recyclerViewAdapter
             viewDataBinding.detailRecycler.layoutManager = LinearLayoutManager(context)
+            viewDataBinding.detailRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
             ItemTouchHelper(setSwipeToDelete(recyclerViewAdapter)).attachToRecyclerView(viewDataBinding.detailRecycler)
         }
         viewDataBinding.model?.memoEmpty?.value = itemList?.isEmpty()

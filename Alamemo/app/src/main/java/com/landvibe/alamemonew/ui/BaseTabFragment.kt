@@ -80,6 +80,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
         recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList)
         viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
+        viewDataBinding.tabMemoRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
         ItemTouchHelper(setSwipeToDelete(recyclerViewAdapter)).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
 
         viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()

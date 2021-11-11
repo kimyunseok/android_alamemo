@@ -84,8 +84,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                 )
                 //TODO : 알람 종료시키기
 
-                itemList.removeAt(position)
-                notifyItemRemoved(position)
+                (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
             }
         }
     }
