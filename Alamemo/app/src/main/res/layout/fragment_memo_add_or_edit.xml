@@ -447,7 +447,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/LightGrey"
-                android:visibility="@{model.type == 1 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{model.type == 1 ? View.GONE : model.setAlarm ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout"
                 app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_start_time_layout"/>
 
