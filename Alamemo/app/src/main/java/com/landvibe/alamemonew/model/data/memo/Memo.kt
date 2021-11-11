@@ -77,11 +77,10 @@ class Memo (
 
         if (type.value != 3) {
             showDateFormat.value =
-                "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일" + "\n${scheduleDateHour.value}:${scheduleDateMinute.value}"
+                "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일"
         } else {
             repeatDay.sortWith(AboutDay.DayCompare())
-            showDateFormat.value =
-                repeatDay.toString() + " - " + "\n${scheduleDateHour.value}:${scheduleDateMinute.value}"
+            showDateFormat.value = repeatDay.toString()
         }
         return showDateFormat.value.toString()
     }
@@ -117,4 +116,11 @@ class Memo (
         return AboutDay.AboutDayOfWeek().checkRepeatDayToday(repeatDay)
     }
 
+    fun getTitleInclueTime(): String {
+        return if(type.value == 2 || type.value == 3) {
+           "${scheduleDateHour.value}:${scheduleDateMinute.value} " + title.value
+        } else {
+            title.value.toString()
+        }
+    }
 }

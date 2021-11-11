@@ -1,5 +1,6 @@
 package com.landvibe.alamemonew.util
 
+import java.lang.Integer.min
 import java.util.*
 import kotlin.Comparator
 
@@ -8,7 +9,7 @@ import kotlin.Comparator
 * */
 class AboutDay {
 
-    class AboutDayOfWeek() {
+    class AboutDayOfWeek {
         val calendar = Calendar.getInstance()
 
         fun checkRepeatDayToday(scheduleDays: MutableList<Char>): Boolean {

@@ -8,12 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
+import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteDialog
+import com.landvibe.alamemonew.util.AboutDay
+import com.landvibe.alamemonew.util.SwipeAction
 import java.util.*
 
 abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
@@ -31,6 +36,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     ): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         initViewModel()
+        viewDataBinding.lifecycleOwner = this
 
         init()
         setRecyclerView()
@@ -39,10 +45,10 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     }
 
     override fun onResume() {
+        super.onResume()
         if(this::viewDataBinding.isInitialized) {
             setRecyclerView()
         }
-        super.onResume()
     }
 
     private fun initViewModel() {
@@ -54,6 +60,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
     private fun setRecyclerView() {
         val itemList = AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
+
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
             .thenBy { it.scheduleDateMonth.value }
             .thenBy { it.scheduleDateDay.value }
@@ -70,11 +77,26 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
             }
         }
 
+        Log.d(this.toString() + "ListSize::", itemList.size.toString())
+
         if(itemList.isNotEmpty()) {
             viewDataBinding.model?.memoEmpty?.value = false
         }
-        viewDataBinding.tabMemoRecycler.adapter = MemoRecyclerViewAdapter(requireContext(), itemList)
+        val adapter = MemoRecyclerViewAdapter(requireContext(), itemList)
+        viewDataBinding.tabMemoRecycler.adapter = adapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
+        ItemTouchHelper(setSwipeToDelete(adapter)).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
     }
 
+    private fun setSwipeToDelete(adapter: MemoRecyclerViewAdapter): SwipeAction {
+        return object: SwipeAction() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val pos = viewHolder.adapterPosition
+
+                val dialog = MemoDeleteDialog(requireContext(), adapter, pos)
+                dialog.show()
+            }
+
+        }
+    }
 }

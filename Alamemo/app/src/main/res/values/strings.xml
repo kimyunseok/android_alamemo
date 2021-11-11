@@ -6,6 +6,10 @@
     <string name="today_emoji">📋</string>
     <string name="repeat_emoji">⏰</string>
     <string name="finish_emoji">🏁</string>
+    <string name="yes">예</string>
+    <string name="no">아니오</string>
+
+
     <!-- MainActivity -->
     <string name="helper">도움말</string>
     <string name="setting">⚙</string>
@@ -54,4 +58,7 @@
     <string name="before_one_day">하루 전부터</string>
     <string name="everyday">매일</string>
 
+    <!-- 메모삭제다이얼로그 -->
+    <string name="delete_didalog_title">삭제</string>
+    <string name="delete_didalog_message">메모를 삭제하시겠습니까?\n세부사항도 모두 삭제됩니다.</string>
 </resources>

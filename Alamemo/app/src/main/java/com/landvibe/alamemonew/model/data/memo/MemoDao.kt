@@ -24,6 +24,9 @@ interface MemoDao {
     @Delete
     fun deleteMemo(memoViewModel: Memo)
 
+    @Query("DELETE FROM Memo Where id = :id")
+    fun deleteMemoByID(id: Long)
+
     @Query("UPDATE Memo SET type = :type Where id = :id")
     fun modifyMemoType(id: Long, type: MutableLiveData<Int>)
 

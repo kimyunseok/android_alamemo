@@ -2,12 +2,12 @@ package com.landvibe.alamemonew.ui.fragment.main
 
 import android.util.Log
 import android.view.View
-import androidx.databinding.ViewDataBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.adapter.FragmentPageAdapter
 import com.landvibe.alamemonew.databinding.FragmentMainBinding
 import com.landvibe.alamemonew.databinding.TabButtonBinding
+import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabButtonViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
@@ -15,23 +15,31 @@ import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
 
+    private val memoFragment = MemoFragment()
+    private val scheduleFragment = ScheduleFragment()
+    private val repeatFragment = RepeatFragment()
+    private val finishFragment = FinishFragment()
+
     override fun init() {
         setUpBtnOnClickListener()
-
         initViewPager()
         initTabLayout()
     }
 
     override fun onResume() {
         super.onResume()
-        resumeViewPagerFragment()
+        memoFragment.onResume()
+        scheduleFragment.onResume()
+        repeatFragment.onResume()
+        finishFragment.onResume()
     }
 
-    private fun resumeViewPagerFragment() {
-        val adapter = viewDataBinding.mainViewPager.adapter as FragmentPageAdapter
-        for(fragment in adapter.fragmentList) {
-            fragment.onResume()
-        }
+    override fun onPause() {
+        super.onPause()
+        memoFragment.onPause()
+        scheduleFragment.onPause()
+        repeatFragment.onPause()
+        finishFragment.onPause()
     }
 
     private fun setUpBtnOnClickListener() {
@@ -54,12 +62,14 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
     private fun initViewPager() {
         val pagerAdapter = FragmentPageAdapter(requireActivity())
         pagerAdapter.apply {
-            addFragment(MemoFragment())
-            addFragment(ScheduleFragment())
-            addFragment(RepeatFragment())
-            addFragment(FinishFragment())
+            addFragment(memoFragment)
+            addFragment(scheduleFragment)
+            addFragment(repeatFragment)
+            addFragment(finishFragment)
         }
+
         viewDataBinding.mainViewPager.adapter = pagerAdapter
+
         viewDataBinding.mainViewPager.isUserInputEnabled = false // 스와이프 막기
     }
 
