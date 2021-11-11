@@ -12,6 +12,7 @@ import com.landvibe.alamemonew.databinding.HolderMemoBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.activity.MainActivity
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
+import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
 import java.util.*
 
 class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
@@ -34,6 +35,20 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
     inner class Holder(var binding: HolderMemoBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Memo, position: Int) {
             binding.model = item
+
+            itemView.setOnClickListener {
+                val bundle = Bundle().apply {
+                    putLong("memoId", item.id)
+                    putString("memoTitle", item.title.value.toString())
+                }
+
+                (context as MainActivity).supportFragmentManager
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left)
+                    .replace(R.id.main_container, DetailFragment().apply { arguments = bundle })
+                    .addToBackStack(null)
+                    .commit()
+            }
 
             binding.memoEditBtn.setOnClickListener {
                 val bundle = Bundle().apply { putLong("memoId", item.id) }

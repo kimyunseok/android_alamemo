@@ -2,6 +2,7 @@ package com.landvibe.alamemonew.ui.fragment.main
 
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.adapter.FragmentPageAdapter
@@ -55,7 +56,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         }
 
         viewDataBinding.mainSettingButton.setOnClickListener {
-            //startActivity(Intent(this, HelperActivity::class.java))
+            Toast.makeText(requireContext(), getString(R.string.sry_making), Toast.LENGTH_SHORT).show()
         }
     }
 

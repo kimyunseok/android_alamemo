@@ -44,6 +44,9 @@
     <string name="error">에러가 발생했습니다.</string>
     <string name="select_icon">아이콘을 선택해 주세요.</string>
 
+    <!-- DetailFragment -->
+    <string name="detail">세부 일정/메모</string>
+
     <!-- 요일 -->
     <string name="mon">월</string>
     <string name="tue">화</string>
