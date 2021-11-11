@@ -101,6 +101,5 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
         val fadeAnimation = AlphaAnimation(0F, 1F)
         fadeAnimation.duration = 500
         viewDataBinding.tabMemoRecycler.animation = fadeAnimation
-        viewDataBinding.tabMemoEmptyText.animation = fadeAnimation
     }
 }
