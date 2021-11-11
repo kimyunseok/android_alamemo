@@ -2,6 +2,7 @@ package com.landvibe.alamemonew.ui.fragment.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -70,6 +71,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     }
 
     private fun setUpRecyclerView() {
+        setAnimation()
         val itemList = memoId?.let { memoId -> AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList() }
 
         itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
@@ -98,5 +100,12 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
             }
 
         }
+    }
+
+    private fun setAnimation() {
+        val fadeAnimation = AlphaAnimation(0F, 1F)
+        fadeAnimation.duration = 500
+        viewDataBinding.detailRecycler.animation = fadeAnimation
+        viewDataBinding.tabMemoEmptyText.animation = fadeAnimation
     }
 }

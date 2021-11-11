@@ -43,7 +43,6 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
         viewDataBinding.lifecycleOwner = this
 
         init()
-        setAnimation()
         setRecyclerView()
 
         return viewDataBinding.root
@@ -54,7 +53,6 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
         //화면 재구성 시 필요.
         if(this::viewDataBinding.isInitialized) {
-            setAnimation()
             setRecyclerView()
         }
     }
@@ -67,6 +65,7 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     }
 
     private fun setRecyclerView() {
+        setAnimation()
         val itemList = AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
 
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
