@@ -2,17 +2,14 @@ package com.landvibe.alamemonew.adapter
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.common.AppDataBase
-import com.landvibe.alamemonew.common.GlobalApplication.Companion.memoToMemoViewModel
 import com.landvibe.alamemonew.databinding.HolderMemoBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
-import com.landvibe.alamemonew.model.uimodel.MemoViewModel
 import com.landvibe.alamemonew.ui.activity.MainActivity
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 import java.util.*
@@ -27,27 +24,7 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val memo = itemList[position]
 
-        val item = MemoViewModel(
-            0,
-            type = MutableLiveData<Int>(1),
-            icon = MutableLiveData<String>(context.getString(R.string.memo_emoji)),
-            title = MutableLiveData<String>(""),
-            scheduleDateYear = MutableLiveData<Int>(0),
-            scheduleDateMonth = MutableLiveData<Int>(0),
-            scheduleDateDay = MutableLiveData<Int>(0),
-            scheduleDateHour = MutableLiveData<Int>(0),
-            scheduleDateMinute = MutableLiveData<Int>(0),
-            alarmStartTimeHour = MutableLiveData<Int>(0),
-            alarmStartTimeMinute = MutableLiveData<Int>(0),
-            fixNotify = MutableLiveData<Boolean>(false),
-            setAlarm = MutableLiveData<Boolean>(false),
-            repeatDay = mutableListOf(),
-            alarmStartTimeType = MutableLiveData(1)
-        )
-
-        memoToMemoViewModel(memo, item)
-
-        holder.bind(item, memo, position)
+        holder.bind(memo, position)
     }
 
     override fun getItemCount(): Int {
@@ -55,7 +32,7 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
     }
 
     inner class Holder(var binding: HolderMemoBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MemoViewModel, memo: Memo, position: Int) {
+        fun bind(item: Memo, position: Int) {
             binding.model = item
 
             binding.memoEditBtn.setOnClickListener {
@@ -71,17 +48,27 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
             
             binding.holderCompleteCb.setOnClickListener {
                 //일정 종료처리
-                AppDataBase.instance.memoDao().modifyMemo(memo.id, 4,
-                    memo.icon,
-                    memo.title,
-                    memo.scheduleDate,
-                    memo.alarmStartTime,
-                    memo.fixNotify,
-                    memo.setAlarm,
-                    memo.repeatDay,
-                    memo.alarmStartTimeType
+                AppDataBase.instance.memoDao().modifyMemo(
+                    id = item.id,
+                    type = MutableLiveData(4),
+                    icon = item.icon,
+                    title = item.title,
+                    scheduleDateYear = item.scheduleDateYear,
+                    scheduleDateMonth = item.scheduleDateMonth,
+                    scheduleDateDay = item.scheduleDateDay,
+                    scheduleDateHour = item.scheduleDateHour,
+                    scheduleDateMinute = item.scheduleDateMinute,
+                    alarmStartTimeHour = item.alarmStartTimeHour,
+                    alarmStartTimeMinute = item.alarmStartTimeMinute,
+                    fixNotify = MutableLiveData(false),
+                    setAlarm = MutableLiveData(false),
+                    repeatDay = item.repeatDay,
+                    alarmStartTimeType = MutableLiveData(1)
                 )
-                binding.invalidateAll()
+                //TODO : 알람 종료시키기
+
+                itemList.removeAt(position)
+                notifyItemRemoved(position)
             }
         }
     }

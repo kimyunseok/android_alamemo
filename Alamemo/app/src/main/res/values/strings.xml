@@ -37,6 +37,7 @@
     <string name="warn_empty_title_message">메모를 입력해 주세요.</string>
     <string name="memo_save_complete">메모/일정 저장이 완료되었습니다.</string>
     <string name="memo_modify_complete">메모/일정 수정이 완료되었습니다.</string>
+    <string name="error">에러가 발생했습니다.</string>
 
     <!-- 요일 -->
     <string name="mon">월</string>

@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
+import java.util.*
 
 abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     lateinit var viewDataBinding: T
@@ -37,11 +39,10 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     }
 
     override fun onResume() {
-        super.onResume()
         if(this::viewDataBinding.isInitialized) {
             setRecyclerView()
-            viewDataBinding.invalidateAll()
         }
+        super.onResume()
     }
 
     private fun initViewModel() {
@@ -53,26 +54,19 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
     private fun setRecyclerView() {
         val itemList = AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
-        itemList.sortWith(compareBy {it.scheduleDate.time})
+        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
+            .thenBy { it.scheduleDateMonth.value }
+            .thenBy { it.scheduleDateDay.value }
+            .thenBy { it.scheduleDateHour.value }
+            .thenBy { it.scheduleDateMinute.value }
+            .thenBy { it.alarmStartTimeHour.value }
+            .thenBy { it.alarmStartTimeMinute.value }
+        )
 
         if(type == 2) {
             val today = System.currentTimeMillis()
             for(idx in 0 until itemList.size) {
-                if(itemList[idx].scheduleDate.time - today < 0) {
-                    AppDataBase.instance.memoDao().modifyMemo(
-                        itemList[idx].id,
-                        4,
-                        itemList[idx].icon,
-                        itemList[idx].title,
-                        itemList[idx].scheduleDate,
-                        itemList[idx].alarmStartTime,
-                        itemList[idx].fixNotify,
-                        itemList[idx].setAlarm,
-                        itemList[idx].repeatDay,
-                        itemList[idx].alarmStartTimeType
-                    )
-
-                }
+                val calendar = Calendar.getInstance()
             }
         }
 

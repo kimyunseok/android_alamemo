@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemonew.model.uimodel.MemoViewModel" />
+            type="com.landvibe.alamemonew.model.data.memo.Memo" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -116,6 +116,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
+                    android:hour="@={model.scheduleDateHour}"
+                    android:minute="@={model.scheduleDateMinute}"
                     android:timePickerMode="spinner"
                     android:onTimeChanged="@{(_, hour, minute) -> model.setSceduleTime(hour, minute)}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -545,6 +547,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:timePickerMode="spinner"
+                    android:hour="@={model.alarmStartTimeHour}"
+                    android:minute="@={model.alarmStartTimeMinute}"
                     android:onTimeChanged="@{(_, hour, minute) -> model.setAlarmStartTime(hour, minute)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
