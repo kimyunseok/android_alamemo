@@ -39,6 +39,7 @@ class MemoRecyclerViewAdapter(val context: Context, val itemList: MutableList<Me
             itemView.setOnClickListener {
                 val bundle = Bundle().apply {
                     putLong("memoId", item.id)
+                    putString("memoIcon", item.icon.value.toString())
                     putString("memoTitle", item.title.value.toString())
                 }
 

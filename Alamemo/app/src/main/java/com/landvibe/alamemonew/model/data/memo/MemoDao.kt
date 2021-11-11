@@ -5,7 +5,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import java.util.*
 
 @Dao
 interface MemoDao {
@@ -19,10 +18,10 @@ interface MemoDao {
     fun getMemoByType(type: Int): List<Memo>
 
     @Insert
-    fun insertMemo(memoViewModel: Memo)
+    fun insertMemo(memo: Memo)
 
     @Delete
-    fun deleteMemo(memoViewModel: Memo)
+    fun deleteMemo(memo: Memo)
 
     @Query("DELETE FROM Memo Where id = :id")
     fun deleteMemoByID(id: Long)

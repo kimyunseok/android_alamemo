@@ -4,11 +4,11 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import com.landvibe.alamemonew.R
-import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
+import com.landvibe.alamemonew.adapter.DetailMemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.ui.activity.MainActivity
 
-class MemoDeleteDialog(context: Context, recyclerViewAdapter: MemoRecyclerViewAdapter, position: Int): AlertDialog.Builder(context) {
+class DetailMemoDeleteDialog(context: Context, recyclerViewAdapter: DetailMemoRecyclerViewAdapter, position: Int): AlertDialog.Builder(context) {
     init {
         setTitle(context.getString(R.string.delete_didalog_title))
         setMessage(context.getString(R.string.delete_didalog_message))
@@ -20,10 +20,9 @@ class MemoDeleteDialog(context: Context, recyclerViewAdapter: MemoRecyclerViewAd
                     //TODO : 알람삭제
                     //TODO : 상단바 고정 삭제
                     //TODO : 세부일정도 다 삭제하기
-                    val memoID = recyclerViewAdapter.itemList[position].id
+                    val detailMemoID = recyclerViewAdapter.itemList[position].id
 
-                    AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(memoID)
-                    AppDataBase.instance.memoDao().deleteMemoByID(memoID)
+                    AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemoID)
                 }
                 DialogInterface.BUTTON_NEGATIVE -> {
                     //아니요 버튼

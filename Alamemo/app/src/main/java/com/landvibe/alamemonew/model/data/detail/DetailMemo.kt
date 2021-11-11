@@ -1,4 +1,4 @@
-package com.landvibe.alamemonew.model.data.memo
+package com.landvibe.alamemonew.model.data.detail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Entity
@@ -7,9 +7,10 @@ import com.landvibe.alamemonew.util.AboutDay
 import java.util.*
 
 @Entity
-class Memo (
+class DetailMemo (
     @PrimaryKey(autoGenerate = true) var id: Long,
-    var type: MutableLiveData<Int>, // 1 : 메모, 2 : 일정, 3 : 반복일정, 4 : 종료된 일정
+    val memoId: Long,
+    var type: MutableLiveData<Int>, // 1 : 메모, 2 : 일정
     var icon: MutableLiveData<String>,
     var title: MutableLiveData<String>,
     var scheduleDateYear: MutableLiveData<Int>,
@@ -17,12 +18,6 @@ class Memo (
     var scheduleDateDay: MutableLiveData<Int>,
     var scheduleDateHour: MutableLiveData<Int>,
     var scheduleDateMinute: MutableLiveData<Int>,
-    var alarmStartTimeHour: MutableLiveData<Int>,
-    var alarmStartTimeMinute: MutableLiveData<Int>,
-    var fixNotify: MutableLiveData<Boolean>,
-    var setAlarm: MutableLiveData<Boolean>,
-    var alarmStartTimeType: MutableLiveData<Int>, // 1 : 매일, 2 : 1주일 전, 3 : 3일 전, 4 : 하루 전
-    var repeatDay: MutableList<Char> // 반복일정에서 사용하는 반복 요일
 ) {
     var showDateFormat = MutableLiveData("")
 
@@ -39,33 +34,8 @@ class Memo (
         getDateFormat()
     }
 
-    fun setAlarmStartTime(hour: Int, minute: Int) {
-        alarmStartTimeHour.value = (hour)
-        alarmStartTimeMinute.value = (minute)
-    }
-
     fun setType(type: Int) {
         this.type.value = type
-    }
-
-    fun setRepeatDay(dayOfWeek: Char) {
-        if (repeatDay.contains(dayOfWeek)) {
-            repeatDay.remove(dayOfWeek)
-        } else {
-            repeatDay.add(dayOfWeek)
-        }
-    }
-
-    fun setNotify(notify: Boolean) {
-        fixNotify.value = notify
-    }
-
-    fun setAlarm(alarm: Boolean) {
-        setAlarm.value = alarm
-    }
-
-    fun setAlarmStartType(type: Int) {
-        alarmStartTimeType.value = type
     }
 
     fun getDateFormat(): String {
@@ -75,13 +45,9 @@ class Memo (
         scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
         val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
 
-        if (type.value != 3) {
-            showDateFormat.value =
-                "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일"
-        } else {
-            repeatDay.sortWith(AboutDay.DayCompare())
-            showDateFormat.value = repeatDay.toString()
-        }
+        showDateFormat.value =
+            "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일"
+
         return showDateFormat.value.toString()
     }
 
@@ -112,10 +78,6 @@ class Memo (
         return (setDateDay - today).toInt()
     }
 
-    fun checkRepeatDay(): Boolean {
-        return AboutDay.AboutDayOfWeek().checkRepeatDayToday(repeatDay)
-    }
-
     fun getTitleInclueTime(): String {
         val hourValue = scheduleDateHour.value?.toInt()
         val minuteValue = scheduleDateMinute.value
@@ -133,8 +95,8 @@ class Memo (
         }
 
 
-        return if(type.value == 2 || type.value == 3) {
-           "${hour}:${minute} " + title.value
+        return if(type.value == 2) {
+            "${hour}:${minute} " + title.value
         } else {
             title.value.toString()
         }

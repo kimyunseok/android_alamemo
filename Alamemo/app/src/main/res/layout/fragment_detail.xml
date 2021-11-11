@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable
-            name="title"
-            type="java.lang.String" />
+            name="model"
+            type="com.landvibe.alamemonew.model.uimodel.DetailFragmentViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@{title}"
+            android:text="@{model.title}"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp"
@@ -94,13 +97,35 @@
             android:layout_marginHorizontal="25dp"
             app:layout_constraintTop_toBottomOf="@id/detail_detail"/>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/detail_recycler"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tab_center_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            app:layout_constraintTop_toBottomOf="@id/divider2"/>
+            android:clipToPadding="false"
+            app:layout_constraintTop_toBottomOf="@id/divider2">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detail_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{model.memoEmpty ? View.GONE : View.VISIBLE}"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tab_memo_empty_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/no_schedule"
+                android:textSize="26sp"
+                android:textColor="@color/color_383838"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="@{model.memoEmpty ? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

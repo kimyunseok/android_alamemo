@@ -2,14 +2,16 @@ package com.landvibe.alamemonew.common
 
 import androidx.lifecycle.MutableLiveData
 import androidx.room.*
+import com.landvibe.alamemonew.model.data.detail.DetailMemo
+import com.landvibe.alamemonew.model.data.detail.DetailMemoDao
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.data.memo.MemoDao
 
-@Database(entities = [Memo::class], version = 1)
+@Database(entities = [Memo::class, DetailMemo::class], version = 1)
 @TypeConverters(AppDataBase.Converter::class)
 abstract class AppDataBase: RoomDatabase() {
     abstract fun memoDao(): MemoDao
-    //abstract fun contentDao(): ContentDao
+    abstract fun detailMemoDao(): DetailMemoDao
 
     companion object {
         val instance = Room.databaseBuilder(

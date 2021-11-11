@@ -1,6 +1,8 @@
 package com.landvibe.alamemonew.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -47,6 +49,8 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        //화면 재구성 시 필요.
         if(this::viewDataBinding.isInitialized) {
             setRecyclerView()
         }

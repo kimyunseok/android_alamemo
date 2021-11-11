@@ -1,6 +1,7 @@
 package com.landvibe.alamemonew.ui.fragment.add
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemonew.R
@@ -29,9 +30,14 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                 val model = viewDataBinding.model
 
                 if (model != null) {
+                    if(model.type.value == 1) {
+                        //메모라면 날짜를 오늘로 수정.
+                        model.setMemoScheduleTimeToday()
+                    }
+
                     if (viewDataBinding.model?.id?.toInt() != 0) {
                         // 메모 id가 존재한다면, 즉 수정하기라면
-                        // 2. 메모 수정.
+                        // 메모 수정.
                         AppDataBase.instance.memoDao().modifyMemo(
                             id = model.id,
                             type = model.type,
@@ -90,7 +96,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     private fun initMemoModel() {
         val memoId = arguments?.getLong("memoId")
 
-        val memo = if(memoId != null) {
+        val memo = if(memoId != null && memoId != (0).toLong()) {
             AppDataBase.instance.memoDao().getMemoById(memoId)
         } else {
             val calendar = Calendar.getInstance()
@@ -130,6 +136,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
         if(yearValue != null && monthValue != null && dayOfMonthValue != null) {
             val calendarDialog = DatePickerDialog(requireContext(), calendarOnDateSetListener, yearValue, monthValue, dayOfMonthValue)
+                .apply { datePicker.minDate = System.currentTimeMillis() }
             calendarDialog.show()
         }
 
