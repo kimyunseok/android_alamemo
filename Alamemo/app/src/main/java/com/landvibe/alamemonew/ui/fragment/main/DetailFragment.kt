@@ -14,7 +14,7 @@ import com.landvibe.alamemonew.model.data.detail.DetailMemo
 import com.landvibe.alamemonew.model.uimodel.DetailFragmentViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.DetailAddOrEditFragment
-import com.landvibe.alamemonew.ui.fragment.dialog.DetailMemoDeleteDialog
+import com.landvibe.alamemonew.ui.fragment.dialog.DetailMemoDeleteSnackBar
 import com.landvibe.alamemonew.util.DetailMemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 
@@ -77,12 +77,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         setAnimation()
         val itemList = memoId?.let { memoId -> AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList() }
 
-        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-        )
+        sortDetailMemoList(itemList)
 
         if(itemList != null) {
             recyclerViewAdapter = DetailMemoRecyclerViewAdapter(requireContext(), itemList)
@@ -97,10 +92,19 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     private fun setSwipeToDelete(adapter: DetailMemoRecyclerViewAdapter): SwipeAction {
         return object: SwipeAction() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val pos = viewHolder.adapterPosition
+                val position = viewHolder.adapterPosition
 
-                val dialog = DetailMemoDeleteDialog(requireContext(), adapter, pos)
-                dialog.show()
+                //TODO : 알람삭제
+                //TODO : 상단바 고정 삭제
+                val detailMemoID = recyclerViewAdapter.itemList[position].id
+                val tmpDetailMemo = recyclerViewAdapter.itemList[position]
+
+                AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemoID)
+
+                recyclerViewAdapter.itemList.removeAt(position)
+                recyclerViewAdapter.notifyItemRemoved(position)
+
+                DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, recyclerViewAdapter, position, tmpDetailMemo).showSnackBar()
             }
 
         }
@@ -115,12 +119,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     private fun refreshRecyclerView() {
         val itemList = memoId?.let { memoId -> AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList() }
 
-        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-        )
+        sortDetailMemoList(itemList)
 
         //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
 
@@ -134,5 +133,14 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
         viewDataBinding.model?.memoEmpty?.value = itemList?.isEmpty()
 
+    }
+
+    private fun sortDetailMemoList(itemList: MutableList<DetailMemo>?) {
+        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
+            .thenBy { it.scheduleDateMonth.value }
+            .thenBy { it.scheduleDateDay.value }
+            .thenBy { it.scheduleDateHour.value }
+            .thenBy { it.scheduleDateMinute.value }
+        )
     }
 }

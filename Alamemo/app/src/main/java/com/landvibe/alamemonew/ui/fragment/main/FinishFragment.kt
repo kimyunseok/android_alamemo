@@ -6,7 +6,7 @@ import com.landvibe.alamemonew.ui.BaseTabFragment
 
 class FinishFragment: BaseTabFragment<TabFragmentBinding>() {
     override val layoutId: Int = R.layout.tab_fragment
-    override val type: Int = 4
+    override val type: Int = 4 // type 4는 실제로는 쓰지 않는 type. 프래그먼트에서만 사용.
 
     override fun init() {
 

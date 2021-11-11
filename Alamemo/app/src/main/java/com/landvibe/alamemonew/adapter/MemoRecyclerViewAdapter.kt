@@ -67,7 +67,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                 //일정 종료처리
                 AppDataBase.instance.memoDao().modifyMemo(
                     id = item.id,
-                    type = MutableLiveData(4),
+                    type = item.type,
                     icon = item.icon,
                     title = item.title,
                     scheduleDateYear = item.scheduleDateYear,

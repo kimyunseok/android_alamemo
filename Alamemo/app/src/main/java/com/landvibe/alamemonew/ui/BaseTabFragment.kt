@@ -1,7 +1,6 @@
 package com.landvibe.alamemonew.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
-import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteDialog
+import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteSnackBar
 import com.landvibe.alamemonew.util.MemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 import java.util.*
@@ -70,31 +69,10 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
         if(type == 2) {
             //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-            val today = System.currentTimeMillis()
-            for(data in itemList) {
-                val calendar = Calendar.getInstance()
-                data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
-                data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
-                data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
-                data.scheduleDateHour.value?.let { calendar.set(Calendar.HOUR_OF_DAY, it) }
-                data.scheduleDateMinute.value?.let { calendar.set(Calendar.MINUTE, it) }
-                val checkDay = calendar.time.time
-
-                if(checkDay < today) {
-                    AppDataBase.instance.memoDao().setMemoFinish(data.id)
-                    itemList.remove(data)
-                }
-            }
+            finishScheduleBeforeCurrentTime(itemList)
         }
 
-        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-            .thenBy { it.alarmStartTimeHour.value }
-            .thenBy { it.alarmStartTimeMinute.value }
-        )
+        sortMemoList(itemList)
 
         recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList)
         viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
@@ -114,31 +92,11 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
 
         if(type == 2) {
             //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-            val today = System.currentTimeMillis()
-            for(data in itemList) {
-                val calendar = Calendar.getInstance()
-                data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
-                data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
-                data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
-                data.scheduleDateHour.value?.let { calendar.set(Calendar.HOUR_OF_DAY, it) }
-                data.scheduleDateMinute.value?.let { calendar.set(Calendar.MINUTE, it) }
-                val checkDay = calendar.time.time
-
-                if(checkDay < today) {
-                    AppDataBase.instance.memoDao().setMemoFinish(data.id)
-                    itemList.remove(data)
-                }
-            }
+            finishScheduleBeforeCurrentTime(itemList)
         }
 
-        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-            .thenBy { it.alarmStartTimeHour.value }
-            .thenBy { it.alarmStartTimeMinute.value }
-        )
+        sortMemoList(itemList)
+
         //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
 
         //대체 코드
@@ -154,10 +112,20 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
     private fun setSwipeToDelete(adapter: MemoRecyclerViewAdapter): SwipeAction {
         return object: SwipeAction() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val pos = viewHolder.adapterPosition
+                val position = viewHolder.adapterPosition
 
-                val dialog = MemoDeleteDialog(requireContext(), adapter, pos)
-                dialog.show()
+                //TODO : 알람삭제
+                //TODO : 상단바 고정 삭제
+                val tmpMemo = recyclerViewAdapter.itemList[position]
+                val tmpDetailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(tmpMemo.id)
+
+                AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(tmpMemo.id)
+                AppDataBase.instance.memoDao().deleteMemoByID(tmpMemo.id)
+
+                recyclerViewAdapter.itemList.removeAt(position)
+                recyclerViewAdapter.notifyItemRemoved(position)
+
+                MemoDeleteSnackBar(requireContext(), viewDataBinding.root, recyclerViewAdapter, position, tmpMemo, tmpDetailMemoList).showSnackBar()
             }
 
         }
@@ -167,5 +135,35 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
         val fadeAnimation = AlphaAnimation(0F, 1F)
         fadeAnimation.duration = 500
         viewDataBinding.tabMemoRecycler.animation = fadeAnimation
+    }
+
+    private fun finishScheduleBeforeCurrentTime(itemList: MutableList<Memo>) {
+        //일정 중에서 오늘날짜보다 지난것들은 종료처리.
+        val today = System.currentTimeMillis()
+        for(data in itemList) {
+            val calendar = Calendar.getInstance()
+            data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
+            data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
+            data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+            data.scheduleDateHour.value?.let { calendar.set(Calendar.HOUR_OF_DAY, it) }
+            data.scheduleDateMinute.value?.let { calendar.set(Calendar.MINUTE, it) }
+            val checkDay = calendar.time.time
+
+            if(checkDay < today) {
+                AppDataBase.instance.memoDao().setMemoFinish(data.id)
+                itemList.remove(data)
+            }
+        }
+    }
+
+    private fun sortMemoList(itemList: MutableList<Memo>) {
+        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
+            .thenBy { it.scheduleDateMonth.value }
+            .thenBy { it.scheduleDateDay.value }
+            .thenBy { it.scheduleDateHour.value }
+            .thenBy { it.scheduleDateMinute.value }
+            .thenBy { it.alarmStartTimeHour.value }
+            .thenBy { it.alarmStartTimeMinute.value }
+        )
     }
 }
