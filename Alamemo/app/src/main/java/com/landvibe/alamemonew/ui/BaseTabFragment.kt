@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.TabFragmentBinding
@@ -70,18 +71,8 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
             .thenBy { it.alarmStartTimeMinute.value }
         )
 
-        if(type == 2) {
-            val today = System.currentTimeMillis()
-            for(idx in 0 until itemList.size) {
-                val calendar = Calendar.getInstance()
-            }
-        }
+        viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()
 
-        Log.d(this.toString() + "ListSize::", itemList.size.toString())
-
-        if(itemList.isNotEmpty()) {
-            viewDataBinding.model?.memoEmpty?.value = false
-        }
         val adapter = MemoRecyclerViewAdapter(requireContext(), itemList)
         viewDataBinding.tabMemoRecycler.adapter = adapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)

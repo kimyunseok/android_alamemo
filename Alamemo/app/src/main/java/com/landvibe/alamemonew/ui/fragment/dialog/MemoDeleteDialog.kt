@@ -28,10 +28,10 @@ class MemoDeleteDialog(context: Context, recyclerViewAdapter: MemoRecyclerViewAd
                         recyclerViewAdapter.notifyItemRemoved(position)
                     }
                     DialogInterface.BUTTON_NEGATIVE -> {
-                        (context as MainActivity).viewDataBinding.invalidateAll()
                         //아니요 버튼
                     }
                 }
+                (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
             }
 
         }
