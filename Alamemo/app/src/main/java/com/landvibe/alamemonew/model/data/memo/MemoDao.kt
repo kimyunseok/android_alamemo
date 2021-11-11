@@ -32,6 +32,9 @@ interface MemoDao {
     @Query("UPDATE Memo SET type = :type Where id = :id")
     fun modifyMemoType(id: Long, type: MutableLiveData<Int>)
 
+    @Query("UPDATE Memo SET scheduleFinish = ${true} Where id = :id")
+    fun setMemoFinish(id: Long)
+
     @Query("UPDATE Memo SET type = :type, icon = :icon, title = :title, scheduleDateYear = :scheduleDateYear, scheduleDateMonth = :scheduleDateMonth, scheduleDateDay = :scheduleDateDay, scheduleDateHour = :scheduleDateHour, scheduleDateMinute = :scheduleDateMinute, alarmStartTimeHour = :alarmStartTimeHour, alarmStartTimeMinute = :alarmStartTimeMinute, scheduleFinish = :scheduleFinish, fixNotify = :fixNotify, setAlarm = :setAlarm, repeatDay = :repeatDay, alarmStartTimeType = :alarmStartTimeType Where id = :id")
     fun modifyMemo(id: Long, type: MutableLiveData<Int>, icon: MutableLiveData<String>,
                    title: MutableLiveData<String>, scheduleDateYear: MutableLiveData<Int>,

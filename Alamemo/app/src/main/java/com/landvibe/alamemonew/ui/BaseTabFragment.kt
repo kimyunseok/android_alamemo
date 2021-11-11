@@ -1,6 +1,7 @@
 package com.landvibe.alamemonew.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,6 +68,25 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
             AppDataBase.instance.memoDao().getFinishMemo().toMutableList()
         }
 
+        if(type == 2) {
+            //일정 중에서 오늘날짜보다 지난것들은 종료처리.
+            val today = System.currentTimeMillis()
+            for(data in itemList) {
+                val calendar = Calendar.getInstance()
+                data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
+                data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
+                data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+                data.scheduleDateHour.value?.let { calendar.set(Calendar.HOUR_OF_DAY, it) }
+                data.scheduleDateMinute.value?.let { calendar.set(Calendar.MINUTE, it) }
+                val checkDay = calendar.time.time
+
+                if(checkDay < today) {
+                    AppDataBase.instance.memoDao().setMemoFinish(data.id)
+                    itemList.remove(data)
+                }
+            }
+        }
+
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
             .thenBy { it.scheduleDateMonth.value }
             .thenBy { it.scheduleDateDay.value }
@@ -90,6 +110,25 @@ abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
             AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
         } else {
             AppDataBase.instance.memoDao().getFinishMemo().toMutableList()
+        }
+
+        if(type == 2) {
+            //일정 중에서 오늘날짜보다 지난것들은 종료처리.
+            val today = System.currentTimeMillis()
+            for(data in itemList) {
+                val calendar = Calendar.getInstance()
+                data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
+                data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
+                data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+                data.scheduleDateHour.value?.let { calendar.set(Calendar.HOUR_OF_DAY, it) }
+                data.scheduleDateMinute.value?.let { calendar.set(Calendar.MINUTE, it) }
+                val checkDay = calendar.time.time
+
+                if(checkDay < today) {
+                    AppDataBase.instance.memoDao().setMemoFinish(data.id)
+                    itemList.remove(data)
+                }
+            }
         }
 
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}

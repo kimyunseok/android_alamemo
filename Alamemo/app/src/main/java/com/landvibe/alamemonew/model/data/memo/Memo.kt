@@ -134,7 +134,7 @@ class Memo (
         }
 
 
-        return if(type.value == 2 || type.value == 3) {
+        return if(scheduleFinish.value == false && (type.value == 2 || type.value == 3) ) {
            "${hour}:${minute} " + title.value
         } else {
             title.value.toString()

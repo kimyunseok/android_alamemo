@@ -24,7 +24,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             android:padding="6dp"
-            android:background="@{(model.type == 2 &amp;&amp; (model.getDDayInteger == 0)) || (model.type == 3 &amp;&amp; model.checkRepeatDay()) ? @drawable/selector_radius_green_yellow_background : @drawable/selector_radius_background}"
+            android:background="@{model.scheduleFinish == false &amp;&amp; ( (model.type == 2 &amp;&amp; (model.getDDayInteger == 0)) || (model.type == 3 &amp;&amp; model.checkRepeatDay()) ) ? @drawable/selector_radius_green_yellow_background : @drawable/selector_radius_background}"
             android:elevation="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -33,7 +33,7 @@
                 android:id="@+id/holder_complete_cb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{model.type == 4 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{model.scheduleFinish ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -91,7 +91,7 @@
                     android:id="@+id/memo_d_day_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{model.type != 2 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{model.scheduleFinish == true || model.type != 2 ? View.GONE : View.VISIBLE}"
                     android:text="@{model.DDay}"
                     android:textColor="@color/black"
                     android:textStyle="bold"
