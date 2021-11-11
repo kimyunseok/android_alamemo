@@ -1,5 +1,6 @@
 package com.landvibe.alamemonew.model.data.memo
 
+import android.icu.text.StringSearch
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -117,8 +118,24 @@ class Memo (
     }
 
     fun getTitleInclueTime(): String {
+        val hourValue = scheduleDateHour.value?.toInt()
+        val minuteValue = scheduleDateMinute.value
+
+        val hour =
+            if(hourValue != null && hourValue < 10) {
+                "0" + scheduleDateHour.value
+            } else {
+                scheduleDateHour.value.toString()
+            }
+        val minute = if(minuteValue != null && minuteValue < 10) {
+            "0" + scheduleDateMinute.value
+        } else {
+            scheduleDateMinute.value.toString()
+        }
+
+
         return if(type.value == 2 || type.value == 3) {
-           "${scheduleDateHour.value}:${scheduleDateMinute.value} " + title.value
+           "${hour}:${minute} " + title.value
         } else {
             title.value.toString()
         }
