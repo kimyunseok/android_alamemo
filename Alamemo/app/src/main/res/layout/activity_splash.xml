@@ -5,42 +5,16 @@
     android:id="@+id/splash_layout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:background="@color/white">
+    android:background="@color/MintCream">
 
-    <TextView
-        android:id="@+id/imageView"
+    <ImageView
+        android:id="@+id/splash_image"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:text="@string/memo_emoji"
-        android:textSize="100sp"
+        android:layout_height="0dp"
+        android:src="@drawable/splash"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/splash_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="@string/splash_top_text"
-        android:textColor="@color/black"
-        android:textSize="35sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/splash_tv2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="@string/splash_bottom_text"
-        android:textColor="@color/black"
-        android:textSize="29sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/splash_tv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
