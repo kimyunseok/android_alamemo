@@ -16,7 +16,7 @@ class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerV
         Snackbar.make(rootView, context.getString(R.string.delete_memo_snackbar_message), Snackbar.LENGTH_SHORT).apply {
             setAction(context.getString(R.string.delete_snackbar_cancel)) { undoDelete() }
             setTextColor(ContextCompat.getColor(context, R.color.white))
-            setActionTextColor(ContextCompat.getColor(context, R.color.DarkRed))
+            setActionTextColor(ContextCompat.getColor(context, R.color.Red))
             setBackgroundTint(ContextCompat.getColor(context, R.color.black))
         }
 
