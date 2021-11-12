@@ -24,7 +24,7 @@
     <string name="memo">메모</string>
     <string name="today_schedule">일정</string>
     <string name="repeat_schedule">반복 일정</string>
-    <string name="finish_schedule">종료된 일정</string>
+    <string name="finish_schedule">종료</string>
 
     <!-- AddFragment -->
     <string name="show_dialog">달력으로 보기(날짜)</string>
