@@ -55,7 +55,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
             onStop()
         }
 
-        viewDataBinding.mainSettingButton.setOnClickListener {
+        viewDataBinding.mainGuideButton.setOnClickListener {
             Toast.makeText(requireContext(), getString(R.string.sry_making), Toast.LENGTH_SHORT).show()
         }
     }

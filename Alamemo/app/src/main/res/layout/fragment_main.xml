@@ -18,11 +18,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
-                android:id="@+id/main_setting_button"
+                android:id="@+id/main_guide_button"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/ic_setting"/>
+                android:background="@drawable/ic_guide"/>
 
             <TextView
                 android:layout_width="wrap_content"
