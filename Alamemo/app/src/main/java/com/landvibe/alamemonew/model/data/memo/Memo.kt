@@ -1,5 +1,6 @@
 package com.landvibe.alamemonew.model.data.memo
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -107,8 +108,8 @@ class Memo (
         scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
         scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
         scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
-        val today = (System.currentTimeMillis() + (60 * 60 * 9 * 1000)) / (60 * 60 * 24 * 1000)
-        val setDateDay = (calendar.time.time.plus((60 * 60 * 9 * 1000)).div((60 * 60 * 24 * 1000)))
+        val today = System.currentTimeMillis() / (1000 * 60 * 60 * 24) // 1000(1초) * 60(1분) * 60(1시간) * 24(24시간, 하루)
+        val setDateDay = calendar.time.time / (1000 * 60 * 60 * 24)
 
         return (setDateDay - today).toInt()
     }
@@ -118,6 +119,16 @@ class Memo (
     }
 
     fun getTitleInclueTime(): String {
+
+
+        return if(scheduleFinish.value == false && (type.value == 2 || type.value == 3) ) {
+            getTimeFormat() + title.value
+        } else {
+            title.value.toString()
+        }
+    }
+
+    fun getTimeFormat(): String {
         val hourValue = scheduleDateHour.value?.toInt()
         val minuteValue = scheduleDateMinute.value
 
@@ -133,12 +144,7 @@ class Memo (
             scheduleDateMinute.value.toString()
         }
 
-
-        return if(scheduleFinish.value == false && (type.value == 2 || type.value == 3) ) {
-           "${hour}:${minute} " + title.value
-        } else {
-            title.value.toString()
-        }
+        return "${hour}:${minute}"
     }
 
     fun setMemoScheduleTimeToday() {

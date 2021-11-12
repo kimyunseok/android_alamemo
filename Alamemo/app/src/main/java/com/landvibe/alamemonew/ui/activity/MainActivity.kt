@@ -1,16 +1,13 @@
 package com.landvibe.alamemonew.ui.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.landvibe.alamemonew.R
-import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.ActivityMainBinding
 import com.landvibe.alamemonew.ui.BaseActivity
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
-import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
 import com.landvibe.alamemonew.ui.fragment.main.MainFragment
-import java.util.*
+import com.landvibe.alamemonew.util.NotificationChannelMaker
 
 /**
 MainActivity는 자동으로 menifests에 추가됨. 따로 추가할 필요가 없다.
@@ -38,8 +35,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun init() {
-        Log.d("checkTime::", Calendar.getInstance().time.time.toString() + ", " + System.currentTimeMillis().toString())
+        NotificationChannelMaker().createNotificationChannel(applicationContext) // 노티피케이션 채널 생성
 
+        setUpFragment()
+    }
+
+    private fun setUpFragment() {
         val memoId = intent?.getLongExtra("memoId", -1)
         if(memoId != null && memoId != (-1).toLong()) {
             //상단바를 통해서 들어온 경우.

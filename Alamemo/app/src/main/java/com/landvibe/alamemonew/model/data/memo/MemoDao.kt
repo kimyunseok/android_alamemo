@@ -8,6 +8,12 @@ import androidx.room.Query
 
 @Dao
 interface MemoDao {
+    @Insert
+    fun insertMemo(memo: Memo)
+
+    @Delete
+    fun deleteMemo(memo: Memo)
+
     @Query("SELECT * FROM Memo")
     fun getAllMemo(): List<Memo>
 
@@ -20,11 +26,14 @@ interface MemoDao {
     @Query("SELECT * FROM Memo Where scheduleFinish = ${true}")
     fun getFinishMemo(): List<Memo>
 
-    @Insert
-    fun insertMemo(memo: Memo)
+    @Query("SELECT * FROM Memo Where setAlarm = ${true}")
+    fun getAlarmMemo(): List<Memo>
 
-    @Delete
-    fun deleteMemo(memo: Memo)
+    @Query("SELECT * FROM Memo Where fixNotify = ${true}")
+    fun getFixNotifyMemo(): List<Memo>
+
+    @Query("SELECT * FROM Memo Where type = ${3}")
+    fun getRepeatScheduleMemo(): List<Memo>
 
     @Query("DELETE FROM Memo Where id = :id")
     fun deleteMemoByID(id: Long)
@@ -42,4 +51,5 @@ interface MemoDao {
                    scheduleDateHour: MutableLiveData<Int>, scheduleDateMinute: MutableLiveData<Int>,
                    alarmStartTimeHour: MutableLiveData<Int>, alarmStartTimeMinute: MutableLiveData<Int>, scheduleFinish: MutableLiveData<Boolean>,
                    fixNotify: MutableLiveData<Boolean>, setAlarm: MutableLiveData<Boolean>, repeatDay: MutableList<Char>, alarmStartTimeType: MutableLiveData<Int>)
+
 }

@@ -14,6 +14,8 @@ import com.landvibe.alamemonew.databinding.FragmentTabBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
 import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteSnackBar
+import com.landvibe.alamemonew.util.AlarmHandler
+import com.landvibe.alamemonew.util.FixNotifyHandler
 import com.landvibe.alamemonew.util.MemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 import java.util.*
@@ -78,7 +80,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
         viewDataBinding.tabMemoRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
-        ItemTouchHelper(setSwipeToDelete(recyclerViewAdapter)).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
+        ItemTouchHelper(setSwipeToDelete()).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
 
         viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()
     }
@@ -109,7 +111,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
     }
 
-    private fun setSwipeToDelete(adapter: MemoRecyclerViewAdapter): SwipeAction {
+    private fun setSwipeToDelete(): SwipeAction {
         return object: SwipeAction() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
@@ -118,6 +120,16 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
                 //TODO : 상단바 고정 삭제
                 val tmpMemo = recyclerViewAdapter.itemList[position]
                 val tmpDetailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(tmpMemo.id)
+
+                if(tmpMemo.setAlarm.value == true) {
+                    //알람설정 돼 있었다면 알람해제.
+                    AlarmHandler().cancelAlarm(requireContext(), tmpMemo.id.toInt())
+                }
+
+                if(tmpMemo.fixNotify.value == true) {
+                    //고성설정 돼 있었다면 알람해제.
+                    FixNotifyHandler().cancelFixNotify(requireContext(), tmpMemo.id.toInt())
+                }
 
                 AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(tmpMemo.id)
                 AppDataBase.instance.memoDao().deleteMemoByID(tmpMemo.id)

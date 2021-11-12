@@ -84,12 +84,12 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
             viewDataBinding.detailRecycler.adapter = recyclerViewAdapter
             viewDataBinding.detailRecycler.layoutManager = LinearLayoutManager(context)
             viewDataBinding.detailRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
-            ItemTouchHelper(setSwipeToDelete(recyclerViewAdapter)).attachToRecyclerView(viewDataBinding.detailRecycler)
+            ItemTouchHelper(setSwipeToDelete()).attachToRecyclerView(viewDataBinding.detailRecycler)
         }
         viewDataBinding.model?.memoEmpty?.value = itemList?.isEmpty()
     }
 
-    private fun setSwipeToDelete(adapter: DetailMemoRecyclerViewAdapter): SwipeAction {
+    private fun setSwipeToDelete(): SwipeAction {
         return object: SwipeAction() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition

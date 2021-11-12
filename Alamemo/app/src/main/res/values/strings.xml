@@ -73,4 +73,17 @@
     <string name="delete_snackbar_cancel">삭제취소</string>
     <string name="delete_detail_memo_snackbar_message">세부 메모/일정이 삭제되었습니다.</string>
     <string name="delete_memo_snackbar_message">메모가 삭제되었습니다.\n세부 메모/일정도 삭제되었습니다.</string>
+    
+    <!-- Notification 관련 -->
+    <string name="notification_channel_id">alamemo_notification_channel_id</string>
+    <string name="notification_channel_name" >alamemo_notification_channel</string>
+    <string name="notification_today">오늘은 </string>
+    <string name="notification_today_time_is">에 </string>
+    <string name="notification_today_is_scheduled">이(가) 예정되어 있습니다!\n</string>
+    <string name="notification_is">이(가) </string>
+    <string name="notification_future_is_remain">일 전입니다!\n</string>
+    <string name="notification_past_is_over">일 지났습니다!\n</string>
+    <string name="notification_fix_notify_slash">- </string>
+    <string name="notification_fix_notify_slash_include_line_enter">\n- </string>
+    <string name="notification_boot">잊으신 메모는 없나요?\n여기를 눌러서 확인해보세요!</string>
 </resources>
