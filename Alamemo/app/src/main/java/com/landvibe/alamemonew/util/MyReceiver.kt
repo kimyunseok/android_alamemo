@@ -62,6 +62,7 @@ class MyReceiver: BroadcastReceiver() {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setShowWhen(false)
     }
 
     private fun setBuilderContentText(context: Context, memo: Memo, detailMemoList: MutableList<DetailMemo>) {
