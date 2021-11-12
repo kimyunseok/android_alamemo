@@ -1,4 +1,4 @@
-package com.landvibe.alamemonew.util
+package com.landvibe.alamemonew.receiver
 
 import android.app.PendingIntent
 import android.app.TaskStackBuilder

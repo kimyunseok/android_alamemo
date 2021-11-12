@@ -1,14 +1,12 @@
-package com.landvibe.alamemonew.util
+package com.landvibe.alamemonew.handler
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.model.data.memo.Memo
-import com.landvibe.alamemonew.ui.activity.MainActivity
+import com.landvibe.alamemonew.receiver.MyReceiver
 import java.util.*
 
 class AlarmHandler {
@@ -32,7 +30,7 @@ class AlarmHandler {
             initAlarmManagerForSchedule(context, memo)
         } else {
             //반복 일정이라면
-            
+            initAlarmManagerForRepeatSchedule(context, memo)
         }
     }
 
@@ -83,6 +81,43 @@ class AlarmHandler {
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
             AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
+    private fun initAlarmManagerForRepeatSchedule(context: Context, memo: Memo) {
+        alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val todayCalendar = Calendar.getInstance()
+        val alarmCalendar = Calendar.getInstance().apply {
+            memo.scheduleDateYear.value?.let { year -> set(Calendar.YEAR, year) }
+            memo.scheduleDateMonth.value?.let { month -> set(Calendar.MONTH, month) }
+            memo.scheduleDateDay.value?.let { day -> set(Calendar.DAY_OF_MONTH, day) }
+        }
+
+        if(memo.alarmStartTimeType.value == 1) {
+            val alarmHour = memo.alarmStartTimeHour.value
+            val alarmMinute = memo.alarmStartTimeMinute.value
+            if(alarmHour != null && alarmMinute != null) {
+                //매일 알람이 설정됐다면, 매일 정해진 시간에 알람을 울려주면 된다.
+                if(todayCalendar.get(Calendar.HOUR_OF_DAY) < alarmHour ||
+                    (todayCalendar.get(Calendar.HOUR_OF_DAY) == alarmHour &&
+                            todayCalendar.get(Calendar.MINUTE) < alarmMinute) ) {
+                    alarmCalendar.timeInMillis = System.currentTimeMillis()
+                } else {
+                    alarmCalendar.timeInMillis = System.currentTimeMillis() + (1000 * 60 * 60 * 24)
+                }
+            }
+        }
+
+        memo.alarmStartTimeHour.value?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
+        memo.alarmStartTimeMinute.value?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
+        alarmCalendar.set(Calendar.SECOND, 1)
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            alarmCalendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY * 7, //
             pendingIntent
         )
     }

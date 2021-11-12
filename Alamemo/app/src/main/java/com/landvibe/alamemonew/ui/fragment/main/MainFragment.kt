@@ -1,7 +1,5 @@
 package com.landvibe.alamemonew.ui.fragment.main
 
-import android.content.Context
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.google.android.material.tabs.TabLayoutMediator
@@ -12,9 +10,6 @@ import com.landvibe.alamemonew.databinding.HolderTabButtonBinding
 import com.landvibe.alamemonew.model.uimodel.TabButtonViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
-import com.landvibe.alamemonew.util.AlarmHandler
-import com.landvibe.alamemonew.util.FixNotifyHandler
-import com.landvibe.alamemonew.util.NotificationChannelMaker
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main

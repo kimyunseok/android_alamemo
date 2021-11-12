@@ -31,13 +31,13 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".util.MyReceiver"
+        <receiver android:name=".receiver.MyReceiver"
             android:process=":remote"
             android:enabled="true"
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".util.MyBootReceiver"
+        <receiver android:name=".receiver.MyBootReceiver"
             android:process=":remote"
             android:enabled="true"
             android:exported="false">

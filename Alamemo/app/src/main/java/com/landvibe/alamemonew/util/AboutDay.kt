@@ -55,18 +55,18 @@ class AboutDay {
     //요일 비교 클래스
     class DayCompare: Comparator<Char> {
         override fun compare(p0: Char?, p1: Char?): Int {
-            return getDaySequence(p1) - getDaySequence(p0)
+            return getDaySequence(p0) - getDaySequence(p1)
         }
 
         private fun getDaySequence(day: Char?): Int {
             return when(day) {
-                '월' -> 7
-                '화' -> 6
-                '수' -> 5
-                '목' -> 4
-                '금' -> 3
-                '토' -> 2
                 '일' -> 1
+                '월' -> 2
+                '화' -> 3
+                '수' -> 4
+                '목' -> 5
+                '금' -> 6
+                '토' -> 7
                 else -> 0
             }
         }

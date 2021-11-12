@@ -2,16 +2,14 @@ package com.landvibe.alamemonew.ui.activity
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.databinding.ActivityMainBinding
 import com.landvibe.alamemonew.ui.BaseActivity
-import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
 import com.landvibe.alamemonew.ui.fragment.main.MainFragment
-import com.landvibe.alamemonew.util.AlarmHandler
-import com.landvibe.alamemonew.util.FixNotifyHandler
+import com.landvibe.alamemonew.handler.AlarmHandler
+import com.landvibe.alamemonew.handler.FixNotifyHandler
 import com.landvibe.alamemonew.util.NotificationChannelMaker
 
 /**

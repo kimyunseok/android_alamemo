@@ -1,4 +1,4 @@
-package com.landvibe.alamemonew.util
+package com.landvibe.alamemonew.receiver
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -7,6 +7,8 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemonew.R
+import com.landvibe.alamemonew.handler.AlarmHandler
+import com.landvibe.alamemonew.handler.FixNotifyHandler
 import com.landvibe.alamemonew.ui.splash.SplashActivity
 
 class MyBootReceiver: BroadcastReceiver() {

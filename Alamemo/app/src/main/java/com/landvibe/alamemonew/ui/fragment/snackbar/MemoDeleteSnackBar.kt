@@ -9,8 +9,8 @@ import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.model.data.detail.DetailMemo
 import com.landvibe.alamemonew.model.data.memo.Memo
-import com.landvibe.alamemonew.util.AlarmHandler
-import com.landvibe.alamemonew.util.FixNotifyHandler
+import com.landvibe.alamemonew.handler.AlarmHandler
+import com.landvibe.alamemonew.handler.FixNotifyHandler
 
 class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerViewAdapter: MemoRecyclerViewAdapter,
                          private val position: Int, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>) {

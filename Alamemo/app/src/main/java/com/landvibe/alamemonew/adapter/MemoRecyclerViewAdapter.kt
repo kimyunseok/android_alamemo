@@ -13,9 +13,8 @@ import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.activity.MainActivity
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
-import com.landvibe.alamemonew.util.AlarmHandler
-import com.landvibe.alamemonew.util.FixNotifyHandler
-import java.util.*
+import com.landvibe.alamemonew.handler.AlarmHandler
+import com.landvibe.alamemonew.handler.FixNotifyHandler
 
 class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 
