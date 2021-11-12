@@ -21,7 +21,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
 
     private fun initDetailMemoModel() {
         val memoId = arguments?.getLong("memoId")
-        val detailMemoId = arguments?.getLong("detailMemoId")
+        val detailMemoId = arguments?.getLong("detailMemoId", -1)
         var type = arguments?.getInt("memoType")
 
         if(type == 3) {
@@ -29,7 +29,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
             type = 1
         }
 
-        val detailMemo = if(detailMemoId != null && detailMemoId != (0).toLong()) {
+        val detailMemo = if(detailMemoId != null && detailMemoId != (-1).toLong()) {
             AppDataBase.instance.detailMemoDao().getDetailMemoById(detailMemoId)
         } else {
             val calendar = Calendar.getInstance()
