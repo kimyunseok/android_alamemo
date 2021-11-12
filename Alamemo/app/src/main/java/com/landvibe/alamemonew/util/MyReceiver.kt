@@ -75,7 +75,8 @@ class MyReceiver: BroadcastReceiver() {
                         + context.getString(R.string.notification_today_time_is)
                         + memo.title.value
                         + context.getString(R.string.notification_today_is_scheduled)
-                        + detailMemoList.joinToString("\n") {it.getTitleInclueTime()}
+                        + detailMemoList.joinToString("\n") {it.getTitleInclueTime()
+                        }
                 )
             }
             dDay > 0 -> {

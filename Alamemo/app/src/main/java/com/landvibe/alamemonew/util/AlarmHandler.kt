@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.activity.MainActivity
@@ -24,15 +25,15 @@ class AlarmHandler {
 
     fun setMemoAlarm(context: Context, memo: Memo) {
 
-        initPendingIntent(context, memo.id.toInt())
+        initPendingIntent(context, memo.id)
         initAlarmManager(context, memo)
     }
 
-    private fun initPendingIntent(context: Context, memoId: Int) {
+    private fun initPendingIntent(context: Context, memoId: Long) {
         val receiverIntent = Intent(context, MyReceiver::class.java).putExtra("memoId", memoId)
 
         pendingIntent = PendingIntent.getBroadcast(
-            context, memoId, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            context, memoId.toInt(), receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 
@@ -69,6 +70,11 @@ class AlarmHandler {
             }
         }
 
+        memo.alarmStartTimeHour.value?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
+        memo.alarmStartTimeMinute.value?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
+
+        Log.d("알람맞춰진시간::", alarmCalendar.time.toString())
+
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
@@ -95,14 +101,14 @@ class AlarmHandler {
         }
     }
 
-    fun cancelAlarm(context: Context, memoId: Int) {
+    fun cancelAlarm(context: Context, memoId: Long) {
         alarmManager =
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(context, MyReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            memoId, intent, PendingIntent.FLAG_UPDATE_CURRENT
+            memoId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
         alarmManager.cancel(pendingIntent)
     }

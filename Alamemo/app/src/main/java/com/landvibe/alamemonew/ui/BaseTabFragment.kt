@@ -123,12 +123,12 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
                 if(tmpMemo.setAlarm.value == true) {
                     //알람설정 돼 있었다면 알람해제.
-                    AlarmHandler().cancelAlarm(requireContext(), tmpMemo.id.toInt())
+                    AlarmHandler().cancelAlarm(requireContext(), tmpMemo.id)
                 }
 
                 if(tmpMemo.fixNotify.value == true) {
                     //고성설정 돼 있었다면 알람해제.
-                    FixNotifyHandler().cancelFixNotify(requireContext(), tmpMemo.id.toInt())
+                    FixNotifyHandler().cancelFixNotify(requireContext(), tmpMemo.id)
                 }
 
                 AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(tmpMemo.id)
