@@ -72,8 +72,7 @@ class AlarmHandler {
 
         memo.alarmStartTimeHour.value?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
         memo.alarmStartTimeMinute.value?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
-
-        Log.d("알람맞춰진시간::", alarmCalendar.time.toString())
+        alarmCalendar.set(Calendar.SECOND, 1)
 
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
