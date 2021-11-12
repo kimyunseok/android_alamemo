@@ -13,6 +13,8 @@ import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.activity.MainActivity
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
+import com.landvibe.alamemonew.util.AlarmHandler
+import com.landvibe.alamemonew.util.FixNotifyHandler
 import java.util.*
 
 class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
@@ -83,7 +85,15 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                     repeatDay = item.repeatDay,
                     alarmStartTimeType = MutableLiveData(1)
                 )
-                //TODO : 알람 종료시키기
+
+                if(item.setAlarm.value == true) {
+                    //알람설정 돼 있었다면 알람해제.
+                    AlarmHandler().cancelAlarm(context, item.id)
+                }
+                if(item.fixNotify.value == true) {
+                    //고성설정 돼 있었다면 알람해제.
+                    FixNotifyHandler().cancelFixNotify(context, item.id)
+                }
 
                 (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
             }
