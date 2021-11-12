@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="com.landvibe.alamemonew.model.uimodel.TabButtonViewModel" />
+            type="com.landvibe.alamemo.model.uimodel.TabButtonViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

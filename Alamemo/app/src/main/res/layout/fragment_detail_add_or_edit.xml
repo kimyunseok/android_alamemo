@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemonew.model.data.detail.DetailMemo" />
+            type="com.landvibe.alamemo.model.data.detail.DetailMemo" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/LightGrey"
-                    android:visibility="@{model.type == 3 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{model.type != 2 ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_time_picker"
                     app:layout_constraintBottom_toTopOf="@+id/add_date_layout"/>
 
@@ -139,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
-                    android:visibility="@{model.type == 3 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{model.type != 2 ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_time_picker">
 
                     <TextView

@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemonew.model.uimodel.DetailFragmentViewModel" />
+            type="com.landvibe.alamemo.model.uimodel.DetailFragmentViewModel" />
 
     </data>
 

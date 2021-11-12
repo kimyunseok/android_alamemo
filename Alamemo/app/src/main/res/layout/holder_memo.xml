@@ -4,11 +4,11 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="com.landvibe.alamemonew.util.AboutDay"/>
+        <import type="com.landvibe.alamemo.util.AboutDay"/>
 
         <variable
             name="model"
-            type="com.landvibe.alamemonew.model.data.memo.Memo" />
+            type="com.landvibe.alamemo.model.data.memo.Memo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
