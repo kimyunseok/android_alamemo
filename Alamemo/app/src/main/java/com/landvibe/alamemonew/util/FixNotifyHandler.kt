@@ -36,6 +36,7 @@ class FixNotifyHandler {
         val mainActivityIntent = Intent(context, MainActivity::class.java).putExtra("memoId", memoId)
 
         pendingIntent = TaskStackBuilder.create(context).run {
+            addParentStack(MainActivity::class.java)
             addNextIntentWithParentStack(mainActivityIntent)
             getPendingIntent(memoId, PendingIntent.FLAG_UPDATE_CURRENT)
             //요청 코드를 메모Id를 Int로 변환해서 쓰면 위험하긴 하지만 21억번 메모를 할 일은 없을 것 같다...

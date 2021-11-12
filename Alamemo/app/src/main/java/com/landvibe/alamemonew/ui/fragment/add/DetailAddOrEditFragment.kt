@@ -9,6 +9,8 @@ import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.FragmentDetailAddOrEditBinding
 import com.landvibe.alamemonew.model.data.detail.DetailMemo
 import com.landvibe.alamemonew.ui.BaseFragment
+import com.landvibe.alamemonew.util.AlarmHandler
+import com.landvibe.alamemonew.util.FixNotifyHandler
 import java.util.*
 
 class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
@@ -99,6 +101,9 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+
+                    reSetAlarmAndFixNotify()
+
                 } else {
                     Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
                 }
@@ -147,4 +152,16 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
         }
     }
 
+    private fun reSetAlarmAndFixNotify() {
+        val memo = viewDataBinding.model?.memoId?.let { AppDataBase.instance.memoDao().getMemoById(it) }
+
+        //알람설정.
+        if(memo?.setAlarm?.value == true) {
+            AlarmHandler().setMemoAlarm(requireContext(), memo)
+        }
+        //상단바 고정 설정
+        if(memo?.fixNotify?.value == true) {
+            FixNotifyHandler().setMemoFixNotify(requireContext(), memo)
+        }
+    }
 }

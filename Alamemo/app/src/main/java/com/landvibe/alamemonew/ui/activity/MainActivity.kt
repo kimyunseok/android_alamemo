@@ -38,6 +38,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun init() {
+        NotificationChannelMaker().createNotificationChannel(applicationContext) // 노티피케이션 채널 생성
+        setUpFixNotifyAndAlarm(applicationContext)
 
         setUpFragment()
     }
@@ -61,4 +63,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
+    //알람 설정을 해준다.
+    private fun setUpFixNotifyAndAlarm(context: Context) {
+        AlarmHandler().setUpAllMemoAlarm(context)
+        FixNotifyHandler().setUpAllFixNotify(context)
+    }
 }

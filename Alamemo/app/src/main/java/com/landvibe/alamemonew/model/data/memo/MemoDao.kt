@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface MemoDao {
     @Insert
-    fun insertMemo(memo: Memo)
+    fun insertMemo(memo: Memo): Long // Long을 return하면 해당 memo의 id를 알 수 있다.
 
     @Delete
     fun deleteMemo(memo: Memo)

@@ -14,7 +14,7 @@ import com.landvibe.alamemonew.model.data.detail.DetailMemo
 import com.landvibe.alamemonew.model.uimodel.DetailFragmentViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.DetailAddOrEditFragment
-import com.landvibe.alamemonew.ui.fragment.dialog.DetailMemoDeleteSnackBar
+import com.landvibe.alamemonew.ui.fragment.snackbar.DetailMemoDeleteSnackBar
 import com.landvibe.alamemonew.util.DetailMemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 

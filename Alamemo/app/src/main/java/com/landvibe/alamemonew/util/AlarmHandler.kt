@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.model.data.memo.Memo
+import com.landvibe.alamemonew.ui.activity.MainActivity
 import java.util.*
 
 class AlarmHandler {
@@ -30,10 +31,9 @@ class AlarmHandler {
     private fun initPendingIntent(context: Context, memoId: Int) {
         val receiverIntent = Intent(context, MyReceiver::class.java).putExtra("memoId", memoId)
 
-        pendingIntent = TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(receiverIntent)
-            getPendingIntent(memoId, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
+        pendingIntent = PendingIntent.getBroadcast(
+            context, memoId, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     private fun initAlarmManager(context: Context, memo: Memo) {

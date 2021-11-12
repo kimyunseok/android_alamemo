@@ -36,6 +36,15 @@
             android:exported="false">
         </receiver>
 
+        <receiver android:name=".util.MyBootReceiver"
+            android:process=":remote"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

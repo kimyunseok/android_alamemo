@@ -24,7 +24,7 @@ class MyReceiver: BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val memoId = intent?.getLongExtra("memoId", -1)
-        if(memoId != null && context != null) {
+        if(memoId != null && context != null && memoId != (-1).toLong()) {
             val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
             val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList()
             sortDetailMemoList(detailMemoList)

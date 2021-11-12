@@ -13,7 +13,7 @@ import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.FragmentTabBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
-import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteSnackBar
+import com.landvibe.alamemonew.ui.fragment.snackbar.MemoDeleteSnackBar
 import com.landvibe.alamemonew.util.AlarmHandler
 import com.landvibe.alamemonew.util.FixNotifyHandler
 import com.landvibe.alamemonew.util.MemoDiffUtil

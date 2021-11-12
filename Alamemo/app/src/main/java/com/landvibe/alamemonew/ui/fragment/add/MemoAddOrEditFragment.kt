@@ -73,7 +73,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                         //메모 새로 생성하기라면
 
                         // 메모 삽입.
-                        AppDataBase.instance.memoDao().insertMemo(model)
+                        model.id = AppDataBase.instance.memoDao().insertMemo(model)
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.memo_save_complete),
