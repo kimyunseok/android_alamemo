@@ -7,6 +7,7 @@ import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.databinding.ActivityMainBinding
 import com.landvibe.alamemonew.ui.BaseActivity
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
+import com.landvibe.alamemonew.ui.fragment.main.DetailFragment
 import com.landvibe.alamemonew.ui.fragment.main.MainFragment
 import com.landvibe.alamemonew.util.AlarmHandler
 import com.landvibe.alamemonew.util.FixNotifyHandler
@@ -52,7 +53,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.main_container, MemoAddOrEditFragment().apply { arguments = bundle })
+                .replace(R.id.main_container, DetailFragment().apply { arguments = bundle })
                 .commit()
         } else {
             //그냥 앱을 킨 경우.
