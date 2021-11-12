@@ -22,7 +22,12 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     private fun initDetailMemoModel() {
         val memoId = arguments?.getLong("memoId")
         val detailMemoId = arguments?.getLong("detailMemoId")
-        val type = arguments?.getInt("memoType")
+        var type = arguments?.getInt("memoType")
+
+        if(type == 3) {
+            //반복 일정의 경우 세부메모만 가능.
+            type = 1
+        }
 
         val detailMemo = if(detailMemoId != null && detailMemoId != (0).toLong()) {
             AppDataBase.instance.detailMemoDao().getDetailMemoById(detailMemoId)
