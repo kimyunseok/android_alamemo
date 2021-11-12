@@ -34,6 +34,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                     if(model.type.value == 1) {
                         //메모라면 날짜를 오늘로 수정.
                         model.setMemoScheduleTimeToday()
+                        model.setAlarm.value = false // 메모라면 알람기능 해제
                     }
 
                     if(model.type.value != 3) {
