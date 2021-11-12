@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.landvibe.alamemonew.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemonew.common.AppDataBase
-import com.landvibe.alamemonew.databinding.TabFragmentBinding
+import com.landvibe.alamemonew.databinding.FragmentTabBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.model.uimodel.TabFragmentViewModel
 import com.landvibe.alamemonew.ui.fragment.dialog.MemoDeleteSnackBar
@@ -18,7 +18,7 @@ import com.landvibe.alamemonew.util.MemoDiffUtil
 import com.landvibe.alamemonew.util.SwipeAction
 import java.util.*
 
-abstract class BaseTabFragment<T: TabFragmentBinding>() : Fragment() {
+abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     lateinit var viewDataBinding: T
     abstract val layoutId: Int
     abstract val type: Int

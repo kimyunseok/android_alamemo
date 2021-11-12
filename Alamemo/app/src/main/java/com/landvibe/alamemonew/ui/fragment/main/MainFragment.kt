@@ -7,8 +7,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.adapter.FragmentPageAdapter
 import com.landvibe.alamemonew.databinding.FragmentMainBinding
-import com.landvibe.alamemonew.databinding.TabButtonBinding
-import com.landvibe.alamemonew.model.data.memo.Memo
+import com.landvibe.alamemonew.databinding.HolderTabButtonBinding
 import com.landvibe.alamemonew.model.uimodel.TabButtonViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
@@ -82,7 +81,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
     }
 
     private fun createTabView(position: Int): View {
-        val tabBtnBinding = TabButtonBinding.inflate(layoutInflater)
+        val tabBtnBinding = HolderTabButtonBinding.inflate(layoutInflater)
         var tabBtnModel = TabButtonViewModel()
         return when(position) {
             0 -> {
