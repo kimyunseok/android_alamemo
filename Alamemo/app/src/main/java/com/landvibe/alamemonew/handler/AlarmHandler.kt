@@ -90,7 +90,7 @@ class AlarmHandler {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val alarmCalendar = Calendar.getInstance().apply { add(Calendar.YEAR, 1) } //
-        var checkCalendar = Calendar.getInstance()
+        var checkCalendar: Calendar
 
         val alarmHour = memo.alarmStartTimeHour.value
         val alarmMinute = memo.alarmStartTimeMinute.value
