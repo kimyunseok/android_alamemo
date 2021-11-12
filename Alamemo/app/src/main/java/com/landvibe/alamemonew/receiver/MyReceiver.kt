@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.common.AppDataBase
+import com.landvibe.alamemonew.handler.AlarmHandler
 import com.landvibe.alamemonew.model.data.detail.DetailMemo
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.activity.MainActivity
@@ -33,6 +34,10 @@ class MyReceiver: BroadcastReceiver() {
             initNotificationCompatBuilder(context, memo)
             setBuilderContentText(context, memo, detailMemoList)
 
+            if(memo.type.value == 3) {
+                //반복 일정이라면 알람설정을 다시 SET해준다.
+                setUpRepeatMemoAlarm(context, memo)
+            }
         }
     }
 
@@ -106,5 +111,9 @@ class MyReceiver: BroadcastReceiver() {
             val notificationID = memo.id.toInt()
             notify(notificationID, builder.build())
         }
+    }
+
+    private fun setUpRepeatMemoAlarm(context: Context, memo: Memo) {
+        AlarmHandler().setMemoAlarm(context, memo)
     }
 }

@@ -4,9 +4,11 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.receiver.MyReceiver
+import com.landvibe.alamemonew.util.AboutDay
 import java.util.*
 
 class AlarmHandler {
@@ -15,7 +17,6 @@ class AlarmHandler {
 
     fun setUpAllMemoAlarm(context: Context) {
         val memoList = AppDataBase.instance.memoDao().getAlarmMemo()
-
         for(memo in memoList) {
             setMemoAlarm(context, memo)
         }
@@ -62,7 +63,7 @@ class AlarmHandler {
                             todayCalendar.get(Calendar.MINUTE) < alarmMinute) ) {
                     alarmCalendar.timeInMillis = System.currentTimeMillis()
                 } else {
-                    alarmCalendar.timeInMillis = System.currentTimeMillis() + (1000 * 60 * 60 * 24)
+                    alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
                 }
             }
         } else {
@@ -88,36 +89,41 @@ class AlarmHandler {
     private fun initAlarmManagerForRepeatSchedule(context: Context, memo: Memo) {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val todayCalendar = Calendar.getInstance()
-        val alarmCalendar = Calendar.getInstance().apply {
-            memo.scheduleDateYear.value?.let { year -> set(Calendar.YEAR, year) }
-            memo.scheduleDateMonth.value?.let { month -> set(Calendar.MONTH, month) }
-            memo.scheduleDateDay.value?.let { day -> set(Calendar.DAY_OF_MONTH, day) }
-        }
+        val alarmCalendar = Calendar.getInstance().apply { add(Calendar.YEAR, 1) } //
+        var checkCalendar = Calendar.getInstance()
 
-        if(memo.alarmStartTimeType.value == 1) {
-            val alarmHour = memo.alarmStartTimeHour.value
-            val alarmMinute = memo.alarmStartTimeMinute.value
-            if(alarmHour != null && alarmMinute != null) {
-                //매일 알람이 설정됐다면, 매일 정해진 시간에 알람을 울려주면 된다.
-                if(todayCalendar.get(Calendar.HOUR_OF_DAY) < alarmHour ||
-                    (todayCalendar.get(Calendar.HOUR_OF_DAY) == alarmHour &&
-                            todayCalendar.get(Calendar.MINUTE) < alarmMinute) ) {
-                    alarmCalendar.timeInMillis = System.currentTimeMillis()
-                } else {
-                    alarmCalendar.timeInMillis = System.currentTimeMillis() + (1000 * 60 * 60 * 24)
-                }
+        val alarmHour = memo.alarmStartTimeHour.value
+        val alarmMinute = memo.alarmStartTimeMinute.value
+
+        //가지고있는 반복요일에 대해 알람설정
+        for(dayOfWeek in memo.repeatDay) {
+
+            val dayOfWeekToInt = AboutDay.DayCompare().getDaySequence(dayOfWeek)
+
+            checkCalendar = Calendar.getInstance()
+            checkCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeekToInt)
+            alarmHour?.let { checkCalendar.set(Calendar.HOUR_OF_DAY, it) }
+            alarmMinute?.let { checkCalendar.set(Calendar.MINUTE, it) }
+            checkCalendar.set(Calendar.SECOND, 59)
+
+            //오늘보다 이르다면 7일을 더해준다
+            if(checkCalendar.timeInMillis < System.currentTimeMillis()) {
+                checkCalendar.add(Calendar.DAY_OF_MONTH, 7)
+            }
+
+            if(checkCalendar.timeInMillis < alarmCalendar.timeInMillis) {
+                alarmCalendar.time = checkCalendar.time
             }
         }
 
-        memo.alarmStartTimeHour.value?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
-        memo.alarmStartTimeMinute.value?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
+        alarmHour?.let { alarmCalendar.set(Calendar.HOUR_OF_DAY, it) }
+        alarmMinute?.let { alarmCalendar.set(Calendar.MINUTE, it) }
         alarmCalendar.set(Calendar.SECOND, 1)
 
-        alarmManager.setInexactRepeating(
+        // 반복일정은 울리고 나서 다음 최소 날짜를 찾아서 알람을 설정한다.
+        alarmManager.set(
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * 7, // 1주일 단위로 반복
             pendingIntent
         )
     }

@@ -58,7 +58,7 @@ class AboutDay {
             return getDaySequence(p0) - getDaySequence(p1)
         }
 
-        private fun getDaySequence(day: Char?): Int {
+        fun getDaySequence(day: Char?): Int {
             return when(day) {
                 '일' -> 1
                 '월' -> 2
