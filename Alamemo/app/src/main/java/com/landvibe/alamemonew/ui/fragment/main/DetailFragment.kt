@@ -40,6 +40,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         if(arguments != null) {
             memoId = arguments?.getLong("memoId")
         }
+
         val memoIcon = arguments?.getString("memoIcon", "-")
         val memoTitle = arguments?.getString("memoTitle", "-")
 

@@ -28,17 +28,21 @@ class FixNotifyHandler {
     fun setMemoFixNotify(context: Context, memo: Memo) {
         val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
-        initPendingIntent(context, memo.id)
+        initPendingIntent(context, memo)
         initNotificationCompatBuilder(context, memo, detailMemoList)
     }
 
-    private fun initPendingIntent(context: Context, memoId: Long) {
-        val mainActivityIntent = Intent(context, MainActivity::class.java).putExtra("memoId", memoId)
+    private fun initPendingIntent(context: Context, memo: Memo) {
+        val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra("memoId", memo.id)
+            putExtra("memoIcon", memo.icon.value)
+            putExtra("memoTitle", memo.title.value)
+        }
 
         pendingIntent = TaskStackBuilder.create(context).run {
             addParentStack(MainActivity::class.java)
             addNextIntentWithParentStack(mainActivityIntent)
-            getPendingIntent(memoId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
             //요청 코드를 메모Id를 Int로 변환해서 쓰면 위험하긴 하지만 21억번 메모를 할 일은 없을 것 같다...
         }
     }

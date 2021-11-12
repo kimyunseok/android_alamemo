@@ -2,6 +2,7 @@ package com.landvibe.alamemonew.ui.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.landvibe.alamemonew.R
 import com.landvibe.alamemonew.databinding.ActivityMainBinding
@@ -49,7 +50,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val memoId = intent?.getLongExtra("memoId", -1)
         if(memoId != null && memoId != (-1).toLong()) {
             //상단바를 통해서 들어온 경우.
-            val bundle = Bundle().apply { putLong("memoId", memoId) }
+            val memoIcon = intent?.getStringExtra("memoIcon")
+            val memoTitle = intent?.getStringExtra("memoTitle")
+
+            val bundle = Bundle().apply {
+                putLong("memoId", memoId)
+                putString("memoIcon", memoIcon)
+                putString("memoTitle", memoTitle)
+            }
+
 
             supportFragmentManager
                 .beginTransaction()

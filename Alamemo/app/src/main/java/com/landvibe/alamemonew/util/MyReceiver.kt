@@ -29,7 +29,7 @@ class MyReceiver: BroadcastReceiver() {
             val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList()
             sortDetailMemoList(detailMemoList)
 
-            initPendingIntent(context, memoId)
+            initPendingIntent(context, memo)
             initNotificationCompatBuilder(context, memo)
             setBuilderContentText(context, memo, detailMemoList)
 
@@ -45,12 +45,16 @@ class MyReceiver: BroadcastReceiver() {
         )
     }
 
-    private fun initPendingIntent(context: Context, memoId: Long) {
-        val mainActivityIntent = Intent(context, MainActivity::class.java).putExtra("memoId", memoId)
+    private fun initPendingIntent(context: Context, memo: Memo) {
+        val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
+            putExtra("memoId", memo.id)
+            putExtra("memoIcon", memo.icon.value)
+            putExtra("memoTitle", memo.title.value)
+        }
 
         pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(mainActivityIntent)
-            getPendingIntent(memoId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
         }
     }
 
@@ -62,7 +66,6 @@ class MyReceiver: BroadcastReceiver() {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setShowWhen(false)
     }
 
     private fun setBuilderContentText(context: Context, memo: Memo, detailMemoList: MutableList<DetailMemo>) {
