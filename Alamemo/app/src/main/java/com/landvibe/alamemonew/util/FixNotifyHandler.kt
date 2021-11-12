@@ -50,7 +50,7 @@ class FixNotifyHandler {
 
     private fun initNotificationCompatBuilder(context: Context, memo: Memo, detailMemoList: MutableList<DetailMemo>) {
         builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
-            .setContentTitle(memo.title.value)
+            .setContentTitle(memo.icon.value + " " + memo.title.value)
             .setSmallIcon(R.drawable.iconfinder_icon)
             .setStyle(NotificationCompat.BigTextStyle())
             .setContentIntent(pendingIntent)
