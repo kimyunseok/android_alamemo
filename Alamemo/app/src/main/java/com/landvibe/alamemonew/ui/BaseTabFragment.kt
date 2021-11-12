@@ -145,8 +145,9 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
             data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
             data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
             data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
-            data.scheduleDateHour.value?.let { calendar.set(Calendar.HOUR_OF_DAY, it) }
-            data.scheduleDateMinute.value?.let { calendar.set(Calendar.MINUTE, it) }
+            //시간은 상관없이 당일의 모든 일정을 보여주도록 하기위해 비교하는 날의 시간은 23:59분으로 맞춤.
+            calendar.set(Calendar.HOUR_OF_DAY, 23)
+            calendar.set(Calendar.MINUTE, 59)
             val checkDay = calendar.time.time
 
             if(checkDay < today) {
