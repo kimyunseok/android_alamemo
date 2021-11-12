@@ -52,6 +52,7 @@
 
     <!-- DetailFragment -->
     <string name="detail">세부 일정/메모</string>
+    <string name="save_memo">이미지로\n일정 저장하기</string>
 
     <!-- 요일 -->
     <string name="mon">월</string>
