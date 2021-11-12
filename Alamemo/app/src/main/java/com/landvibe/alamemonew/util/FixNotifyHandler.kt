@@ -64,11 +64,11 @@ class FixNotifyHandler {
             //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
             builder.setContentText(context.getString(
                 R.string.notification_fix_notify_slash) +
-                    detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.title.value.toString() }
+                    detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
             )
         } else {
             builder.setContentText(
-                detailMemoList.joinToString("\n") { it.getTitleInclueTime() }
+                detailMemoList.joinToString("\n") { it.icon.value.toString() + " " + it.getTitleInclueTime() }
             )
         }
 

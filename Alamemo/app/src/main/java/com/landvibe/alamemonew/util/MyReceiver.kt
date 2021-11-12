@@ -61,7 +61,7 @@ class MyReceiver: BroadcastReceiver() {
 
     private fun initNotificationCompatBuilder(context: Context, memo: Memo) {
         builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
-            .setContentTitle(memo.title.value)
+            .setContentTitle(memo.icon.value + " " +memo.title.value)
             .setSmallIcon(R.drawable.iconfinder_icon)
             .setStyle(NotificationCompat.BigTextStyle())
             .setContentIntent(pendingIntent)
@@ -77,28 +77,28 @@ class MyReceiver: BroadcastReceiver() {
                 builder.setContentText(context.getString(R.string.notification_today)
                         + memo.getTimeFormat()
                         + context.getString(R.string.notification_today_time_is)
-                        + memo.title.value
+                        + memo.icon.value + " " + memo.title.value
                         + context.getString(R.string.notification_today_is_scheduled)
-                        + detailMemoList.joinToString("\n") {it.getTitleInclueTime()
+                        + detailMemoList.joinToString("\n") {it.icon.value + " " + it.getTitleInclueTime()
                         }
                 )
             }
             dDay > 0 -> {
-                builder.setContentText(memo.title.value
+                builder.setContentText(memo.icon.value + " " + memo.title.value
                         + context.getString(R.string.notification_is)
                         + dDay.toString()
                         + context.getString(R.string.notification_future_is_remain)
-                        + detailMemoList.joinToString("\n") {it.getTitleInclueTime()}
+                        + detailMemoList.joinToString("\n") {it.icon.value + " " + it.getTitleInclueTime()}
                 )
 
             }
             else -> {
                 //dDay < 0
-                builder.setContentText(memo.title.value
+                builder.setContentText(memo.icon.value + " " + memo.title.value
                         + context.getString(R.string.notification_is)
                         + dDay.toString()
                         + context.getString(R.string.notification_past_is_over)
-                        + detailMemoList.joinToString("\n") {it.getTitleInclueTime()}
+                        + detailMemoList.joinToString("\n") {it.icon.value + " " + it.getTitleInclueTime()}
                 )
             }
         }

@@ -26,7 +26,14 @@ class AlarmHandler {
     fun setMemoAlarm(context: Context, memo: Memo) {
 
         initPendingIntent(context, memo.id)
-        initAlarmManager(context, memo)
+
+        if(memo.type.value == 2) {
+            //그냥 일정이라면
+            initAlarmManagerForSchedule(context, memo)
+        } else {
+            //반복 일정이라면
+            
+        }
     }
 
     private fun initPendingIntent(context: Context, memoId: Long) {
@@ -37,7 +44,7 @@ class AlarmHandler {
         )
     }
 
-    private fun initAlarmManager(context: Context, memo: Memo) {
+    private fun initAlarmManagerForSchedule(context: Context, memo: Memo) {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val todayCalendar = Calendar.getInstance()

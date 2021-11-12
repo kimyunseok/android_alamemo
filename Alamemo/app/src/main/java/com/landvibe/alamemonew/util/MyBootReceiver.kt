@@ -29,7 +29,7 @@ class MyBootReceiver: BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
             .setSmallIcon(R.drawable.iconfinder_icon)
-            .setContentTitle(context.getString(R.string.app_name))
+            .setContentTitle(context.getString(R.string.memo_emoji) + " " + context.getString(R.string.app_name))
             .setContentIntent(pendingIntent)
             .setStyle(NotificationCompat.BigTextStyle())
             .setAutoCancel(true)
