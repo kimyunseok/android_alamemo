@@ -227,7 +227,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/LightGrey"
-                android:visibility="@{model.type == 3 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_type_layout"
                 app:layout_constraintBottom_toTopOf="@+id/add_memo_input_layout"/>
 
