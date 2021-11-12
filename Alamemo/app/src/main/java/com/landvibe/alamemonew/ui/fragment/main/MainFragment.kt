@@ -1,5 +1,6 @@
 package com.landvibe.alamemonew.ui.fragment.main
 
+import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -11,6 +12,9 @@ import com.landvibe.alamemonew.databinding.HolderTabButtonBinding
 import com.landvibe.alamemonew.model.uimodel.TabButtonViewModel
 import com.landvibe.alamemonew.ui.BaseFragment
 import com.landvibe.alamemonew.ui.fragment.add.MemoAddOrEditFragment
+import com.landvibe.alamemonew.util.AlarmHandler
+import com.landvibe.alamemonew.util.FixNotifyHandler
+import com.landvibe.alamemonew.util.NotificationChannelMaker
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
@@ -32,6 +36,11 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         scheduleFragment.onResume()
         repeatFragment.onResume()
         finishFragment.onResume()
+
+        context?.let { _context ->
+            NotificationChannelMaker().createNotificationChannel(_context) // 노티피케이션 채널 생성
+            setUpFixNotifyAndAlarm(_context) // 알람설정
+        }
     }
 
     override fun onPause() {
@@ -41,6 +50,8 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         repeatFragment.onPause()
         finishFragment.onPause()
     }
+
+
 
     private fun setUpBtnOnClickListener() {
         viewDataBinding.mainAddMemoButton.setOnClickListener {
@@ -112,5 +123,11 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
                 tabBtnBinding.root
             }
         }
+    }
+
+    //알람 설정을 해준다.
+    private fun setUpFixNotifyAndAlarm(context: Context) {
+        AlarmHandler().setUpAllMemoAlarm(context)
+        FixNotifyHandler().setUpAllFixNotify(context)
     }
 }

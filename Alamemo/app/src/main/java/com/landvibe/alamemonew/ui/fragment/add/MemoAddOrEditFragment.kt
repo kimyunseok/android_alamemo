@@ -9,6 +9,8 @@ import com.landvibe.alamemonew.common.AppDataBase
 import com.landvibe.alamemonew.databinding.FragmentMemoAddOrEditBinding
 import com.landvibe.alamemonew.model.data.memo.Memo
 import com.landvibe.alamemonew.ui.BaseFragment
+import com.landvibe.alamemonew.util.AlarmHandler
+import com.landvibe.alamemonew.util.FixNotifyHandler
 import java.util.*
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
@@ -80,9 +82,26 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
 
                     }
+
+                    //알람설정.
+                    if(model.setAlarm.value == true) {
+                        AlarmHandler().setMemoAlarm(requireContext(), model)
+                    } else if(model.id != (0).toLong()){
+                        //알람설정 아니고, 새로 추가한 메모가 아니라면 알람 취소라는 의미.
+                        AlarmHandler().cancelAlarm(requireContext(), model.id.toInt())
+                    }
+
+                    //상단바 고정 설정
+                    if(model.fixNotify.value == true) {
+                        FixNotifyHandler().setMemoFixNotify(requireContext(), model)
+                    } else if(model.id != (0).toLong()){
+                        //알람설정 아니고, 새로 추가한 메모가 아니라면 상단바 고정 취소라는 의미.
+                        FixNotifyHandler().cancelFixNotify(requireContext(), model.id.toInt())
+                    }
                 } else {
                     Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
                 }
+
                 requireActivity().supportFragmentManager.popBackStack()
             }
         }
@@ -102,9 +121,9 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     }
 
     private fun initMemoModel() {
-        val memoId = arguments?.getLong("memoId")
+        val memoId = arguments?.getLong("memoId", -1)
 
-        val memo = if(memoId != null && memoId != (0).toLong()) {
+        val memo = if(memoId != null && memoId != (-1).toLong()) {
             AppDataBase.instance.memoDao().getMemoById(memoId)
         } else {
             val calendar = Calendar.getInstance()

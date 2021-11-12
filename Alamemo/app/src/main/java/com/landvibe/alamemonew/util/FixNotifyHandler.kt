@@ -25,7 +25,7 @@ class FixNotifyHandler {
     }
 
     //개별로 상단바 고정 설정해주기.
-    private fun setMemoFixNotify(context: Context, memo: Memo) {
+    fun setMemoFixNotify(context: Context, memo: Memo) {
         val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
         initPendingIntent(context, memo.id.toInt())

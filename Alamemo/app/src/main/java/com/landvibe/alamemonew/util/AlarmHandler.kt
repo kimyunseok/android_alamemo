@@ -21,7 +21,7 @@ class AlarmHandler {
         }
     }
 
-    private fun setMemoAlarm(context: Context, memo: Memo) {
+    fun setMemoAlarm(context: Context, memo: Memo) {
 
         initPendingIntent(context, memo.id.toInt())
         initAlarmManager(context, memo)
