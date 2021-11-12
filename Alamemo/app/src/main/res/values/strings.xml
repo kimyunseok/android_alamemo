@@ -11,8 +11,8 @@
     <string name="sry_making">죄송합니다.\n아직 해당 기능을\n이용하실 수 없습니다.</string>
 
     <!-- SplashActivity -->
-    <string name="splash_top_text">알람이 울리는 메모어플</string>
-    <string name="splash_bottom_text">Alamemo!</string>
+    <string name="splash_top_text">알람&amp;메모</string>
+    <string name="splash_bottom_text">Alamemo</string>
 
     <!-- MainActivity -->
     <string name="helper">도움말</string>
