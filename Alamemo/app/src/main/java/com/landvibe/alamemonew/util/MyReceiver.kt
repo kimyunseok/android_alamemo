@@ -50,6 +50,7 @@ class MyReceiver: BroadcastReceiver() {
             putExtra("memoId", memo.id)
             putExtra("memoIcon", memo.icon.value)
             putExtra("memoTitle", memo.title.value)
+            putExtra("memoType", memo.type.value)
         }
 
         pendingIntent = TaskStackBuilder.create(context).run {

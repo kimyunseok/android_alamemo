@@ -48,7 +48,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun setUpFragment() {
         val memoId = intent?.getLongExtra("memoId", -1)
-        if(memoId != null && memoId != (-1).toLong()) {
+        val memoType= intent?.getIntExtra("memoType", -1)
+        if(memoId != null && memoId != (-1).toLong() && memoType != null && memoType != -1) {
             //상단바를 통해서 들어온 경우.
             val memoIcon = intent?.getStringExtra("memoIcon")
             val memoTitle = intent?.getStringExtra("memoTitle")
@@ -57,6 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 putLong("memoId", memoId)
                 putString("memoIcon", memoIcon)
                 putString("memoTitle", memoTitle)
+                putInt("memoType", memoType)
             }
 
 

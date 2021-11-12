@@ -49,6 +49,8 @@ class AlarmHandler {
             memo.alarmStartTimeMinute.value?.let { minute -> set(Calendar.YEAR, minute) }
         }
 
+        Log.d("firstTime::", alarmCalendar.time.toString())
+
         if(memo.alarmStartTimeType.value == 1) {
             val alarmHour = memo.alarmStartTimeHour.value
             val alarmMinute = memo.alarmStartTimeMinute.value
