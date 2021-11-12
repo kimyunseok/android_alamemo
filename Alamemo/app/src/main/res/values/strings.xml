@@ -70,5 +70,6 @@
 
     <!-- 메모삭제스낵바 -->
     <string name="delete_snackbar_cancel">삭제취소</string>
-    <string name="delete_snackbar_message">메모가 삭제되었습니다.</string>
+    <string name="delete_detail_memo_snackbar_message">세부 메모/일정이 삭제되었습니다.</string>
+    <string name="delete_memo_snackbar_message">메모가 삭제되었습니다.\n세부 메모/일정도 삭제되었습니다.</string>
 </resources>

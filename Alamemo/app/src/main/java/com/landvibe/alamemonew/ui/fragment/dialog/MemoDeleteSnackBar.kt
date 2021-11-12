@@ -13,10 +13,10 @@ import com.landvibe.alamemonew.model.data.memo.Memo
 class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerViewAdapter: MemoRecyclerViewAdapter,
                          private val position: Int, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>) {
     private var snackBar: Snackbar =
-        Snackbar.make(rootView, context.getString(R.string.delete_snackbar_message), Snackbar.LENGTH_SHORT).apply {
+        Snackbar.make(rootView, context.getString(R.string.delete_memo_snackbar_message), Snackbar.LENGTH_SHORT).apply {
             setAction(context.getString(R.string.delete_snackbar_cancel)) { undoDelete() }
             setTextColor(ContextCompat.getColor(context, R.color.white))
-            setActionTextColor(ContextCompat.getColor(context, R.color.white))
+            setActionTextColor(ContextCompat.getColor(context, R.color.DarkRed))
             setBackgroundTint(ContextCompat.getColor(context, R.color.black))
         }
 
