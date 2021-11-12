@@ -82,21 +82,19 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
                     }
 
+                    //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
+                    AlarmHandler().cancelAlarm(requireContext(), model.id)
+                    FixNotifyHandler().cancelFixNotify(requireContext(), model.id)
+
                     //알람설정.
                     if(model.setAlarm.value == true) {
                         AlarmHandler().setMemoAlarm(requireContext(), model)
-                    } else if(model.id != (0).toLong()){
-                        //알람설정 아니고, 새로 추가한 메모가 아니라면 알람 취소라는 의미.
-                        AlarmHandler().cancelAlarm(requireContext(), model.id)
                     }
-
                     //상단바 고정 설정
                     if(model.fixNotify.value == true) {
                         FixNotifyHandler().setMemoFixNotify(requireContext(), model)
-                    } else if(model.id != (0).toLong()){
-                        //알람설정 아니고, 새로 추가한 메모가 아니라면 상단바 고정 취소라는 의미.
-                        FixNotifyHandler().cancelFixNotify(requireContext(), model.id)
                     }
+
                 } else {
                     Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
                 }

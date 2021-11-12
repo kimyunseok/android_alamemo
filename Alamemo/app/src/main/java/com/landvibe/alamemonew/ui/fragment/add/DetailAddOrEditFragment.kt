@@ -156,10 +156,12 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
 
         //알람설정.
         if(memo?.setAlarm?.value == true) {
+            AlarmHandler().cancelAlarm(requireContext(), memo.id)
             AlarmHandler().setMemoAlarm(requireContext(), memo)
         }
         //상단바 고정 설정
         if(memo?.fixNotify?.value == true) {
+            FixNotifyHandler().cancelFixNotify(requireContext(), memo.id)
             FixNotifyHandler().setMemoFixNotify(requireContext(), memo)
         }
     }

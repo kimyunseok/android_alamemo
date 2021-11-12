@@ -117,7 +117,7 @@ class AlarmHandler {
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * 7, //
+            AlarmManager.INTERVAL_DAY * 7, // 1주일 단위로 반복
             pendingIntent
         )
     }
