@@ -1,6 +1,10 @@
 package com.landvibe.alamemonew.ui.fragment.add
 
 import android.app.DatePickerDialog
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.Transformation
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemonew.R
@@ -18,6 +22,8 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override fun init() {
         setUpBtnOnClickListener()
         initMemoModel()
+
+        setUpAnimation()
     }
 
     private fun setUpBtnOnClickListener() {
@@ -165,6 +171,37 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                 .apply { datePicker.minDate = System.currentTimeMillis() }
             calendarDialog.show()
         }
+    }
+
+    private fun setUpAnimation() {
+        viewDataBinding.addOrEditMemoLayout.let { it.animation = expandAction(it) }
+    }
+
+    /**
+     * https://android-dev.tistory.com/59
+     * 블로그를 참고했다.
+     */
+    private fun expandAction(view: View) : Animation {
+        view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val actualHeight = view.measuredHeight
+
+        view.layoutParams.height = 0
+        view.visibility = View.VISIBLE
+
+        val animation = object : Animation() {
+            override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
+                view.layoutParams.height = if (interpolatedTime == 1f) ViewGroup.LayoutParams.WRAP_CONTENT
+                else (actualHeight * interpolatedTime).toInt()
+
+                view.requestLayout()
+            }
+        }
+
+        animation.duration = 500 + (actualHeight / view.context.resources.displayMetrics.density).toLong()
+
+        view.startAnimation(animation)
+
+        return animation
     }
 
 }
