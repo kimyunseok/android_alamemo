@@ -35,6 +35,11 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                         model.setMemoScheduleTimeToday()
                     }
 
+                    if(model.type.value != 3) {
+                        //반복 일정 아니라면, 반복 요일 선택했던 거 다 지움.
+                        model.repeatDay.clear()
+                    }
+
                     if (viewDataBinding.model?.id?.toInt() != 0) {
                         // 메모 id가 존재한다면, 즉 수정하기라면
                         // 메모 수정.

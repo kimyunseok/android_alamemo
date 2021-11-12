@@ -172,7 +172,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/LightGrey"
-                android:visibility="@{model.id == 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_set_date_layout"
                 app:layout_constraintBottom_toTopOf="@+id/add_type_layout"/>
 
@@ -181,7 +180,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:visibility="@{model.id == 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/add_set_date_layout">
 
                 <TextView
@@ -209,6 +207,7 @@
                         android:layout_marginEnd="16dp"
                         android:checked="@{model.type == 3}"
                         android:onClick="@{() -> model.setType(3)}"
+                        android:enabled="@{model.id == 0 ? true : false}"
                         android:text="@string/repeat_schedule"/>
 
                     <RadioButton
@@ -218,6 +217,7 @@
                         android:layout_marginEnd="16dp"
                         android:checked="@{model.type == 2}"
                         android:onClick="@{() -> model.setType(2)}"
+                        android:enabled="@{model.id == 0 ? true : false}"
                         android:text="@string/schedule" />
 
                     <RadioButton
@@ -226,6 +226,7 @@
                         android:layout_height="wrap_content"
                         android:checked="@{model.type == 1}"
                         android:onClick="@{() -> model.setType(1)}"
+                        android:enabled="@{model.id == 0 ? true : false}"
                         android:text="@string/memo" />
 
                 </RadioGroup>

@@ -149,4 +149,5 @@ class Memo (
         scheduleDateHour.value = calendar.get(Calendar.HOUR_OF_DAY)
         scheduleDateMinute.value = calendar.get(Calendar.MINUTE)
     }
+
 }
