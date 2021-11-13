@@ -3,6 +3,7 @@ package com.landvibe.alamemo.ui.fragment.snackbar
 import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.MemoRecyclerViewAdapter
@@ -13,7 +14,9 @@ import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 
 class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerViewAdapter: MemoRecyclerViewAdapter,
-                         private val position: Int, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>) {
+                         private val position: Int, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>,
+                         private val memoEmpty: MutableLiveData<Boolean>
+) {
 
     private var snackBar: Snackbar =
         Snackbar.make(rootView, context.getString(R.string.delete_memo_snackbar_message), Snackbar.LENGTH_SHORT).apply {
@@ -31,6 +34,7 @@ class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerV
         recyclerViewAdapter.itemList.add(position, removedMemo)
         AppDataBase.instance.memoDao().insertMemo(removedMemo)
         recyclerViewAdapter.notifyItemInserted(position)
+        memoEmpty.value = false
 
         for(data in removedDetailMemo) {
             AppDataBase.instance.detailMemoDao().insertDetailMemo(data)

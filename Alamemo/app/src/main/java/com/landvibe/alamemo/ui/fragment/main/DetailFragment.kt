@@ -104,8 +104,14 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
                 recyclerViewAdapter.itemList.removeAt(position)
                 recyclerViewAdapter.notifyItemRemoved(position)
+                viewDataBinding.model?.memoEmpty?.value = recyclerViewAdapter.itemList.isEmpty()
 
-                DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, recyclerViewAdapter, position, tmpDetailMemo).showSnackBar()
+                viewDataBinding.model?.memoEmpty?.let {
+                    memoEmpty ->
+                    DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, recyclerViewAdapter, position, tmpDetailMemo,
+                        memoEmpty
+                    ).showSnackBar()
+                }
             }
 
         }
