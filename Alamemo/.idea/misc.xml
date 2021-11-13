@@ -22,11 +22,14 @@
         <entry key="..\:/Development/Android/Alamemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1675925925925926" />
         <entry key="..\:/Development/Android/Alamemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1675925925925926" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/emoji_background.xml" value="0.26481481481481484" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_dark_blue_radius_background.xml" value="0.34444444444444444" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_dark_blue_square_background.xml" value="0.2828125" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.26481481481481484" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_light_grey_radius_background.xml" value="0.21388888888888888" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_light_grey_square_background.xml" value="0.2828125" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_modify_memo.xml" value="0.34444444444444444" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_today_radius_background.xml" value="0.21388888888888888" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/ic_top_radius_background.xml" value="0.34444444444444444" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/selector_radius_background.xml" value="0.22083333333333333" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/selector_radius_today_background.xml" value="0.21388888888888888" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/selector_square_background.xml" value="0.2828125" />
@@ -34,7 +37,7 @@
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/font/font_memo.xml" value="0.29907407407407405" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_splash.xml" value="0.22" />
-        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_select_icon.xml" value="0.19635416666666666" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_select_icon.xml" value="0.16" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_add.xml" value="0.16666666666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_detail.xml" value="0.22" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_detail_add_or_edit.xml" value="0.22" />
@@ -44,6 +47,7 @@
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_content.xml" value="0.20104166666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_detail.xml" value="0.3138586956521739" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_icon.xml" value="0.19635416666666666" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_icon_type.xml" value="0.18" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_memo.xml" value="0.22" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_tab_button.xml" value="0.2015625" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/snackbar_layout.xml" value="0.271875" />

@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.databinding.HolderIconBinding
 
-class IconSelectRecyclerViewAdapter(context: Context, val itemList: MutableList<String>,
+class IconSelectRecyclerViewAdapter(context: Context, var itemList: MutableList<String>,
                                     val dialog: Dialog, val iconLiveData: MutableLiveData<String>): RecyclerView.Adapter<IconSelectRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

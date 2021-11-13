@@ -114,8 +114,6 @@ class AlarmHandler {
         alarmMinute?.let { alarmCalendar.set(Calendar.MINUTE, it) }
         alarmCalendar.set(Calendar.SECOND, 1)
 
-        Log.d("alarmCheck::", alarmCalendar.time.toString())
-
         alarmManager.set(
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
