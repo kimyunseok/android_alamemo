@@ -30,7 +30,7 @@ class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerV
         snackBar.show()
     }
 
-    fun undoDelete(context: Context) {
+    private fun undoDelete(context: Context) {
         recyclerViewAdapter.itemList.add(position, removedMemo)
         AppDataBase.instance.memoDao().insertMemo(removedMemo)
         recyclerViewAdapter.notifyItemInserted(position)
@@ -39,7 +39,6 @@ class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerV
         for(data in removedDetailMemo) {
             AppDataBase.instance.detailMemoDao().insertDetailMemo(data)
         }
-
 
         if(removedMemo.setAlarm.value == true) {
             //알람설정 돼 있었다면 다시 알람설정

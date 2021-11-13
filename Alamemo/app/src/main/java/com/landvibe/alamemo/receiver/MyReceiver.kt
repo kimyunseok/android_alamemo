@@ -90,7 +90,7 @@ class MyReceiver: BroadcastReceiver() {
             dDay == 0 -> {
                 builder.setContentText(context.getString(R.string.notification_today)
                         + memo.getTimeFormat()
-                        + context.getString(R.string.notification_today_time_is)
+                        + context.getString(R.string.notification_today_time_is) + " "
                         + memo.title.value
                         + context.getString(R.string.notification_today_is_scheduled)
                         + detailListText
@@ -98,7 +98,7 @@ class MyReceiver: BroadcastReceiver() {
             }
             dDay > 0 -> {
                 builder.setContentText(memo.title.value
-                        + context.getString(R.string.notification_is)
+                        + context.getString(R.string.notification_is) + " "
                         + dDay.toString()
                         + context.getString(R.string.notification_future_is_remain)
                         + detailListText
@@ -108,7 +108,7 @@ class MyReceiver: BroadcastReceiver() {
             else -> {
                 //dDay < 0
                 builder.setContentText(memo.title.value
-                        + context.getString(R.string.notification_is)
+                        + context.getString(R.string.notification_is) + " "
                         + dDay.toString()
                         + context.getString(R.string.notification_past_is_over)
                         + detailListText

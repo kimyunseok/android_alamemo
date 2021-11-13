@@ -10,6 +10,8 @@ import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.DetailMemoRecyclerViewAdapter
 import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.databinding.FragmentDetailBinding
+import com.landvibe.alamemo.handler.AlarmHandler
+import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.uimodel.DetailFragmentViewModel
 import com.landvibe.alamemo.ui.BaseFragment
@@ -97,6 +99,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
                 //TODO : 알람삭제
                 //TODO : 상단바 고정 삭제
+                val memoID = recyclerViewAdapter.itemList[position].memoId
                 val detailMemoID = recyclerViewAdapter.itemList[position].id
                 val tmpDetailMemo = recyclerViewAdapter.itemList[position]
 
@@ -105,6 +108,17 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
                 recyclerViewAdapter.itemList.removeAt(position)
                 recyclerViewAdapter.notifyItemRemoved(position)
                 viewDataBinding.model?.memoEmpty?.value = recyclerViewAdapter.itemList.isEmpty()
+                
+                //알람 업데이트
+                val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
+                if(tmpMemo.setAlarm.value == true) {
+                    //알람설정 돼 있었다면 알람재설정
+                    AlarmHandler().setMemoAlarm(requireContext(), tmpMemo)
+                }
+                if(tmpMemo.fixNotify.value == true) {
+                    //고성설정 돼 있었다면 고정재설정
+                    FixNotifyHandler().setMemoFixNotify(requireContext(), tmpMemo)
+                }
 
                 viewDataBinding.model?.memoEmpty?.let {
                     memoEmpty ->

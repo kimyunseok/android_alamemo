@@ -75,7 +75,7 @@ class FixNotifyHandler {
 
         } else if(detailMemoList.isEmpty().not()){
             contentText +=
-                detailMemoList.joinToString("\n") { it.icon.value.toString() + " " + it.getDateFormat() + " - " + it.getTitleInclueTime() }
+                detailMemoList.joinToString("\n") { it.getDateFormat() + " - " + it.icon.value.toString() + " " + it.getTitleInclueTime() }
         }
 
         builder.setContentText(contentText)

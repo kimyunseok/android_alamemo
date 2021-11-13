@@ -76,7 +76,7 @@
     <string name="notification_channel_id">alamemo_notification_channel_id</string>
     <string name="notification_channel_name" >alamemo_notification_channel</string>
     <string name="notification_today">오늘은 </string>
-    <string name="notification_today_time_is">에 </string>
+    <string name="notification_today_time_is"> 에 </string>
     <string name="notification_today_is_scheduled">이(가) 예정되어 있습니다!\n</string>
     <string name="notification_is">이(가) </string>
     <string name="notification_future_is_remain">일 전입니다!\n</string>
