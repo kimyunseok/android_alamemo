@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.model.data.memo.Memo
@@ -89,47 +90,31 @@ class AlarmHandler {
     private fun initAlarmManagerForRepeatSchedule(context: Context, memo: Memo) {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val alarmCalendar = Calendar.getInstance().apply { add(Calendar.YEAR, 1) } //
-        var checkCalendar: Calendar
+        val curScheduleCalendar = Calendar.getInstance().apply {
+            memo.scheduleDateYear.value?.let { set(Calendar.YEAR, it) }
+            memo.scheduleDateMonth.value?.let { set(Calendar.MONTH, it) }
+            memo.scheduleDateDay.value?.let { set(Calendar.DAY_OF_MONTH, it) }
+            memo.alarmStartTimeHour.value?.let { set(Calendar.HOUR_OF_DAY, it) }
+            memo.alarmStartTimeMinute.value?.let { set(Calendar.MINUTE, it) }
+        }
+
+        val alarmCalendar = Calendar.getInstance()
+        alarmCalendar.timeInMillis = AboutDay.AboutDayOfWeek().findMinTimeAboutDayOfWeekBySpecificTime(memo, curScheduleCalendar.timeInMillis)
+
+        //반복 일정의 날짜를 찾은 다음 날짜로 바꾼다.
+        val yearLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
+        val monthLivedata = MutableLiveData(alarmCalendar.get(Calendar.MONTH))
+        val dayLivedata = MutableLiveData(alarmCalendar.get(Calendar.DAY_OF_MONTH))
+        AppDataBase.instance.memoDao().modifyMemoDate(memo.id, yearLivedata, monthLivedata, dayLivedata)
 
         val alarmHour = memo.alarmStartTimeHour.value
         val alarmMinute = memo.alarmStartTimeMinute.value
 
-        //가지고있는 반복요일에 대해 알람설정
-        //반복일정은 울리고 나서 다음 최소 날짜를 찾아서 알람을 설정한다.
-        for(dayOfWeek in memo.repeatDay) {
-
-            val dayOfWeekToInt = AboutDay.DayCompare().getDaySequence(dayOfWeek)
-
-            checkCalendar = Calendar.getInstance()
-            checkCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeekToInt)
-            alarmHour?.let { checkCalendar.set(Calendar.HOUR_OF_DAY, it) }
-            alarmMinute?.let { checkCalendar.set(Calendar.MINUTE, it) }
-            checkCalendar.set(Calendar.SECOND, 59)
-
-            //오늘보다 이르다면 7일을 더해준다
-            if(checkCalendar.timeInMillis < System.currentTimeMillis()) {
-                checkCalendar.add(Calendar.DAY_OF_MONTH, 7)
-            }
-
-            if(checkCalendar.timeInMillis < alarmCalendar.timeInMillis) {
-                alarmCalendar.time = checkCalendar.time
-            }
-        }
-
-        val memoYear = memo.scheduleDateYear.value
-        val memoMonth = memo.scheduleDateMonth.value
-        val memoDay = memo.scheduleDateDay.value
-
-        //반복 일정의 날짜를 찾은 다음 날짜로 바꾼다.
-        val yearLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
-        val monthLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
-        val dayLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
-        AppDataBase.instance.memoDao().modifyMemoDate(memo.id, yearLivedata, monthLivedata, dayLivedata)
-
         alarmHour?.let { alarmCalendar.set(Calendar.HOUR_OF_DAY, it) }
         alarmMinute?.let { alarmCalendar.set(Calendar.MINUTE, it) }
         alarmCalendar.set(Calendar.SECOND, 1)
+
+        Log.d("alarmCheck::", alarmCalendar.time.toString())
 
         alarmManager.set(
             AlarmManager.RTC_WAKEUP,

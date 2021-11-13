@@ -14,6 +14,7 @@ import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
+import com.landvibe.alamemo.util.AboutDay
 import java.util.*
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
@@ -46,6 +47,13 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                     if(model.type.value != 3) {
                         //반복 일정 아니라면, 반복 요일 선택했던 거 다 지움.
                         model.repeatDay.clear()
+                    } else {
+                        //반복 일정이라면 반복 요일 중 최초로 해당하는 날로 scheduleDay 설정.
+                        val calendar = Calendar.getInstance()
+                        calendar.timeInMillis = AboutDay.AboutDayOfWeek().findMinTimeAboutDayOfWeekBySpecificTime(model, System.currentTimeMillis())
+                        model.scheduleDateYear.value = calendar.get(Calendar.YEAR)
+                        model.scheduleDateMonth.value = calendar.get(Calendar.MONTH)
+                        model.scheduleDateDay.value = calendar.get(Calendar.DAY_OF_MONTH)
                     }
 
                     if (viewDataBinding.model?.id?.toInt() != 0) {
@@ -85,8 +93,6 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                             getString(R.string.memo_save_complete),
                             Toast.LENGTH_SHORT
                         ).show()
-
-
                     }
 
                     //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
