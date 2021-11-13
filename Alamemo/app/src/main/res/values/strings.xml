@@ -143,4 +143,6 @@
     <string name="helper_function_alarm_fix_noti_description_3">알람을 설정하면\n알람 시간에 맞춰서\n알람이 오게 됩니다.\n일정과 반복 일정은 각각\n다른 형식으로 알람이 갑니다.</string>
     <string name="helper_function_alarm_fix_noti_description_4">상단바 고정을 설정하면\n상단바에 메모에 대한 정보가\n고정됩니다.\n각 유형들은 다른 형식으로\n고정됩니다.</string>
     <string name="helper_function_alarm_fix_noti_description_5">상단바 고정과 알람 기능을\n같이 사용할 수 있습니다.</string>
+
+    <string name="failed_to_send_mail">메일 보내기에 실패했습니다.</string>
 </resources>
