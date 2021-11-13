@@ -121,7 +121,7 @@ class Memo (
 
 
         return if(scheduleFinish.value == false && (type.value == 2 || type.value == 3) ) {
-            getTimeFormat() + title.value
+            getTimeFormat() + " " + title.value
         } else {
             title.value.toString()
         }
