@@ -79,6 +79,14 @@ class DetailMemo(
     }
 
     fun getTitleInclueTime(): String {
+        return if(type.value == 2) {
+            getTimeFormat() + " " + title.value
+        } else {
+            title.value.toString()
+        }
+    }
+
+    fun getTimeFormat(): String {
         val hourValue = scheduleDateHour.value?.toInt()
         val minuteValue = scheduleDateMinute.value
 
@@ -94,12 +102,7 @@ class DetailMemo(
             scheduleDateMinute.value.toString()
         }
 
-
-        return if(type.value == 2) {
-            "${hour}:${minute} " + title.value
-        } else {
-            title.value.toString()
-        }
+        return "${hour}:${minute}"
     }
 
     fun setMemoScheduleTimeToday() {

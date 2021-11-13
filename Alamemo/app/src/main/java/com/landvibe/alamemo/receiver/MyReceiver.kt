@@ -80,15 +80,15 @@ class MyReceiver: BroadcastReceiver() {
         val detailListText = detailMemoList.joinToString("\n") {
             if (memo.type.value == 2) {
                 // 일정이라면 날짜도 보여준다.
-                it.getDateFormat() + " " + it.icon.value + " " + it.getTitleInclueTime()
+                it.getDateFormat() + " " + it.getTimeFormat() + " - " + it.icon.value + " " + it.title.value
             } else {
-                it.icon.value + " " + it.getTitleInclueTime()
+                it.icon.value + " " + it.title.value
             }
         }
 
         when {
             dDay == 0 -> {
-                builder.setContentText(context.getString(R.string.notification_today)
+                builder.setContentText(context.getString(R.string.notification_today) + " "
                         + memo.getTimeFormat()
                         + context.getString(R.string.notification_today_time_is) + " "
                         + memo.title.value
