@@ -48,35 +48,35 @@ class AlarmHandler {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val todayCalendar = Calendar.getInstance()
-        val alarmCalendar = Calendar.getInstance().apply {
-            memo.scheduleDateYear.value?.let { year -> set(Calendar.YEAR, year) }
-            memo.scheduleDateMonth.value?.let { month -> set(Calendar.MONTH, month) }
-            memo.scheduleDateDay.value?.let { day -> set(Calendar.DAY_OF_MONTH, day) }
-        }
+        val alarmCalendar = Calendar.getInstance()
+        val alarmHour = memo.alarmStartTimeHour.value
+        val alarmMinute = memo.alarmStartTimeMinute.value
 
         if(memo.alarmStartTimeType.value == 1) {
-            val alarmHour = memo.alarmStartTimeHour.value
-            val alarmMinute = memo.alarmStartTimeMinute.value
-            if(alarmHour != null && alarmMinute != null) {
-                //매일 알람이 설정됐다면, 매일 정해진 시간에 알람을 울려주면 된다.
-                if(todayCalendar.get(Calendar.HOUR_OF_DAY) < alarmHour ||
-                    (todayCalendar.get(Calendar.HOUR_OF_DAY) == alarmHour &&
-                            todayCalendar.get(Calendar.MINUTE) < alarmMinute) ) {
-                    alarmCalendar.timeInMillis = System.currentTimeMillis()
-                } else {
-                    alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
-                }
-            }
+            //매일 알람이 설정됐다면, 매일 정해진 시간에 알람을 울려주면 된다.
+            checkAlarmTimePass(alarmHour, alarmMinute, alarmCalendar)
         } else {
             // 아니라면 알람이 시작하기로 설정된 날에 맞춰서 알람을 설정하면 된다.
+            alarmCalendar.apply {
+                memo.scheduleDateYear.value?.let { year -> set(Calendar.YEAR, year) }
+                memo.scheduleDateMonth.value?.let { month -> set(Calendar.MONTH, month) }
+                memo.scheduleDateDay.value?.let { day -> set(Calendar.DAY_OF_MONTH, day) }
+            }
+
+            //타입에 따라서 일 수를 빼준다.
             memo.alarmStartTimeType.value?.let { alarmStartTimeType ->
-                //타입에 따라서 일 수를 빼준다.
                 alarmCalendar.add(Calendar.DAY_OF_MONTH, getDayByAlarmStartType(alarmStartTimeType))
+            }
+
+            //만일 뺀 날짜가 오늘보다 이전이라면 오늘 이후로 알람을 설정해준다.
+            if(alarmCalendar.timeInMillis < todayCalendar.timeInMillis) {
+                alarmCalendar.timeInMillis = todayCalendar.timeInMillis
+                checkAlarmTimePass(alarmHour, alarmMinute, alarmCalendar)
             }
         }
 
-        memo.alarmStartTimeHour.value?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
-        memo.alarmStartTimeMinute.value?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
+        alarmHour?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
+        alarmMinute?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
         alarmCalendar.set(Calendar.SECOND, 1)
 
         Log.d("setScheduleAlarm::", "checkTime::" + alarmCalendar.time.toString())
@@ -139,6 +139,18 @@ class AlarmHandler {
             }
             else -> {
                 0
+            }
+        }
+    }
+
+    private fun checkAlarmTimePass(alarmHour: Int?, alarmMinute: Int?, alarmCalendar: Calendar) {
+        val todayCalendar = Calendar.getInstance()
+
+        if(alarmHour != null && alarmMinute != null) {
+            //매일 알람을 울려야하는데, 현재 알람 시간을 지난 경우, 알람 달력에 1일을 더 해준다.
+            if( todayCalendar.get(Calendar.HOUR_OF_DAY) > alarmHour ||
+                (todayCalendar.get(Calendar.HOUR_OF_DAY) == alarmHour && todayCalendar.get(Calendar.MINUTE) > alarmMinute ) ) {
+                alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
             }
         }
     }
