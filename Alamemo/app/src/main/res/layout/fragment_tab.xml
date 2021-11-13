@@ -75,7 +75,6 @@
                 android:text="@string/no_schedule"
                 android:textColor="@color/color_383838"
                 android:textSize="26sp"
-                android:textStyle="bold"
                 android:visibility="@{model.memoEmpty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toTopOf="parent" />
 

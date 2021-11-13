@@ -30,20 +30,20 @@
                 android:layout_gravity="center"
                 android:text="@string/app_name"
                 android:textColor="@color/color_383838"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/detail_back_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/outline_west_black_48" />
+                android:background="@drawable/outline_close_black_48" />
 
             <Button
                 android:id="@+id/detail_add_content_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/ic_add_memo"
                 android:layout_gravity="end"/>
@@ -123,7 +123,6 @@
                 android:text="@string/no_schedule"
                 android:textColor="@color/color_383838"
                 android:textSize="26sp"
-                android:textStyle="bold"
                 android:visibility="@{model.memoEmpty ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toTopOf="parent" />
 

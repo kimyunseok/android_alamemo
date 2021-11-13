@@ -19,17 +19,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/app_name"
+                android:text="@string/helper"
                 android:textColor="@color/color_383838"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/back_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/outline_west_black_48" />
+                android:background="@drawable/outline_close_black_48" />
 
         </androidx.appcompat.widget.Toolbar>
 

@@ -28,6 +28,7 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
         setUpBtnListener()
 
         binding.model = HelperDialogViewModel(
+            MutableLiveData(getTitle()),
             MutableLiveData(helperShowModelList[0].image),
             MutableLiveData(helperShowModelList[0].description),
             prevEnable = MutableLiveData(false),
@@ -108,6 +109,31 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
     private fun checkBtnEnabled() {
         binding.model?.prevEnable?.value = (curSelectIdx == 0).not()
         binding.model?.nextEnable?.value = (curSelectIdx == (helperShowModelList.size - 1)).not()
+    }
+
+    private fun getTitle(): String {
+        return when (type) {
+            1 -> {
+                context.getString(R.string.helper_function_add)
+            }
+            2 -> {
+                context.getString(R.string.helper_function_delete)
+            }
+            3 -> {
+                context.getString(R.string.helper_function_edit)
+            }
+            4 -> {
+                context.getString(R.string.helper_function_finish)
+            }
+            5 -> {
+                context.getString(R.string.helper_function_alarm)
+            }
+            6 -> {
+                context.getString(R.string.helper_function_detail)
+            } else -> {
+                ""
+            }
+        }
     }
 
     inner class HelperShowModel (val image: Int, val description: String)
