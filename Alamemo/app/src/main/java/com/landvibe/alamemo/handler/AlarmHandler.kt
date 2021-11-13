@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.receiver.MyReceiver
@@ -95,6 +96,7 @@ class AlarmHandler {
         val alarmMinute = memo.alarmStartTimeMinute.value
 
         //가지고있는 반복요일에 대해 알람설정
+        //반복일정은 울리고 나서 다음 최소 날짜를 찾아서 알람을 설정한다.
         for(dayOfWeek in memo.repeatDay) {
 
             val dayOfWeekToInt = AboutDay.DayCompare().getDaySequence(dayOfWeek)
@@ -115,11 +117,20 @@ class AlarmHandler {
             }
         }
 
+        val memoYear = memo.scheduleDateYear.value
+        val memoMonth = memo.scheduleDateMonth.value
+        val memoDay = memo.scheduleDateDay.value
+
+        //반복 일정의 날짜를 찾은 다음 날짜로 바꾼다.
+        val yearLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
+        val monthLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
+        val dayLivedata = MutableLiveData(alarmCalendar.get(Calendar.YEAR))
+        AppDataBase.instance.memoDao().modifyMemoDate(memo.id, yearLivedata, monthLivedata, dayLivedata)
+
         alarmHour?.let { alarmCalendar.set(Calendar.HOUR_OF_DAY, it) }
         alarmMinute?.let { alarmCalendar.set(Calendar.MINUTE, it) }
         alarmCalendar.set(Calendar.SECOND, 1)
 
-        // 반복일정은 울리고 나서 다음 최소 날짜를 찾아서 알람을 설정한다.
         alarmManager.set(
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
