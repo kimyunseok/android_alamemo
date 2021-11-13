@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.DialogHelperBinding
 import com.landvibe.alamemo.model.uimodel.HelperDialogViewModel
-import com.landvibe.alamemo.ui.activity.MainActivity
 
 /**
  * Type에 따라서 보여주는 목록이 다름.
@@ -47,8 +46,7 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
                     HelperShowModel(R.drawable.helper_add_5, context.getString(R.string.helper_function_add_description_5)),
                     HelperShowModel(R.drawable.helper_add_6, context.getString(R.string.helper_function_add_description_6)),
                     HelperShowModel(R.drawable.helper_add_7, context.getString(R.string.helper_function_add_description_7)),
-                    HelperShowModel(R.drawable.helper_add_8, context.getString(R.string.helper_function_add_description_8)),
-                    HelperShowModel(R.drawable.helper_notify_fix, context.getString(R.string.helper_function_add_description_9)),
+                    HelperShowModel(R.drawable.helper_add_8, context.getString(R.string.helper_function_add_description_8))
                 )
             }
             2 -> {
@@ -75,7 +73,9 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
                 helperShowModelList = mutableListOf(
                     HelperShowModel(R.drawable.helper_alarm_fix_noti_1, context.getString(R.string.helper_function_alarm_fix_noti_description_1)),
                     HelperShowModel(R.drawable.helper_alarm_fix_noti_2, context.getString(R.string.helper_function_alarm_fix_noti_description_2)),
-                    HelperShowModel(R.drawable.helper_alarm_fix_noti_3, context.getString(R.string.helper_function_alarm_fix_noti_description_3))
+                    HelperShowModel(R.drawable.helper_alarm_fix_noti_3, context.getString(R.string.helper_function_alarm_fix_noti_description_3)),
+                    HelperShowModel(R.drawable.helper_alarm_fix_noti_4, context.getString(R.string.helper_function_alarm_fix_noti_description_4)),
+                    HelperShowModel(R.drawable.helper_alarm_fix_noti_5, context.getString(R.string.helper_function_alarm_fix_noti_description_5))
                 )
             }
             6 -> {

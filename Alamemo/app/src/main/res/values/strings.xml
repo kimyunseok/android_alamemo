@@ -37,7 +37,7 @@
     <string name="save">저장하기</string>
     <string name="use">사용</string>
     <string name="no_use">사용 안함</string>
-    <string name="set_alarm_start_time">알람시작시간\n설정</string>
+    <string name="set_alarm_start_time">알람시작날짜\n설정</string>
     <string name="set_alarm_time">알람시간\n설정</string>
     <string name="memo_hint">추가할 일정/메모를 입력하세요.</string>
     <string name="warn_empty_title_message">메모를 입력해 주세요.</string>
@@ -122,7 +122,6 @@
     <string name="helper_function_add_description_6">일정의 경우에는\n알람 기능을\n사용하실 수 있습니다.</string>
     <string name="helper_function_add_description_7">유형이 반복 일정인 경우에는\n요일을 선택할 수 있습니다.</string>
     <string name="helper_function_add_description_8">반복 일정의 경우\n해당 요일에 날의\n알람 시간에 맞춰서 알람이 울립니다.</string>
-    <string name="helper_function_add_description_9">상단바 고정 표기 사용 시\n위처럼 메모가 상단 바에 고정됩니다.\n유형에 따라 다르게 표시됩니다.</string>
 
     <string name="helper_function_delete_description_1">메모를 좌/우로\n스와이프 합니다.</string>
     <string name="helper_function_delete_description_2">메모가 삭제되며\n하단에 스낵바가 나옵니다.</string>
@@ -139,7 +138,9 @@
     <string name="helper_function_detail_description_2">메모의 세부 메모\n페이지로 이동됩니다.\n여기서 세부 일정/메모를\n추가할 수 있습니다.</string>
     <string name="helper_function_detail_description_3">메모의 세부 유형은\n메모로 고정되고\n일정의 세부 유형은\n일정으로 고정됩니다.</string>
 
-    <string name="helper_function_alarm_fix_noti_description_1">알람을 설정하면\n알람 시간에 맞춰서\n알람이 오게 됩니다.\n일정과 세부 일정에 따라\n다른 형식으로 알람이 갑니다.</string>
-    <string name="helper_function_alarm_fix_noti_description_2">상단바 고정을 설정하면\n상단바에 메모에 대한 정보가\n고정됩니다.</string>
-    <string name="helper_function_alarm_fix_noti_description_3">상단바 고정과 알람 기능을\n같이 사용할 수 있습니다.</string>
+    <string name="helper_function_alarm_fix_noti_description_1">일정은 알람 기능을\n사용할 수 있습니다.\n메모를 작성/수정할 때\n시작 날짜와 알람 시간을\n설정할 수 있습니다.</string>
+    <string name="helper_function_alarm_fix_noti_description_2">반복 일정도 알람 기능을 사용할 수 있습니다.</string>
+    <string name="helper_function_alarm_fix_noti_description_3">알람을 설정하면\n알람 시간에 맞춰서\n알람이 오게 됩니다.\n일정과 반복 일정은 각각\n다른 형식으로 알람이 갑니다.</string>
+    <string name="helper_function_alarm_fix_noti_description_4">상단바 고정을 설정하면\n상단바에 메모에 대한 정보가\n고정됩니다.\n각 유형들은 다른 형식으로\n고정됩니다.</string>
+    <string name="helper_function_alarm_fix_noti_description_5">상단바 고정과 알람 기능을\n같이 사용할 수 있습니다.</string>
 </resources>
