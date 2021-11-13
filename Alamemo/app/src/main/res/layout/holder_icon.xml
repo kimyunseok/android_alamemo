@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{icon}"
+            android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="32sp"
             app:layout_constraintTop_toTopOf="parent"

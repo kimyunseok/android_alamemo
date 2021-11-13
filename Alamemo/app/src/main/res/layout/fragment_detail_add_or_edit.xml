@@ -247,6 +247,7 @@
                     android:elevation="20dp"
                     android:padding="10dp"
                     android:text="@{model.icon}"
+                    android:textColor="@color/black"
                     android:textAlignment="center"
                     android:textSize="36sp"
                     android:clickable="true"

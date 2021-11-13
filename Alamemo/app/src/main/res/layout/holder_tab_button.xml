@@ -19,6 +19,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:text="@{model.emoji}"
+            android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="24sp"
             android:layout_gravity="center_horizontal"
