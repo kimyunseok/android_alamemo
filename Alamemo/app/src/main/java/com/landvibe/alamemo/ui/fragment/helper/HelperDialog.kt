@@ -82,7 +82,7 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
                 helperShowModelList = mutableListOf(
                     HelperShowModel(R.drawable.helper_detail_1, context.getString(R.string.helper_function_detail_description_1)),
                     HelperShowModel(R.drawable.helper_detail_2, context.getString(R.string.helper_function_detail_description_2)),
-                    HelperShowModel(R.drawable.helper_detail_3, context.getString(R.string.helper_function_detail_description_2))
+                    HelperShowModel(R.drawable.helper_detail_3, context.getString(R.string.helper_function_detail_description_3))
                 )
             }
         }
