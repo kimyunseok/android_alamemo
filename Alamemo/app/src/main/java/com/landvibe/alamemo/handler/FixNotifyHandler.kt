@@ -60,17 +60,25 @@ class FixNotifyHandler {
             .setOnlyAlertOnce(true)
             .setShowWhen(false)
 
+        //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
+        var contentText = if(memo.type.value == 1) {
+            ""
+        } else {
+            memo.getDateFormat() + " " +memo.getTimeFormat() + "\n\n"
+        }
+
         if(memo.type.value != 2 && detailMemoList.isEmpty().not()) {
             //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
-            builder.setContentText(context.getString(
+            contentText += context.getString(
                 R.string.notification_fix_notify_slash) +
                     detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
-            )
-        } else {
-            builder.setContentText(
-                detailMemoList.joinToString("\n") { it.icon.value.toString() + " " + it.getTitleInclueTime() }
-            )
+
+        } else if(detailMemoList.isEmpty().not()){
+            contentText +=
+                detailMemoList.joinToString("\n") { it.icon.value.toString() + " " + it.getDateFormat() + " - " + it.getTitleInclueTime() }
         }
+
+        builder.setContentText(contentText)
 
         with(NotificationManagerCompat.from(context)) {
             val fixNotifyId = 0 - memo.id.toInt() // 그냥 알람과 다른 id 사용을 위해 상단바 고정 id는 -id값 으로 설정
