@@ -10,6 +10,7 @@ import com.landvibe.alamemo.databinding.HolderTabButtonBinding
 import com.landvibe.alamemo.model.uimodel.TabButtonViewModel
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
+import com.landvibe.alamemo.ui.fragment.helper.HelperFragment
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
@@ -56,7 +57,13 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         }
 
         viewDataBinding.mainGuideButton.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.sry_making), Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_left)
+                .replace(R.id.main_container, HelperFragment())
+                .addToBackStack(null)
+                .commit()
+
         }
     }
 
