@@ -79,6 +79,8 @@ class AlarmHandler {
         memo.alarmStartTimeMinute.value?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
         alarmCalendar.set(Calendar.SECOND, 1)
 
+        Log.d("setScheduleAlarm::", "checkTime::" + alarmCalendar.time.toString())
+
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             alarmCalendar.timeInMillis,
@@ -113,6 +115,8 @@ class AlarmHandler {
         alarmHour?.let { alarmCalendar.set(Calendar.HOUR_OF_DAY, it) }
         alarmMinute?.let { alarmCalendar.set(Calendar.MINUTE, it) }
         alarmCalendar.set(Calendar.SECOND, 1)
+
+        Log.d("setRepeatAlarm::", "checkTime::" + alarmCalendar.time.toString())
 
         alarmManager.set(
             AlarmManager.RTC_WAKEUP,

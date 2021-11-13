@@ -116,8 +116,6 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-                //TODO : 알람삭제
-                //TODO : 상단바 고정 삭제
                 val tmpMemo = recyclerViewAdapter.itemList[position]
                 val tmpDetailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(tmpMemo.id)
 
