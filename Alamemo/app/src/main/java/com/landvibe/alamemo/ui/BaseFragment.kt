@@ -20,7 +20,7 @@ abstract class BaseFragment<T: ViewDataBinding>: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        viewDataBinding.lifecycleOwner = this
+        viewDataBinding.lifecycleOwner = viewLifecycleOwner
 
         init()
         return viewDataBinding.root

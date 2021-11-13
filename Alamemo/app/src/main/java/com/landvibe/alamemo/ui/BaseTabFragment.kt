@@ -37,7 +37,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     ): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
         initViewModel()
-        viewDataBinding.lifecycleOwner = this
+        viewDataBinding.lifecycleOwner = viewLifecycleOwner
 
         init()
         setRecyclerView()
