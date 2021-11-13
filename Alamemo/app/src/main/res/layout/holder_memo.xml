@@ -93,7 +93,7 @@
                     android:id="@+id/memo_d_day_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{model.scheduleFinish == true || model.type == 1 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{model.scheduleFinish == true || model.type != 2 ? View.GONE : View.VISIBLE}"
                     android:text="@{model.DDay}"
                     android:textColor="@color/black"
                     android:textStyle="bold"
