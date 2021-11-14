@@ -94,7 +94,7 @@ class Memo (
                 "D - $dDay"
             }
             dDay < 0 -> {
-                "D + $dDay"
+                "D + ${0 - dDay}"
             }
             else -> {
                 "D - DAY"
