@@ -1,10 +1,13 @@
 # 알람메모 Alamemo
-### 원래 만들었던 앱의 코드가 너무 하드코딩이라서 다시 만든 프로젝트.
+### 원래 만들었던 앱을 다시 만든 프로젝트. (기본 삼성 메모 어플리케이션이 복잡해서 간단한 알람이 울리는 메모 어플리케이션을 만들고 싶었다.)
+##### - 원래 있던 코드가 하드 코딩이고, 유지 보수가 떨어지는 코드였다.
+##### - UI가 맘에들지 않았다.
+##### - 몇 가지 새로운 기능(반복 일정, 아이콘 선택 등)을 만들고 싶었다.
 [![playStore Badge](https://img.shields.io/badge/Google%20PlayStore-0D96F6?style=for-the-badge&logo=AppStore&logoColor=white)](https://play.google.com/store/apps/details?id=com.landvibe.alamemo&hl=en_AU&gl=US)
 ##
 - Room DB를 활용한 메모 저장
 - Data Binding과 View Model을 활용해서 MVVM패턴으로 앱을 재구성했다.
-- BroadcastReceiver를 통해 알람을 설정할 수 있도록 만들었고, PendingIntent를 같이 사용해서 만들었다.
+- BroadcastReceiver를 통해 알람을 설정할 수 있도록 만들었고, PendingIntent를 같이 사용해서 만들었다. 이를 통해 부팅할 때도 설정된 알람들을 설정할 수 있었다.
 - Android 8 이상의 폰에 알람이 갈 수 있도록 NotificationChannel을 만들었다.
 - BaseActivity, BaseFragment를 사용해서 코드의 중복을 줄였다.
 ##
