@@ -32,10 +32,11 @@
 
             <Button
                 android:id="@+id/back_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:alpha="0.7"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/outline_close_black_48" />
+                android:background="@drawable/ic_back" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -81,32 +82,32 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="25dp"
-            android:background="@color/LightGrey"
-            app:layout_constraintTop_toBottomOf="@id/function_layout"/>
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/developer_layout"
+            android:id="@+id/mail_to_developer_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintTop_toBottomOf="@+id/divider3">
+            android:layout_marginTop="45dp"
+            app:layout_constraintTop_toBottomOf="@+id/function_layout">
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/mail_to_developer_btn"
+                android:id="@+id/mail_to_developer_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginStart="6dp"
                 android:text="@string/helper_mail_to_developer"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="21sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
             <View
                 android:id="@+id/divider23465"
@@ -114,10 +115,9 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="15dp"
                 android:background="@color/LightGrey"
-                app:layout_constraintTop_toBottomOf="@id/mail_to_developer_btn" />
+                app:layout_constraintTop_toBottomOf="@id/mail_to_developer_tv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <TextView
             android:id="@+id/app_version"
@@ -129,7 +129,7 @@
             android:textSize="11sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/developer_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/mail_to_developer_btn" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

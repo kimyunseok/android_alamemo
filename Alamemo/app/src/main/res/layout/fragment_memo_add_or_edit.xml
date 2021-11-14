@@ -42,10 +42,11 @@
 
                 <Button
                     android:id="@+id/add_cancel_btn"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:alpha="0.7"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/outline_close_black_48" />
+                    android:background="@drawable/ic_back" />
 
             </androidx.appcompat.widget.Toolbar>
 
