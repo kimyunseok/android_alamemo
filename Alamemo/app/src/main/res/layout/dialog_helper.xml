@@ -60,13 +60,12 @@
             <TextView
                 android:id="@+id/helper_description"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:layout_marginTop="15dp"
                 android:text="@{model.description}"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textAlignment="center"
-                android:lines="5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/helper_img"/>
