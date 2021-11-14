@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.model.data.memo.Memo
@@ -52,6 +53,10 @@ class AlarmHandler {
         val alarmHour = memo.alarmStartTimeHour.value
         val alarmMinute = memo.alarmStartTimeMinute.value
 
+        alarmHour?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
+        alarmMinute?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
+        alarmCalendar.set(Calendar.SECOND, 1)
+
         if(memo.alarmStartTimeType.value == 1) {
             //매일 알람이 설정됐다면, 매일 정해진 시간에 알람을 울려주면 된다.
             checkAlarmTimePass(alarmHour, alarmMinute, alarmCalendar)
@@ -70,14 +75,12 @@ class AlarmHandler {
 
             //만일 뺀 날짜가 오늘보다 이전이라면 오늘 이후로 알람을 설정해준다.
             if(alarmCalendar.timeInMillis < todayCalendar.timeInMillis) {
-                alarmCalendar.timeInMillis = todayCalendar.timeInMillis
+                alarmCalendar.set(Calendar.YEAR, todayCalendar.get(Calendar.YEAR))
+                alarmCalendar.set(Calendar.MONTH, todayCalendar.get(Calendar.MONTH))
+                alarmCalendar.set(Calendar.DAY_OF_MONTH, todayCalendar.get(Calendar.DAY_OF_MONTH))
                 checkAlarmTimePass(alarmHour, alarmMinute, alarmCalendar)
             }
         }
-
-        alarmHour?.let { hour -> alarmCalendar.set(Calendar.HOUR_OF_DAY, hour) }
-        alarmMinute?.let { minute -> alarmCalendar.set(Calendar.MINUTE, minute) }
-        alarmCalendar.set(Calendar.SECOND, 1)
 
         Log.d("setScheduleAlarm::", "checkTime::" + alarmCalendar.time.toString())
 
@@ -164,6 +167,11 @@ class AlarmHandler {
             context,
             memoId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
         )
-        alarmManager.cancel(pendingIntent)
+        alarmManager.cancel(pendingIntent) // 알람취소
+        
+        // 상단바에 띄워져 있는 알람도 삭제.
+        with(NotificationManagerCompat.from(context)) {
+            cancel(memoId.toInt())
+        }
     }
 }
