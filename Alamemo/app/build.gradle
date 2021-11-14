@@ -11,8 +11,8 @@ android {
         applicationId "com.landvibe.alamemo"
         minSdk 21
         targetSdk 31
-        versionCode 26
-        versionName "2.01"
+        versionCode 27
+        versionName "2.02"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
