@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.landvibe.alamemo.BuildConfig
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.HelperRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.FragmentHelperBinding
@@ -17,6 +18,7 @@ class HelperFragment: BaseFragment<FragmentHelperBinding>() {
     override fun init() {
         setUpBtnClickListener()
         setUpFunctionRecyclerView()
+        setUpVersion()
     }
 
     private fun setUpBtnClickListener() {
@@ -51,5 +53,9 @@ class HelperFragment: BaseFragment<FragmentHelperBinding>() {
                 putExtra(Intent.EXTRA_TEXT, "")
             }
         startActivity(intent)
+    }
+
+    private fun setUpVersion() {
+        viewDataBinding.version = requireContext().getString(R.string.helper_app_version) + " " + BuildConfig.VERSION_NAME
     }
 }

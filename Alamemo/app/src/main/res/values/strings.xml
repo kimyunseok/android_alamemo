@@ -112,7 +112,7 @@
     <string name="helper_blog_to_developer">개발자 블로그</string>
     <string name="helper_github_to_developer">개발자 깃허브</string>
     <string name="helper_open_source">Alamemo는 깃허브에 소스코드가 공개되어 있습니다 !</string>
-    <string name="helper_app_version">앱 버전 : 2.00</string>
+    <string name="helper_app_version">앱 버전 :</string>
     <string name="next">다음</string>
     <string name="prev">이전</string>
 
