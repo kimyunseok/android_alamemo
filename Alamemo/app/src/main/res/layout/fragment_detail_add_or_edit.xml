@@ -48,6 +48,13 @@
 
             </androidx.appcompat.widget.Toolbar>
 
+            <View
+                android:id="@+id/toolbar_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -55,7 +62,7 @@
                 android:paddingBottom="55dp"
                 android:clipToPadding="false"
                 android:clipChildren="false"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_divider">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/add_set_date_layout"

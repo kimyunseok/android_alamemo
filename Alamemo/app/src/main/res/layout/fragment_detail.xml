@@ -51,6 +51,13 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <View
+            android:id="@+id/toolbar_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/LightGrey"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
         <TextView
             android:id="@+id/title_tv"
             android:layout_width="0dp"
@@ -63,7 +70,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/divider"
             app:layout_constraintStart_toStartOf="@+id/divider"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_divider" />
 
         <View
             android:id="@+id/divider"

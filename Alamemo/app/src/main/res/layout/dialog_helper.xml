@@ -45,6 +45,13 @@
 
             </androidx.appcompat.widget.Toolbar>
 
+            <View
+                android:id="@+id/toolbar_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/LightGrey"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
             <ImageView
                 android:id="@+id/helper_img"
                 android:layout_width="240dp"
@@ -54,7 +61,7 @@
                 android:src="@{ContextCompat.getDrawable(context, model.image)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar_divider"
                 app:layout_constraintBottom_toTopOf="@+id/helper_description"/>
 
             <TextView
