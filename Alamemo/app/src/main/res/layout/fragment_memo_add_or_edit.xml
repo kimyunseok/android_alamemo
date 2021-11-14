@@ -107,7 +107,7 @@
                                 android:id="@+id/add_show_date_dialog_img"
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
-                                android:background="@drawable/outline_calendar_today_black_48"
+                                android:background="@drawable/ic_calendar"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -661,7 +661,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:layout_marginEnd="6dp"
-                        android:src="@drawable/outline_check_black_48"
+                        android:src="@drawable/ic_check"
                         app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
