@@ -51,9 +51,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                         //반복 일정이라면 반복 요일 중 최초로 해당하는 날로 scheduleDay 설정.
                         val calendar = Calendar.getInstance()
                         calendar.timeInMillis = AboutDay.AboutDayOfWeek().findMinTimeAboutDayOfWeekBySpecificTime(model, System.currentTimeMillis())
-                        model.scheduleDateYear.value = calendar.get(Calendar.YEAR)
-                        model.scheduleDateMonth.value = calendar.get(Calendar.MONTH)
-                        model.scheduleDateDay.value = calendar.get(Calendar.DAY_OF_MONTH)
+                        model.setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
                     }
 
                     if (viewDataBinding.model?.id?.toInt() != 0) {
@@ -156,6 +154,8 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                 alarmStartTimeType = MutableLiveData(1)
             )
         }
+
+        memo.checkScheduleTime() // 설정된 스케줄 날짜가 오늘 이전이라면 오늘날짜로 설정.
 
         viewDataBinding.model = memo
     }

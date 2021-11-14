@@ -107,11 +107,9 @@ class DetailMemo(
 
     fun setMemoScheduleTimeToday() {
         val calendar = Calendar.getInstance()
-        scheduleDateYear.value = calendar.get(Calendar.YEAR)
-        scheduleDateMonth.value = calendar.get(Calendar.MONTH)
-        scheduleDateDay.value = calendar.get(Calendar.DAY_OF_MONTH)
-        scheduleDateHour.value = calendar.get(Calendar.HOUR_OF_DAY)
-        scheduleDateMinute.value = calendar.get(Calendar.MINUTE)
+        setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+        setSceduleTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
+        getDateFormat()
     }
 
     fun getMaxDate(): Long {
@@ -122,4 +120,21 @@ class DetailMemo(
 
         return calendar.time.time
     }
+
+    fun checkScheduleTime() {
+        val todayCalendar = Calendar.getInstance()
+        val checkCalendar = Calendar.getInstance().apply {
+            scheduleDateYear.value?.let { set(Calendar.YEAR, it) }
+            scheduleDateMonth.value?.let { set(Calendar.MONTH, it) }
+            scheduleDateDay.value?.let { set(Calendar.DAY_OF_MONTH, it) }
+            scheduleDateHour.value?.let { set(Calendar.HOUR_OF_DAY, it) }
+            scheduleDateMinute.value?.let { set(Calendar.MINUTE, it) }
+        }
+
+        //메모에 설정된 시간이 이전 시간이라면 오늘 시간으로 변경한다.
+        if(checkCalendar.timeInMillis < todayCalendar.timeInMillis) {
+            setMemoScheduleTimeToday()
+        }
+    }
+
 }

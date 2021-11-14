@@ -56,6 +56,8 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
             }
         }
 
+        detailMemo?.checkScheduleTime()
+
         viewDataBinding.model = detailMemo
     }
 
