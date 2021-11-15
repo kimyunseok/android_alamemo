@@ -11,7 +11,7 @@ import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.ui.splash.SplashActivity
 
-class MyBootReceiver: BroadcastReceiver() {
+class MyBootAndUpdateReceiver: BroadcastReceiver() {
     val BOOT_REQUEST_CODE = 1001
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {

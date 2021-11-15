@@ -38,12 +38,13 @@
             android:exported="false">
         </receiver>
 
-        <receiver android:name="com.landvibe.alamemo.receiver.MyBootReceiver"
+        <receiver android:name="com.landvibe.alamemo.receiver.MyBootAndUpdateReceiver"
             android:process=":remote"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
 
