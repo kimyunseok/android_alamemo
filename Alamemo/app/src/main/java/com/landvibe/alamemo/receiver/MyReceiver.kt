@@ -124,4 +124,5 @@ class MyReceiver: BroadcastReceiver() {
     private fun setUpRepeatMemoAlarm(context: Context, memo: Memo) {
         AlarmHandler().setMemoAlarm(context, memo)
     }
+
 }

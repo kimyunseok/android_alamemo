@@ -67,6 +67,8 @@ class FixNotifyHandler {
             memo.getDateFormat() + " " +memo.getTimeFormat() + "\n\n"
         }
 
+        sortDetailMemoList(detailMemoList)
+
         if(memo.type.value != 2 && detailMemoList.isEmpty().not()) {
             //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
             contentText += context.getString(
@@ -91,5 +93,14 @@ class FixNotifyHandler {
             val fixNotifyId = 0 - memoId
             cancel(fixNotifyId.toInt())
         }
+    }
+
+    private fun sortDetailMemoList(itemList: MutableList<DetailMemo>?) {
+        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
+            .thenBy { it.scheduleDateMonth.value }
+            .thenBy { it.scheduleDateDay.value }
+            .thenBy { it.scheduleDateHour.value }
+            .thenBy { it.scheduleDateMinute.value }
+        )
     }
 }
