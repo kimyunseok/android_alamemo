@@ -97,8 +97,6 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
 
-                //TODO : 알람삭제
-                //TODO : 상단바 고정 삭제
                 val memoID = recyclerViewAdapter.itemList[position].memoId
                 val detailMemoID = recyclerViewAdapter.itemList[position].id
                 val tmpDetailMemo = recyclerViewAdapter.itemList[position]
