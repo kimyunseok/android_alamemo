@@ -15,6 +15,7 @@ import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
+import com.landvibe.alamemo.ui.fragment.main.MemoLongClickDialog
 
 class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 
@@ -26,7 +27,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val memo = itemList[position]
 
-        holder.bind(memo, position)
+        holder.bind(memo)
     }
 
     override fun getItemCount(): Int {
@@ -34,7 +35,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
     }
 
     inner class Holder(var binding: HolderMemoBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Memo, position: Int) {
+        fun bind(item: Memo) {
             binding.model = item
 
             itemView.setOnClickListener {
@@ -51,6 +52,13 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                     .replace(R.id.main_container, DetailFragment().apply { arguments = bundle })
                     .addToBackStack(null)
                     .commit()
+            }
+
+            itemView.setOnLongClickListener {
+                MemoLongClickDialog().apply {
+                    arguments = Bundle().apply { putLong("memoId", item.id) }
+                }.show((context as MainActivity).supportFragmentManager, "longClick")
+                true
             }
 
             binding.memoEditBtn.setOnClickListener {

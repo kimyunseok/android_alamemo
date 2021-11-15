@@ -147,4 +147,11 @@
     <string name="helper_function_alarm_fix_noti_description_5">상단바 고정과 알람 기능을\n같이 사용할 수 있습니다.</string>
 
     <string name="failed_to_send_mail">메일 보내기에 실패했습니다.</string>
+
+    <string name="long_click_menu_1">메시지, 메신저로 메모/일정 공유하기</string>
+    <string name="long_click_menu_2">메모/일정 복사</string>
+    <string name="long_click_menu_3">메모/일정 완료</string>
+    <string name="long_click_menu_4">메모/일정 수정</string>
+    <string name="long_click_menu_5">메모/일정 삭제</string>
+    <string name="long_click_menu_6">닫기</string>
 </resources>

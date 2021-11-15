@@ -9,4 +9,14 @@
         <item name="android:fontFamily">@font/font_memo</item>
     </style>
 
+    <!-- 하단 다이얼로그 스타일 흰색 윗모서리 둥근 테마-->
+    <style name="TopRadiusBottomSheepDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/ic_top_radius_background</item>
+    </style>
+
 </resources>

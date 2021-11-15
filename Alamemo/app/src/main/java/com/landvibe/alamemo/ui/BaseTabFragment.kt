@@ -136,12 +136,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
                 recyclerViewAdapter.notifyItemRemoved(position)
                 viewDataBinding.model?.memoEmpty?.value = recyclerViewAdapter.itemList.isEmpty()
 
-                viewDataBinding.model?.memoEmpty?.let {
-                    memoEmpty ->
-                    MemoDeleteSnackBar(requireContext(), viewDataBinding.root, recyclerViewAdapter, position, tmpMemo, tmpDetailMemoList,
-                        memoEmpty
-                    ).showSnackBar()
-                }
+                MemoDeleteSnackBar(requireContext(), viewDataBinding.root, tmpMemo, tmpDetailMemoList).showSnackBar()
             }
 
         }

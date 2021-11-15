@@ -12,11 +12,11 @@ import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
+import com.landvibe.alamemo.ui.activity.MainActivity
+import com.landvibe.alamemo.ui.fragment.main.MainFragment
 
-class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerViewAdapter: MemoRecyclerViewAdapter,
-                         private val position: Int, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>,
-                         private val memoEmpty: MutableLiveData<Boolean>
-) {
+class MemoDeleteSnackBar(context: Context, rootView: View, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>
+                         ) {
 
     private var snackBar: Snackbar =
         Snackbar.make(rootView, context.getString(R.string.delete_memo_snackbar_message), Snackbar.LENGTH_SHORT).apply {
@@ -31,10 +31,14 @@ class MemoDeleteSnackBar(context: Context, rootView: View, private val recyclerV
     }
 
     private fun undoDelete(context: Context) {
-        recyclerViewAdapter.itemList.add(position, removedMemo)
         AppDataBase.instance.memoDao().insertMemo(removedMemo)
-        recyclerViewAdapter.notifyItemInserted(position)
-        memoEmpty.value = false
+
+        //메인프래그먼트라면 onResume()호출.
+        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let{
+            if(it is MainFragment) {
+                it.onResume()
+            }
+        }
 
         for(data in removedDetailMemo) {
             AppDataBase.instance.detailMemoDao().insertDetailMemo(data)
