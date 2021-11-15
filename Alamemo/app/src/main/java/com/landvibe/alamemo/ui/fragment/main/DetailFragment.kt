@@ -118,12 +118,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
                     FixNotifyHandler().setMemoFixNotify(requireContext(), tmpMemo)
                 }
 
-                viewDataBinding.model?.memoEmpty?.let {
-                    memoEmpty ->
-                    DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, recyclerViewAdapter, position, tmpDetailMemo,
-                        memoEmpty
-                    ).showSnackBar()
-                }
+                DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, tmpDetailMemo,).showSnackBar()
             }
 
         }

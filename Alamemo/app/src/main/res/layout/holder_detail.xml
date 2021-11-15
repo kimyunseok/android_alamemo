@@ -23,7 +23,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             android:padding="6dp"
-            android:background="@drawable/selector_radius_background"
+            android:background="@{model.type == 2 &amp;&amp; model.getDDayInteger == 0 ? @drawable/selector_radius_green_yellow_background : @drawable/selector_radius_background}"
             android:elevation="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">

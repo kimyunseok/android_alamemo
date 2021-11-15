@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -28,12 +27,12 @@ class MemoLongClickRecyclerViewAdapter (val context: Context, val dialog: Bottom
     RecyclerView.Adapter<MemoLongClickRecyclerViewAdapter.Holder>() {
 
     private val itemList = mutableListOf(
-        LongClickViewModel(context.getString(R.string.long_click_menu_1), 1),
-        LongClickViewModel(context.getString(R.string.long_click_menu_2), 2),
-        LongClickViewModel(context.getString(R.string.long_click_menu_3), 3),
-        LongClickViewModel(context.getString(R.string.long_click_menu_4), 4),
-        LongClickViewModel(context.getString(R.string.long_click_menu_5), 5),
-        LongClickViewModel(context.getString(R.string.long_click_menu_6), 6),
+        LongClickViewModel(context.getString(R.string.memo_menu_share), 1),
+        LongClickViewModel(context.getString(R.string.memo_menu_copy), 2),
+        LongClickViewModel(context.getString(R.string.memo_menu_finish), 3),
+        LongClickViewModel(context.getString(R.string.memo_menu_modify), 4),
+        LongClickViewModel(context.getString(R.string.memo_menu_remove), 5),
+        LongClickViewModel(context.getString(R.string.memo_menu_close), 6),
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

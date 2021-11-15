@@ -15,7 +15,7 @@ import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
-import com.landvibe.alamemo.ui.fragment.main.MemoLongClickDialog
+import com.landvibe.alamemo.ui.fragment.main.dialog.MemoLongClickDialog
 
 class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 
