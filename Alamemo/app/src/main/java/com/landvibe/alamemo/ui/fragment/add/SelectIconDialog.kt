@@ -2,6 +2,8 @@ package com.landvibe.alamemo.ui.fragment.add
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
@@ -21,9 +23,12 @@ class SelectIconDialog(context: Context, val icon: MutableLiveData<String>): Dia
     init {
         setContentView(binding.root)
 
-        window?.attributes?.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height = ViewGroup.LayoutParams.MATCH_PARENT
+        window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes?.apply {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.MATCH_PARENT
+            }
         }
 
         initIconTypeList()

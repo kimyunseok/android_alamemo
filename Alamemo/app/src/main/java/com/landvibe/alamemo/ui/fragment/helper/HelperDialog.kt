@@ -2,6 +2,8 @@ package com.landvibe.alamemo.ui.fragment.helper
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.R
@@ -19,9 +21,12 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
     init {
         setContentView(binding.root)
 
-        window?.attributes?.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height = ViewGroup.LayoutParams.MATCH_PARENT
+        window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            attributes?.apply {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
         }
 
         initList()
