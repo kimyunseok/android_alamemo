@@ -64,18 +64,20 @@ class FixNotifyHandler {
         var contentText = if(memo.type.value == 1) {
             ""
         } else {
-            memo.getDateFormat() + " " +memo.getTimeFormat() + "\n\n"
+            memo.getDateFormat() + " " + memo.getTimeFormat()
         }
 
         sortDetailMemoList(detailMemoList)
 
         if(memo.type.value != 2 && detailMemoList.isEmpty().not()) {
+            contentText += "\n\n"
             //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
             contentText += context.getString(
                 R.string.notification_fix_notify_slash) +
                     detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
 
         } else if(detailMemoList.isEmpty().not()){
+            contentText += "\n\n"
             contentText +=
                 detailMemoList.joinToString("\n") { it.getDateFormat() + " - " + it.icon.value.toString() + " " + it.getTitleInclueTime() }
         }
