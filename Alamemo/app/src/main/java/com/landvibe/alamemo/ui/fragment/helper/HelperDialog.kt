@@ -146,7 +146,7 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
                 context.getString(R.string.helper_function_detail)
             }
             7 -> {
-                context.getString(R.string.helper_function_share_copy)
+                context.getString(R.string.helper_function_detail_menu)
             }
             else -> {
                 ""

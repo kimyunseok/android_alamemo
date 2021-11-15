@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -85,6 +86,7 @@ class DetailMemoClickRecyclerViewAdapter (val context: Context, val dialog: Bott
         val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText(context.getString(R.string.app_name), detailMemo.icon.value + " " + detailMemo.title.value)
         clipBoard.setPrimaryClip(clipData)
+        Toast.makeText(context, context.getString(R.string.memo_copy_complete), Toast.LENGTH_SHORT).show()
     }
 
     private fun modifyMemoBtn() {

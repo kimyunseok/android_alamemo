@@ -108,7 +108,7 @@
     <string name="helper_function_alarm">알람/상단바 고정 관련</string>
     <string name="helper_function_edit">메모/일정 수정</string>
     <string name="helper_function_detail">세부 메모/일정</string>
-    <string name="helper_function_share_copy">메모/일정 공유, 복사 기능</string>
+    <string name="helper_function_detail_menu">세부 메뉴(메모/일정 공유, 복사 기능 등)</string>
     <string name="helper_mail_to_developer">개발자에게 문의하기</string>
     <string name="helper_blog_to_developer">개발자 블로그</string>
     <string name="helper_github_to_developer">개발자 깃허브</string>
@@ -149,7 +149,7 @@
 
     <string name="helper_function_share_copy_1">여행의 세부 일정을\n위처럼 짠 뒤에\n공유를 하고싶을 수 있습니다.</string>
     <string name="helper_function_share_copy_2">이 때 메모/일정을 길게 누릅니다.</string>
-    <string name="helper_function_share_copy_3">아래에서 창이 나오게 되며\n원하는 기능을 선택합니다.\n카카오톡으로 일정을\n공유해 보겠습니다.</string>
+    <string name="helper_function_share_copy_3">아래에서 메뉴 창이 나오게 되며\n원하는 기능을 선택할 수 있습니다.\n카카오톡으로 일정을\n공유해 보겠습니다.</string>
     <string name="helper_function_share_copy_4">위 이미지처럼 다른사람에게\n일정이 공유됩니다.</string>
     <string name="helper_function_share_copy_5">세부 일정은\n한 번만 누르면 위 메뉴창이\n나오게 됩니다.</string>
 
@@ -162,4 +162,5 @@
     <string name="memo_menu_modify">메모/일정 수정</string>
     <string name="memo_menu_remove">메모/일정 삭제</string>
     <string name="memo_menu_close">닫기</string>
+    <string name="memo_copy_complete">메모가 복사되었습니다.</string>
 </resources>

@@ -2,8 +2,6 @@ package com.landvibe.alamemo.ui.fragment.helper
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.landvibe.alamemo.BuildConfig
 import com.landvibe.alamemo.R
@@ -33,7 +31,8 @@ class HelperFragment: BaseFragment<FragmentHelperBinding>() {
             HelperViewModel(requireContext().getString(R.string.helper_function_edit), 3),
             HelperViewModel(requireContext().getString(R.string.helper_function_finish), 4),
             HelperViewModel(requireContext().getString(R.string.helper_function_alarm), 5),
-            HelperViewModel(requireContext().getString(R.string.helper_function_detail), 6)
+            HelperViewModel(requireContext().getString(R.string.helper_function_detail), 6),
+            HelperViewModel(requireContext().getString(R.string.helper_function_detail_menu), 7)
         )
         viewDataBinding.functionRecyclerView.adapter = HelperRecyclerViewAdapter(requireContext(), helperList)
         viewDataBinding.functionRecyclerView.layoutManager = LinearLayoutManager(context)

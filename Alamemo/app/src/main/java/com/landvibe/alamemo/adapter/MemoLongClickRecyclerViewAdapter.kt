@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -110,7 +111,8 @@ class MemoLongClickRecyclerViewAdapter (val context: Context, val dialog: Bottom
 
         } else if(detailMemoList.isEmpty().not()){
             contentText +=
-                detailMemoList.joinToString("\n") { it.getDateFormat() + " - " + it.icon.value.toString() + " " + it.getTitleInclueTime() }
+                detailMemoList.joinToString("\n") { it.getDateFormat() + " " + it.getTimeFormat() + " - "+
+                        it.icon.value.toString() + " " + it.title.value }
         }
 
 
@@ -125,6 +127,7 @@ class MemoLongClickRecyclerViewAdapter (val context: Context, val dialog: Bottom
         val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText(context.getString(R.string.app_name), memo.icon.value + " " + memo.title.value)
         clipBoard.setPrimaryClip(clipData)
+        Toast.makeText(context, context.getString(R.string.memo_copy_complete), Toast.LENGTH_SHORT).show()
     }
 
     private fun finishMemoBtn() {
