@@ -15,7 +15,10 @@ class MyBootAndUpdateReceiver: BroadcastReceiver() {
     val BOOT_REQUEST_CODE = 1001
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {
-            setBootNotification(context)
+            if(intent?.action == Intent.ACTION_BOOT_COMPLETED) {
+                //부팅완료일 경우만, 해당 메시지 보낸다.
+                setBootNotification(context)
+            }
             setUpFixNotifyAndAlarm(context)
         }
     }
