@@ -91,6 +91,15 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
                     HelperShowModel(R.drawable.helper_detail_3, context.getString(R.string.helper_function_detail_description_3))
                 )
             }
+            7 -> {
+                helperShowModelList = mutableListOf(
+                    HelperShowModel(R.drawable.helper_share_1, context.getString(R.string.helper_function_share_copy_1)),
+                    HelperShowModel(R.drawable.helper_share_2, context.getString(R.string.helper_function_share_copy_2)),
+                    HelperShowModel(R.drawable.helper_share_3, context.getString(R.string.helper_function_share_copy_3)),
+                    HelperShowModel(R.drawable.helper_share_4, context.getString(R.string.helper_function_share_copy_4)),
+                    HelperShowModel(R.drawable.helper_share_5, context.getString(R.string.helper_function_share_copy_5))
+                )
+            }
         }
     }
 
@@ -135,7 +144,11 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
             }
             6 -> {
                 context.getString(R.string.helper_function_detail)
-            } else -> {
+            }
+            7 -> {
+                context.getString(R.string.helper_function_share_copy)
+            }
+            else -> {
                 ""
             }
         }
