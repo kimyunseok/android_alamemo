@@ -7,6 +7,7 @@
 ##
 - Room DB를 활용한 메모 저장
 - Data Binding과 View Model을 활용해서 MVVM패턴으로 앱을 재구성했다.
+- LiveData를 활용해서 값의 변화에 따라 UI가 자동으로 변할 수 있도록 했다.
 - BroadcastReceiver를 통해 알람을 설정할 수 있도록 만들었고, PendingIntent를 같이 사용해서 만들었다. 이를 통해 부팅할 때도 설정된 알람들을 설정할 수 있었다.
 - Android 8 이상의 폰에 알람이 갈 수 있도록 NotificationChannel을 만들었다.
 - BaseActivity, BaseFragment를 사용해서 코드의 중복을 줄였다.
