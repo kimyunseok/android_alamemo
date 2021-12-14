@@ -14,7 +14,7 @@ import com.landvibe.alamemo.adapter.IconTypeSelectRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.DialogSelectIconBinding
 import com.landvibe.alamemo.model.uimodel.IconTypeViewModel
 
-class SelectIconDialog(context: Context, val icon: MutableLiveData<String>): Dialog(context) {
+class SelectIconDialog(context: Context, val icon: String): Dialog(context) {
     private val binding = DialogSelectIconBinding.inflate(layoutInflater)
 
     lateinit var iconSelectAdapter: IconSelectRecyclerViewAdapter

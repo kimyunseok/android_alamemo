@@ -7,17 +7,19 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
 import com.landvibe.alamemo.adapter.MemoRecyclerViewAdapter
-import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.databinding.FragmentTabBinding
-import com.landvibe.alamemo.model.data.memo.Memo
-import com.landvibe.alamemo.model.uimodel.TabFragmentViewModel
-import com.landvibe.alamemo.ui.fragment.snackbar.MemoDeleteSnackBar
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
-import com.landvibe.alamemo.util.MemoDiffUtil
+import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.repository.DetailMemoRepository
+import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.ui.fragment.snackbar.MemoDeleteSnackBar
 import com.landvibe.alamemo.util.SwipeAction
+import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 import java.util.*
 
 abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
@@ -27,8 +29,10 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
     lateinit var recyclerViewAdapter: MemoRecyclerViewAdapter
 
-    abstract fun setTitle()
-    abstract fun init()
+    private val viewModel: TabFragmentViewModel by lazy {
+        ViewModelProvider(this, MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            TabFragmentViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,79 +40,54 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewDataBinding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        initViewModel()
         viewDataBinding.lifecycleOwner = viewLifecycleOwner
 
-        init()
-        setRecyclerView()
+        initViewModel()
+        setTitle()
+        getMemoList()
 
         return viewDataBinding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        //화면 재구성 시 필요.
-        if(this::viewDataBinding.isInitialized) {
-            refreshRecyclerView()
-        }
-    }
-
     private fun initViewModel() {
-        val viewModel = TabFragmentViewModel()
-        viewModel.memoEmpty.value = true
+        viewModel.setEmpty(true)
         viewDataBinding.model = viewModel
-        setTitle() // viewModel설정 후 title 설정.
     }
 
-    private fun setRecyclerView() {
-        setAnimation()
-        val itemList = if(type != 4) {
-            AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
-        } else {
-            AppDataBase.instance.memoDao().getFinishMemo().toMutableList()
+    private fun setTitle() {
+        viewModel.setTitle(type)
+    }
+
+    private fun getMemoList() {
+        viewModel.getMemoList(type)
+    }
+
+    private fun setUpObserver() {
+        viewModel.memoList.observe(viewLifecycleOwner) {
+            if(type == 2) {
+                //일정 중에서 오늘날짜보다 지난것들은 종료처리.
+                finishScheduleBeforeCurrentTime(it)
+            }
+
+            sortMemoList(it)
+            setRecyclerView(it)
+
+            viewModel.setEmpty(it.isEmpty())
         }
 
-        if(type == 2) {
-            //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-            finishScheduleBeforeCurrentTime(itemList)
+        viewModel.removedMemo.observe(viewLifecycleOwner) {
+            MemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel).showSnackBar()
         }
+    }
 
-        sortMemoList(itemList)
+    private fun setRecyclerView(itemList: MutableList<Memo>) {
+        setRecyclerViewAnimation()
 
-        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList)
+        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList, viewModel)
         viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
         viewDataBinding.tabMemoRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
         ItemTouchHelper(setSwipeToDelete()).attachToRecyclerView(viewDataBinding.tabMemoRecycler)
-
-        viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()
-    }
-
-    private fun refreshRecyclerView() {
-        val itemList = if(type != 4) {
-            AppDataBase.instance.memoDao().getMemoByType(type).toMutableList()
-        } else {
-            AppDataBase.instance.memoDao().getFinishMemo().toMutableList()
-        }
-
-        if(type == 2) {
-            //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-            finishScheduleBeforeCurrentTime(itemList)
-        }
-
-        sortMemoList(itemList)
-
-        //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
-
-        //대체 코드
-        val oldItemList = recyclerViewAdapter.itemList
-        val diffUtil = DiffUtil.calculateDiff(MemoDiffUtil(oldItemList, itemList), false)
-        diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
-        recyclerViewAdapter.itemList = itemList
-
-        viewDataBinding.model?.memoEmpty?.value = itemList.isEmpty()
-
     }
 
     private fun setSwipeToDelete(): SwipeAction {
@@ -117,32 +96,31 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
                 val position = viewHolder.adapterPosition
 
                 val tmpMemo = recyclerViewAdapter.itemList[position]
-                val tmpDetailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(tmpMemo.id)
+                viewModel.saveRemovedMemo(tmpMemo)
+                viewModel.saveRemovedDetailMemoListByMemoId(tmpMemo.id)
 
-                if(tmpMemo.setAlarm.value == true) {
+                if(tmpMemo.setAlarm) {
                     //알람설정 돼 있었다면 알람해제.
                     AlarmHandler().cancelAlarm(requireContext(), tmpMemo.id)
                 }
 
-                if(tmpMemo.fixNotify.value == true) {
+                if(tmpMemo.fixNotify) {
                     //고성설정 돼 있었다면 알람해제.
                     FixNotifyHandler().cancelFixNotify(requireContext(), tmpMemo.id)
                 }
 
-                AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(tmpMemo.id)
-                AppDataBase.instance.memoDao().deleteMemoByID(tmpMemo.id)
+                viewModel.deleteDetailMemoByMemoID(tmpMemo.id)
+                viewModel.deleteMemoByID(tmpMemo.id)
 
                 recyclerViewAdapter.itemList.removeAt(position)
                 recyclerViewAdapter.notifyItemRemoved(position)
-                viewDataBinding.model?.memoEmpty?.value = recyclerViewAdapter.itemList.isEmpty()
-
-                MemoDeleteSnackBar(requireContext(), viewDataBinding.root, tmpMemo, tmpDetailMemoList).showSnackBar()
+                viewModel.setEmpty(recyclerViewAdapter.itemList.isEmpty())
             }
 
         }
     }
 
-    private fun setAnimation() {
+    private fun setRecyclerViewAnimation() {
         val fadeAnimation = AlphaAnimation(0F, 1F)
         fadeAnimation.duration = 500
         viewDataBinding.tabMemoRecycler.animation = fadeAnimation
@@ -153,29 +131,29 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         val today = System.currentTimeMillis()
         for(data in itemList) {
             val calendar = Calendar.getInstance()
-            data.scheduleDateYear.value?.let { calendar.set(Calendar.YEAR, it) }
-            data.scheduleDateMonth.value?.let { calendar.set(Calendar.MONTH, it) }
-            data.scheduleDateDay.value?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+            data.scheduleDateYear.let { calendar.set(Calendar.YEAR, it) }
+            data.scheduleDateMonth.let { calendar.set(Calendar.MONTH, it) }
+            data.scheduleDateDay.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
             //시간은 상관없이 당일의 모든 일정을 보여주도록 하기위해 비교하는 날의 시간은 23:59분으로 맞춤.
             calendar.set(Calendar.HOUR_OF_DAY, 23)
             calendar.set(Calendar.MINUTE, 59)
             val checkDay = calendar.time.time
 
             if(checkDay < today) {
-                AppDataBase.instance.memoDao().setMemoFinish(data.id)
+                viewModel.setMemoFinish(data.id)
                 itemList.remove(data)
             }
         }
     }
 
     private fun sortMemoList(itemList: MutableList<Memo>) {
-        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-            .thenBy { it.alarmStartTimeHour.value }
-            .thenBy { it.alarmStartTimeMinute.value }
+        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear}
+            .thenBy { it.scheduleDateMonth }
+            .thenBy { it.scheduleDateDay }
+            .thenBy { it.scheduleDateHour }
+            .thenBy { it.scheduleDateMinute }
+            .thenBy { it.alarmStartTimeHour }
+            .thenBy { it.alarmStartTimeMinute }
         )
     }
 }

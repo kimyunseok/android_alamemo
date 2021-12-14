@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemo.model.data.detail.DetailMemo" />
+            type="com.landvibe.alamemo.model.data.detail.prev.DetailMemo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -13,7 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.common.AppDataBase
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.HolderLongClickMenuBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
@@ -24,8 +24,15 @@ import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.MainFragment
 import com.landvibe.alamemo.ui.fragment.snackbar.MemoDeleteSnackBar
+import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MemoLongClickRecyclerViewAdapter (val context: Context, val dialog: BottomSheetDialogFragment, val memo: Memo):
+class MemoLongClickRecyclerViewAdapter (val context: Context,
+                                        val dialog: BottomSheetDialogFragment,
+                                        val memo: Memo,
+                                        val memoHolderViewModel: MemoHolderViewModel):
     RecyclerView.Adapter<MemoLongClickRecyclerViewAdapter.Holder>() {
 
     private val itemList = mutableListOf(
@@ -93,39 +100,41 @@ class MemoLongClickRecyclerViewAdapter (val context: Context, val dialog: Bottom
 
     private fun shearMessageBtn() {
 
-        //메시지, 메신저로 메모/일정 공유하기
-        val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
+        CoroutineScope(Dispatchers.Main).launch {
+            //메시지, 메신저로 메모/일정 공유하기
+            val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
-        //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
-        var contentText = if(memo.type.value == 1) {
-            memo.icon.value + " " + memo.title.value
-        } else {
-            memo.icon.value + " " + memo.title.value + "\n" +
-                    memo.getDateFormat() + " " +memo.getTimeFormat()
+            //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
+            var contentText = if(memo.type == 1) {
+                memo.icon + " " + memo.title
+            } else {
+                memo.icon + " " + memo.title + "\n" +
+                        memoHolderViewModel.getDateFormat() + " " + memoHolderViewModel.getTimeFormat()
+            }
+
+            sortDetailMemoList(detailMemoList)
+
+            if(memo.type != 2 && detailMemoList.isEmpty().not()) {
+                contentText += "\n\n"
+                //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
+                contentText += context.getString(
+                    R.string.notification_fix_notify_slash) +
+                        detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
+
+            } else if(detailMemoList.isEmpty().not()){
+                contentText += "\n\n"
+                contentText +=
+                    detailMemoList.joinToString("\n") { memoHolderViewModel.getDateFormat() + " " + memoHolderViewModel.getTimeFormat() + " - "+
+                            memo.icon.toString() + " " + memo.title }
+            }
+
+
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, contentText)
+            }
+            context.startActivity(intent)
         }
-
-        sortDetailMemoList(detailMemoList)
-
-        if(memo.type.value != 2 && detailMemoList.isEmpty().not()) {
-            contentText += "\n\n"
-            //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
-            contentText += context.getString(
-                R.string.notification_fix_notify_slash) +
-                    detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
-
-        } else if(detailMemoList.isEmpty().not()){
-            contentText += "\n\n"
-            contentText +=
-                detailMemoList.joinToString("\n") { it.getDateFormat() + " " + it.getTimeFormat() + " - "+
-                        it.icon.value.toString() + " " + it.title.value }
-        }
-
-
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, contentText)
-        }
-        context.startActivity(intent)
     }
 
     private fun copyMemo() {

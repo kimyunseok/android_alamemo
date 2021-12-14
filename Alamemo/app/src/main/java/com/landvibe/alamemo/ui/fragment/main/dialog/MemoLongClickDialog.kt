@@ -9,8 +9,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.MemoLongClickRecyclerViewAdapter
-import com.landvibe.alamemo.common.AppDataBase
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.DialogMemoMenuBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MemoLongClickDialog: BottomSheetDialogFragment() {
 
@@ -23,7 +26,9 @@ class MemoLongClickDialog: BottomSheetDialogFragment() {
     ): View? {
         binding = DialogMemoMenuBinding.inflate(inflater, container, false)
 
-        setUpView()
+        CoroutineScope(Dispatchers.Main).launch {
+            setUpView()
+        }
 
         return binding.root
     }
@@ -57,13 +62,13 @@ class MemoLongClickDialog: BottomSheetDialogFragment() {
         }
     }
 
-    private fun setUpView() {
+    private suspend fun setUpView() {
         val memoId = arguments?.getLong("memoId", -1)
         if(memoId != null && memoId != (-1).toLong()) {
             val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
 
             //1. 롱 클릭 타이틀 설정
-            binding.titleIncludeIcon = memo.icon.value + " " + memo.title.value
+            binding.titleIncludeIcon = memo.icon + " " + memo.title
 
             //2. 아래 메뉴 설정
             binding.recyclerView.adapter = MemoLongClickRecyclerViewAdapter(requireContext(), this, memo)

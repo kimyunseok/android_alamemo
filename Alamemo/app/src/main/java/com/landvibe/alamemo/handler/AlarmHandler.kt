@@ -7,8 +7,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.MutableLiveData
-import com.landvibe.alamemo.common.AppDataBase
-import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.database.AppDataBase
+import com.landvibe.alamemo.model.data.memo.prev.Memo
 import com.landvibe.alamemo.receiver.MyReceiver
 import com.landvibe.alamemo.util.AboutDay
 import java.util.*

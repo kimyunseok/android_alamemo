@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 
 abstract class BaseFragment<T: ViewDataBinding>: Fragment() {
     lateinit var viewDataBinding: T
+
     abstract val layoutId: Int
 
     abstract fun init()

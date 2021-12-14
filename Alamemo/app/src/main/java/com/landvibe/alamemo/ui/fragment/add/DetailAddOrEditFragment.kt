@@ -4,9 +4,9 @@ import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.common.AppDataBase
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.FragmentDetailAddOrEditBinding
-import com.landvibe.alamemo.model.data.detail.DetailMemo
+import com.landvibe.alamemo.model.data.detail.prev.DetailMemo
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler

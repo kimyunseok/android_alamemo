@@ -6,25 +6,75 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.databinding.FragmentMemoAddOrEditBinding
-import com.landvibe.alamemo.model.data.memo.Memo
-import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
-import com.landvibe.alamemo.util.AboutDay
-import java.util.*
+import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
+import com.landvibe.alamemo.ui.BaseFragment
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override val layoutId: Int = R.layout.fragment_memo_add_or_edit
 
+    override val viewModel by lazy {
+        ViewModelProvider(this, MemoViewModelFactory(MemoRepository())).get(MemoAddOrEditViewModel::class.java)
+    }
+
     override fun init() {
+        initViewModel()
+        setUpObserver()
         setUpBtnOnClickListener()
-        initMemoModel()
 
         setUpAnimation()
+    }
+
+    private fun setUpObserver() {
+        viewModel.memoSaveComplete.observe(this) {
+            if(it) {
+                //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
+                viewModel.currentMemo?.id?.let { memoId ->
+                    AlarmHandler().cancelAlarm(requireContext(),
+                        memoId
+                    )
+
+                    FixNotifyHandler().cancelFixNotify(requireContext(),
+                        memoId
+                    )
+                }
+
+                //알람설정.
+                if(viewModel.currentMemo?.setAlarm == true) {
+                    AlarmHandler().setMemoAlarm(requireContext(), viewModel.currentMemo)
+                }
+                //상단바 고정 설정
+                if(viewModel.currentMemo?.fixNotify == true) {
+                    FixNotifyHandler().setMemoFixNotify(requireContext(), viewModel.currentMemo)
+                }
+
+                if(viewModel.currentMemo?.id != 0L) {
+                    //Memo Edit
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.memo_modify_complete),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    //Memo First Save
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.memo_save_complete),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                requireActivity().supportFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.warn_empty_title_message), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setUpBtnOnClickListener() {
@@ -32,91 +82,17 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
         //저장하기 버튼
         viewDataBinding.addOkBtn.setOnClickListener {
-            if(viewDataBinding.model?.title?.value.toString().trim() == "") {
-                Toast.makeText(requireContext(), getString(R.string.warn_empty_title_message), Toast.LENGTH_SHORT).show()
-            } else {
-                val model = viewDataBinding.model
-
-                if (model != null) {
-                    if(model.type.value == 1) {
-                        //메모라면 날짜를 오늘로 수정.
-                        model.setMemoScheduleTimeToday()
-                        model.setAlarm.value = false // 메모라면 알람기능 해제
-                    }
-
-                    if(model.type.value != 3) {
-                        //반복 일정 아니라면, 반복 요일 선택했던 거 다 지움.
-                        model.repeatDay.clear()
-                    } else {
-                        //반복 일정이라면 반복 요일 중 최초로 해당하는 날로 scheduleDay 설정.
-                        val calendar = Calendar.getInstance()
-                        calendar.timeInMillis = AboutDay.AboutDayOfWeek().findMinTimeAboutDayOfWeekBySpecificTime(model, System.currentTimeMillis())
-                        model.setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-                    }
-
-                    if (viewDataBinding.model?.id?.toInt() != 0) {
-                        // 메모 id가 존재한다면, 즉 수정하기라면
-                        // 메모 수정.
-                        AppDataBase.instance.memoDao().modifyMemo(
-                            id = model.id,
-                            type = model.type,
-                            icon = model.icon,
-                            title = model.title,
-                            scheduleDateYear = model.scheduleDateYear,
-                            scheduleDateMonth = model.scheduleDateMonth,
-                            scheduleDateDay = model.scheduleDateDay,
-                            scheduleDateHour = model.scheduleDateHour,
-                            scheduleDateMinute = model.scheduleDateMinute,
-                            alarmStartTimeHour = model.alarmStartTimeHour,
-                            alarmStartTimeMinute = model.alarmStartTimeMinute,
-                            MutableLiveData(false),
-                            fixNotify = model.fixNotify,
-                            setAlarm = model.setAlarm,
-                            repeatDay = model.repeatDay,
-                            alarmStartTimeType = model.alarmStartTimeType
-                        )
-
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.memo_modify_complete),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        //메모 새로 생성하기라면
-
-                        // 메모 삽입.
-                        model.id = AppDataBase.instance.memoDao().insertMemo(model)
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.memo_save_complete),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
-                    AlarmHandler().cancelAlarm(requireContext(), model.id)
-                    FixNotifyHandler().cancelFixNotify(requireContext(), model.id)
-
-                    //알람설정.
-                    if(model.setAlarm.value == true) {
-                        AlarmHandler().setMemoAlarm(requireContext(), model)
-                    }
-                    //상단바 고정 설정
-                    if(model.fixNotify.value == true) {
-                        FixNotifyHandler().setMemoFixNotify(requireContext(), model)
-                    }
-
-                } else {
-                    Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
-                }
-
+            if(viewModel.currentMemo == null) {
+                Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
                 requireActivity().supportFragmentManager.popBackStack()
+            } else {
+                viewModel.saveMemo()
             }
         }
 
         //아이콘 선택 버튼
         viewDataBinding.addIconSelectBtn.setOnClickListener {
-            viewDataBinding.model?.icon?.let { iconLiveData ->
+            viewDataBinding.viewModel?.currentMemo?.icon?.let { iconLiveData ->
                 SelectIconDialog(requireContext(), iconLiveData).show()
             }
         }
@@ -128,48 +104,28 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
     }
 
-    private fun initMemoModel() {
+    private fun initViewModel() {
+        viewDataBinding.viewModel = viewModel
+
         val memoId = arguments?.getLong("memoId", -1)
 
-        val memo = if(memoId != null && memoId != (-1).toLong()) {
-            AppDataBase.instance.memoDao().getMemoById(memoId)
+        if(memoId != null && memoId != (-1).toLong()) {
+            viewModel.getMemoInfo(memoId)
         } else {
-            val calendar = Calendar.getInstance()
-
-            Memo(id = 0,
-                type = MutableLiveData(1),
-                icon = MutableLiveData( getString(R.string.memo_emoji) ),
-                title = MutableLiveData(""),
-                scheduleDateYear = MutableLiveData(calendar.get(Calendar.YEAR)),
-                scheduleDateMonth = MutableLiveData(calendar.get(Calendar.MONTH)),
-                scheduleDateDay = MutableLiveData(calendar.get(Calendar.DAY_OF_MONTH)),
-                scheduleDateHour = MutableLiveData(calendar.get(Calendar.HOUR_OF_DAY)),
-                scheduleDateMinute = MutableLiveData(calendar.get(Calendar.MINUTE)),
-                alarmStartTimeHour = MutableLiveData(calendar.get(Calendar.HOUR_OF_DAY)),
-                alarmStartTimeMinute = MutableLiveData(calendar.get(Calendar.MINUTE)),
-                scheduleFinish = MutableLiveData(false),
-                fixNotify = MutableLiveData(false),
-                setAlarm = MutableLiveData(false),
-                repeatDay = mutableListOf(),
-                alarmStartTimeType = MutableLiveData(1)
-            )
+            viewModel.initMemo()
         }
-
-        memo.checkScheduleTime() // 설정된 스케줄 날짜가 오늘 이전이라면 오늘날짜로 설정.
-
-        viewDataBinding.model = memo
     }
 
     private fun showCalendarDialogBtn() {
-        val yearValue = viewDataBinding.model?.scheduleDateYear?.value
-        val monthValue = viewDataBinding.model?.scheduleDateMonth?.value
-        val dayOfMonthValue = viewDataBinding.model?.scheduleDateDay?.value
+        val yearValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateYear
+        val monthValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateMonth
+        val dayOfMonthValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateDay
 
         val calendarOnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            viewDataBinding.model?.scheduleDateYear?.value = year
-            viewDataBinding.model?.scheduleDateMonth?.value = month
-            viewDataBinding.model?.scheduleDateDay?.value = dayOfMonth
-            viewDataBinding.model?.getDateFormat()
+            viewDataBinding.viewModel?.currentMemo?.scheduleDateYear = year
+            viewDataBinding.viewModel?.currentMemo?.scheduleDateMonth = month
+            viewDataBinding.viewModel?.currentMemo?.scheduleDateDay = dayOfMonth
+            viewDataBinding.viewModel?.getDateFormat()
         }
 
         if(yearValue != null && monthValue != null && dayOfMonthValue != null) {

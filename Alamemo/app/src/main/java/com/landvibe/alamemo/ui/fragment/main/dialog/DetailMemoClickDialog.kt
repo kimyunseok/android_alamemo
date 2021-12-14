@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.adapter.DetailMemoClickRecyclerViewAdapter
-import com.landvibe.alamemo.adapter.MemoLongClickRecyclerViewAdapter
-import com.landvibe.alamemo.common.AppDataBase
+import com.landvibe.alamemo.adapter.DetailMemoLongClickRecyclerViewAdapter
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.DialogMemoMenuBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DetailMemoClickDialog: BottomSheetDialogFragment() {
 
@@ -24,7 +26,9 @@ class DetailMemoClickDialog: BottomSheetDialogFragment() {
     ): View? {
         binding = DialogMemoMenuBinding.inflate(inflater, container, false)
 
-        setUpView()
+        CoroutineScope(Dispatchers.Main).launch {
+            setUpView()
+        }
 
         return binding.root
     }
@@ -40,34 +44,19 @@ class DetailMemoClickDialog: BottomSheetDialogFragment() {
         if(bottomSheet != null) {
             val behavior = BottomSheetBehavior.from<View>(bottomSheet)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-            //드래그 할 경우에도 전체화면으로 띄우기
-//            behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-//                override fun onStateChanged(bottomSheet: View, newState: Int) {
-//                    if(newState == BottomSheetBehavior.STATE_DRAGGING) {
-//                        behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//                    }
-//                }
-//
-//                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-//                    behavior.state = BottomSheetBehavior.STATE_EXPANDED
-//                }
-//
-//
-//            })
         }
     }
 
-    private fun setUpView() {
+    private suspend fun setUpView() {
         val detailMemoId = arguments?.getLong("detailMemoId", -1)
         if(detailMemoId != null && detailMemoId != (-1).toLong()) {
             val detailMemo = AppDataBase.instance.detailMemoDao().getDetailMemoById(detailMemoId)
 
             //1. 클릭 타이틀 설정
-            binding.titleIncludeIcon = detailMemo.icon.value + " " + detailMemo.title.value
+            binding.titleIncludeIcon = detailMemo.icon + " " + detailMemo.title
 
             //2. 아래 메뉴 설정
-            binding.recyclerView.adapter = DetailMemoClickRecyclerViewAdapter(requireContext(), this, detailMemo)
+            binding.recyclerView.adapter = DetailMemoLongClickRecyclerViewAdapter(requireContext(), this, detailMemo)
             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         }
     }

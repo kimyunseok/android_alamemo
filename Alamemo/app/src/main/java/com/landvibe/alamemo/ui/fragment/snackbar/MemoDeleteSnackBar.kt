@@ -3,20 +3,13 @@ package com.landvibe.alamemo.ui.fragment.snackbar
 import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.adapter.MemoRecyclerViewAdapter
-import com.landvibe.alamemo.common.AppDataBase
-import com.landvibe.alamemo.model.data.detail.DetailMemo
-import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
-import com.landvibe.alamemo.ui.activity.MainActivity
-import com.landvibe.alamemo.ui.fragment.main.MainFragment
+import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
 
-class MemoDeleteSnackBar(context: Context, rootView: View, private val removedMemo: Memo, private val removedDetailMemo: List<DetailMemo>
-                         ) {
+class MemoDeleteSnackBar(context: Context, rootView: View, private val viewModel: TabFragmentViewModel) {
 
     private var snackBar: Snackbar =
         Snackbar.make(rootView, context.getString(R.string.delete_memo_snackbar_message), Snackbar.LENGTH_SHORT).apply {
@@ -31,27 +24,24 @@ class MemoDeleteSnackBar(context: Context, rootView: View, private val removedMe
     }
 
     private fun undoDelete(context: Context) {
-        AppDataBase.instance.memoDao().insertMemo(removedMemo)
+        viewModel.savedMemo?.let {
+            viewModel.insertMemo(it)
 
-        //메인프래그먼트라면 onResume()호출.
-        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let{
-            if(it is MainFragment) {
-                it.onResume()
+            if(it.setAlarm) {
+                //알람설정 돼 있었다면 다시 알람설정
+                AlarmHandler().setMemoAlarm(context, it)
+            }
+
+            if(it.fixNotify) {
+                //고성설정 돼 있었다면 다시 고정설정
+                FixNotifyHandler().setMemoFixNotify(context, it)
             }
         }
 
-        for(data in removedDetailMemo) {
-            AppDataBase.instance.detailMemoDao().insertDetailMemo(data)
-        }
-
-        if(removedMemo.setAlarm.value == true) {
-            //알람설정 돼 있었다면 다시 알람설정
-            AlarmHandler().setMemoAlarm(context, removedMemo)
-        }
-
-        if(removedMemo.fixNotify.value == true) {
-            //고성설정 돼 있었다면 다시 고정설정
-            FixNotifyHandler().setMemoFixNotify(context, removedMemo)
+        viewModel.savedDetailMemoList?.let {
+            for(data in it) {
+                viewModel.insertDetailMemo(data)
+            }
         }
     }
 }

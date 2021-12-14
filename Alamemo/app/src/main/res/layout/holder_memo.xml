@@ -7,8 +7,8 @@
         <import type="com.landvibe.alamemo.util.AboutDay"/>
 
         <variable
-            name="model"
-            type="com.landvibe.alamemo.model.data.memo.Memo" />
+            name="viewModel"
+            type="com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             android:padding="6dp"
-            android:background="@{model.scheduleFinish == false &amp;&amp; ( (model.type == 2 &amp;&amp; (model.getDDayInteger == 0)) || (model.type == 3 &amp;&amp; model.checkRepeatDay()) ) ? @drawable/selector_radius_green_yellow_background : @drawable/selector_radius_background}"
+            android:background="@{viewModel.memo.scheduleFinish == false &amp;&amp; ( (viewModel.memo.type == 2 &amp;&amp; (viewModel.getDDayInteger == 0)) || (viewModel.memo.type == 3 &amp;&amp; viewModel.checkRepeatDay()) ) ? @drawable/selector_radius_green_yellow_background : @drawable/selector_radius_background}"
             android:elevation="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -33,8 +33,8 @@
                 android:id="@+id/holder_complete_cb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="@{model.scheduleFinish ? View.GONE : View.VISIBLE}"
-                android:checked="@={model.scheduleFinish}"
+                android:visibility="@{viewModel.memo.scheduleFinish ? View.GONE : View.VISIBLE}"
+                android:checked="@={viewModel.memo.scheduleFinish}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -45,7 +45,7 @@
                 android:layout_height="36dp"
                 android:layout_marginStart="9dp"
                 android:layout_marginVertical="8dp"
-                android:text="@{model.icon}"
+                android:text="@{viewModel.memo.icon}"
                 android:textColor="@color/black"
                 android:textAlignment="center"
                 android:textSize="26sp"
@@ -59,8 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_marginEnd="12dp"
-                android:text="@{model.titleInclueTime}"
-                android:textColor="@{model.scheduleFinish ? @color/Gray : @color/black}"
+                android:text="@{viewModel.titleInclueTime}"
+                android:textColor="@{viewModel.memo.scheduleFinish ? @color/Gray : @color/black}"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/memo_edit_btn"
                 app:layout_constraintStart_toEndOf="@+id/holder_memo_icon"
@@ -71,7 +71,7 @@
                 android:id="@+id/holder_memo_date_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:visibility="@{model.type != 1 ? View.VISIBLE : View.GONE}"
+                android:visibility="@{viewModel.memo.type != 1 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toBottomOf="@+id/holder_memo_title_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/holder_memo_title_text"
@@ -81,8 +81,8 @@
                     android:id="@+id/holder_memo_date_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{model.dateFormat}"
-                    android:textColor="@{model.scheduleFinish ? @color/Gray : @color/black}"
+                    android:text="@{viewModel.dateFormat}"
+                    android:textColor="@{viewModel.memo.scheduleFinish ? @color/Gray : @color/black}"
                     android:textSize="14sp"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -93,8 +93,8 @@
                     android:id="@+id/memo_d_day_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="@{model.scheduleFinish == true || model.type != 2 ? View.GONE : View.VISIBLE}"
-                    android:text="@{model.DDay}"
+                    android:visibility="@{viewModel.memo.scheduleFinish == true || viewModel.memo.type != 2 ? View.GONE : View.VISIBLE}"
+                    android:text="@{viewModel.DDay}"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="12sp"

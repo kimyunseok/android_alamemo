@@ -2,6 +2,7 @@ package com.landvibe.alamemo.ui.fragment.main
 
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.FragmentPageAdapter

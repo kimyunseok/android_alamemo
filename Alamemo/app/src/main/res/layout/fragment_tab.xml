@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemo.model.uimodel.TabFragmentViewModel" />
+            type="com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel" />
 
     </data>
 

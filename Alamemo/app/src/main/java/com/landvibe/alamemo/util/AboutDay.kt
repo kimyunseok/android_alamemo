@@ -1,7 +1,6 @@
 package com.landvibe.alamemo.util
 
-import android.util.Log
-import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.data.memo.prev.Memo
 import java.util.*
 import kotlin.Comparator
 

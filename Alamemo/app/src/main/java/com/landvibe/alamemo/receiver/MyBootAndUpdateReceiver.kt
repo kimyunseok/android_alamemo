@@ -10,7 +10,11 @@ import com.landvibe.alamemo.R
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.ui.splash.SplashActivity
-
+/**
+ * 휴대폰이 껐다 켜졌을 때,
+ * 앱이 업데이트 됐을 때
+ * 알람을 자동으로 설정해주는 브로드 캐스트 수신자
+ */
 class MyBootAndUpdateReceiver: BroadcastReceiver() {
     val BOOT_REQUEST_CODE = 1001
     override fun onReceive(context: Context?, intent: Intent?) {

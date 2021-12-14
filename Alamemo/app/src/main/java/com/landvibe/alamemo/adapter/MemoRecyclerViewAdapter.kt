@@ -4,20 +4,24 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.common.AppDataBase
 import com.landvibe.alamemo.databinding.HolderMemoBinding
-import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
+import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
 import com.landvibe.alamemo.ui.fragment.main.dialog.MemoLongClickDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
+class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>
+): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HolderMemoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -36,14 +40,14 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
 
     inner class Holder(var binding: HolderMemoBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Memo) {
-            binding.model = item
+            binding.viewModel = MemoHolderViewModel(item, MemoRepository())
 
             itemView.setOnClickListener {
                 val bundle = Bundle().apply {
                     putLong("memoId", item.id)
-                    putString("memoIcon", item.icon.value.toString())
-                    putString("memoTitle", item.title.value.toString())
-                    item.type.value?.let { type -> putInt("memoType", type) }
+                    putString("memoIcon", item.icon)
+                    putString("memoTitle", item.title)
+                    item.type.let { type -> putInt("memoType", type) }
                 }
 
                 (context as MainActivity).supportFragmentManager
@@ -73,36 +77,22 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
             }
             
             binding.holderCompleteCb.setOnClickListener {
-                //일정 종료처리
-                AppDataBase.instance.memoDao().modifyMemo(
-                    id = item.id,
-                    type = item.type,
-                    icon = item.icon,
-                    title = item.title,
-                    scheduleDateYear = item.scheduleDateYear,
-                    scheduleDateMonth = item.scheduleDateMonth,
-                    scheduleDateDay = item.scheduleDateDay,
-                    scheduleDateHour = item.scheduleDateHour,
-                    scheduleDateMinute = item.scheduleDateMinute,
-                    alarmStartTimeHour = item.alarmStartTimeHour,
-                    alarmStartTimeMinute = item.alarmStartTimeMinute,
-                    scheduleFinish = MutableLiveData(true),
-                    fixNotify = MutableLiveData(false),
-                    setAlarm = MutableLiveData(false),
-                    repeatDay = item.repeatDay,
-                    alarmStartTimeType = MutableLiveData(1)
-                )
+                CoroutineScope(Dispatchers.IO).launch {
+                    //일정 종료처리
+                    binding.viewModel?.finishMemo()
 
-                if(item.setAlarm.value == true) {
-                    //알람설정 돼 있었다면 알람해제.
-                    AlarmHandler().cancelAlarm(context, item.id)
-                }
-                if(item.fixNotify.value == true) {
-                    //고성설정 돼 있었다면 알람해제.
-                    FixNotifyHandler().cancelFixNotify(context, item.id)
-                }
+                    if(item.setAlarm) {
+                        //알람설정 돼 있었다면 알람해제.
+                        AlarmHandler().cancelAlarm(context, item.id)
+                    }
+                    if(item.fixNotify) {
+                        //고성설정 돼 있었다면 알람해제.
+                        FixNotifyHandler().cancelFixNotify(context, item.id)
+                    }
 
-                (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
+                    (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
+
+                }
             }
         }
     }

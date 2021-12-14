@@ -8,11 +8,14 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.common.AppDataBase
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.handler.AlarmHandler
-import com.landvibe.alamemo.model.data.detail.DetailMemo
-import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.data.detail.prev.DetailMemo
+import com.landvibe.alamemo.model.data.memo.prev.Memo
 import com.landvibe.alamemo.ui.activity.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /*
     알람을 보내기 위한 Receiver,
@@ -24,19 +27,21 @@ class MyReceiver: BroadcastReceiver() {
     lateinit var pendingIntent: PendingIntent
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val memoId = intent?.getLongExtra("memoId", -1)
-        if(memoId != null && context != null && memoId != (-1).toLong()) {
-            val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
-            val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList()
-            sortDetailMemoList(detailMemoList)
+        CoroutineScope(Dispatchers.Main).launch {
+            val memoId = intent?.getLongExtra("memoId", -1)
+            if(memoId != null && context != null && memoId != (-1).toLong()) {
+                val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
+                val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memoId).toMutableList()
+                sortDetailMemoList(detailMemoList)
 
-            initPendingIntent(context, memo)
-            initNotificationCompatBuilder(context, memo)
-            setBuilderContentText(context, memo, detailMemoList)
+                initPendingIntent(context, memo)
+                initNotificationCompatBuilder(context, memo)
+                setBuilderContentText(context, memo, detailMemoList)
 
-            if(memo.type.value == 3) {
-                //반복 일정이라면 알람설정을 다시 SET해준다.
-                setUpRepeatMemoAlarm(context, memo)
+                if(memo.type.value == 3) {
+                    //반복 일정이라면 알람설정을 다시 SET해준다.
+                    setUpRepeatMemoAlarm(context, memo)
+                }
             }
         }
     }

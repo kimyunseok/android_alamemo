@@ -3,17 +3,15 @@ package com.landvibe.alamemo.adapter
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.common.AppDataBase
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.HolderLongClickMenuBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
@@ -21,14 +19,11 @@ import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.uimodel.LongClickViewModel
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
-import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
-import com.landvibe.alamemo.ui.fragment.main.MainFragment
 import com.landvibe.alamemo.ui.fragment.snackbar.DetailMemoDeleteSnackBar
-import com.landvibe.alamemo.ui.fragment.snackbar.MemoDeleteSnackBar
 
-class DetailMemoClickRecyclerViewAdapter (val context: Context, val dialog: BottomSheetDialogFragment, val detailMemo: DetailMemo):
-    RecyclerView.Adapter<DetailMemoClickRecyclerViewAdapter.Holder>() {
+class DetailMemoLongClickRecyclerViewAdapter (val context: Context, val dialog: BottomSheetDialogFragment, val detailMemo: DetailMemo):
+    RecyclerView.Adapter<DetailMemoLongClickRecyclerViewAdapter.Holder>() {
 
     private val itemList = mutableListOf(
         LongClickViewModel(context.getString(R.string.memo_menu_copy), 1),
@@ -84,7 +79,7 @@ class DetailMemoClickRecyclerViewAdapter (val context: Context, val dialog: Bott
 
     private fun copyMemo() {
         val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText(context.getString(R.string.app_name), detailMemo.icon.value + " " + detailMemo.title.value)
+        val clipData = ClipData.newPlainText(context.getString(R.string.app_name), detailMemo.icon + " " + detailMemo.title)
         clipBoard.setPrimaryClip(clipData)
         Toast.makeText(context, context.getString(R.string.memo_copy_complete), Toast.LENGTH_SHORT).show()
     }
@@ -108,11 +103,11 @@ class DetailMemoClickRecyclerViewAdapter (val context: Context, val dialog: Bott
 
         //알람 업데이트
         val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
-        if(tmpMemo.setAlarm.value == true) {
+        if(tmpMemo.setAlarm) {
             //알람설정 돼 있었다면 알람재설정
             AlarmHandler().setMemoAlarm(context, tmpMemo)
         }
-        if(tmpMemo.fixNotify.value == true) {
+        if(tmpMemo.fixNotify) {
             //고성설정 돼 있었다면 고정재설정
             FixNotifyHandler().setMemoFixNotify(context, tmpMemo)
         }
