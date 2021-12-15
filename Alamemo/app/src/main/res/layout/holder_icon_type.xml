@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="com.landvibe.alamemo.model.uimodel.IconTypeViewModel" />
+            type="com.landvibe.alamemo.viewmodel.ui.IconTypeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

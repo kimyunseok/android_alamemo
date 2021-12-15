@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.landvibe.alamemo.model.viewmodel.uiviewmodel.MemoAddOrEditViewModel" />
+            type="com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -316,7 +316,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/mon"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('월')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('월')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('월')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_tue_cb"/>
 
@@ -326,7 +326,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/tue"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('화')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('화')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('화')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_wed_cb"/>
 
@@ -336,7 +336,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/wed"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('수')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('수')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('수')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_thu_cb"/>
 
@@ -346,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/thu"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('목')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('목')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('목')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -356,7 +356,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/fri"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('금')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('금')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('금')}"
                         app:layout_constraintTop_toBottomOf="@+id/add_tue_cb"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_sat_cb"/>
@@ -367,7 +367,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sat"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('토')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('토')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('토')}"
                         app:layout_constraintTop_toBottomOf="@+id/add_wed_cb"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_sun_cb"/>
@@ -378,7 +378,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sun"
                         android:checked="@{viewModel.memoInfo.repeatDay.contains('일')}"
-                        android:onClick="@{() -> viewModel.memoInfo.setRepeatDay('일')}"
+                        android:onClick="@{() -> viewModel.setRepeatDay('일')}"
                         app:layout_constraintTop_toBottomOf="@+id/add_wed_cb"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>

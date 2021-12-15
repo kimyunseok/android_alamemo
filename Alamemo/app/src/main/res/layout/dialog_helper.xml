@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.landvibe.alamemo.model.uimodel.HelperDialogViewModel" />
+            type="com.landvibe.alamemo.viewmodel.ui.HelperDialogViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView

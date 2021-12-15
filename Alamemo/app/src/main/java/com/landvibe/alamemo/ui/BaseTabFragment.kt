@@ -16,7 +16,8 @@ import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
-import com.landvibe.alamemo.ui.fragment.snackbar.MemoDeleteSnackBar
+import com.landvibe.alamemo.ui.snackbar.MemoDeleteSnackBar
+import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.util.SwipeAction
 import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
@@ -69,21 +70,21 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
                 finishScheduleBeforeCurrentTime(it)
             }
 
-            sortMemoList(it)
+            MemoUtil().sortMemoList(it)
             setRecyclerView(it)
 
             viewModel.setEmpty(it.isEmpty())
         }
 
         viewModel.removedMemo.observe(viewLifecycleOwner) {
-            MemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel).showSnackBar()
+            MemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel.savedMemo, viewModel.savedDetailMemoList).showSnackBar()
         }
     }
 
     private fun setRecyclerView(itemList: MutableList<Memo>) {
         setRecyclerViewAnimation()
 
-        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList, viewModel)
+        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList)
         viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
         viewDataBinding.tabMemoRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
@@ -146,14 +147,4 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         }
     }
 
-    private fun sortMemoList(itemList: MutableList<Memo>) {
-        itemList.sortWith(compareBy<Memo> {it.scheduleDateYear}
-            .thenBy { it.scheduleDateMonth }
-            .thenBy { it.scheduleDateDay }
-            .thenBy { it.scheduleDateHour }
-            .thenBy { it.scheduleDateMinute }
-            .thenBy { it.alarmStartTimeHour }
-            .thenBy { it.alarmStartTimeMinute }
-        )
-    }
 }

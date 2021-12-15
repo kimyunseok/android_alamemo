@@ -14,10 +14,10 @@ class DetailMemoRepository {
     suspend fun deleteDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.deleteDetailMemo(detailMemo)
     suspend fun deleteDetailMemoByID(id: Long) = detailMemoDataBase.deleteDetailMemoByID(id)
     suspend fun deleteDetailMemoByMemoID(memoId: Long) = detailMemoDataBase.deleteDetailMemoByMemoID(memoId)
-    suspend fun modifyDetailMemo(id: Long, type: MutableLiveData<Int>, icon: MutableLiveData<String>,
-                                 title: MutableLiveData<String>, scheduleDateYear: MutableLiveData<Int>,
-                                 scheduleDateMonth: MutableLiveData<Int>, scheduleDateDay: MutableLiveData<Int>,
-                                 scheduleDateHour: MutableLiveData<Int>, scheduleDateMinute: MutableLiveData<Int>
+    suspend fun modifyDetailMemo(id: Long, type: Int, icon: String,
+                                 title: String, scheduleDateYear: Int,
+                                 scheduleDateMonth: Int, scheduleDateDay: Int,
+                                 scheduleDateHour: Int, scheduleDateMinute: Int
     ) = detailMemoDataBase.modifyDetailMemo(id, type, icon, title, scheduleDateYear, scheduleDateMonth, scheduleDateDay, scheduleDateHour, scheduleDateMinute)
 
 }

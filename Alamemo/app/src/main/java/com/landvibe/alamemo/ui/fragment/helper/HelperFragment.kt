@@ -7,7 +7,7 @@ import com.landvibe.alamemo.BuildConfig
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.HelperRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.FragmentHelperBinding
-import com.landvibe.alamemo.model.uimodel.HelperViewModel
+import com.landvibe.alamemo.viewmodel.ui.HelperViewModel
 import com.landvibe.alamemo.ui.BaseFragment
 
 class HelperFragment: BaseFragment<FragmentHelperBinding>() {

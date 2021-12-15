@@ -15,11 +15,12 @@ import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
 import com.landvibe.alamemo.ui.BaseFragment
+import com.landvibe.alamemo.util.MemoUtil
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override val layoutId: Int = R.layout.fragment_memo_add_or_edit
 
-    override val viewModel by lazy {
+    private val viewModel by lazy {
         ViewModelProvider(this, MemoViewModelFactory(MemoRepository())).get(MemoAddOrEditViewModel::class.java)
     }
 
@@ -29,6 +30,18 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         setUpBtnOnClickListener()
 
         setUpAnimation()
+    }
+
+    private fun initViewModel() {
+        viewDataBinding.viewModel = viewModel
+
+        val memoId = arguments?.getLong("memoId", -1)
+
+        if(memoId != null && memoId != (-1).toLong()) {
+            viewModel.getMemoInfoById(memoId)
+        } else {
+            viewModel.initMemo()
+        }
     }
 
     private fun setUpObserver() {
@@ -104,18 +117,6 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
     }
 
-    private fun initViewModel() {
-        viewDataBinding.viewModel = viewModel
-
-        val memoId = arguments?.getLong("memoId", -1)
-
-        if(memoId != null && memoId != (-1).toLong()) {
-            viewModel.getMemoInfo(memoId)
-        } else {
-            viewModel.initMemo()
-        }
-    }
-
     private fun showCalendarDialogBtn() {
         val yearValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateYear
         val monthValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateMonth
@@ -125,7 +126,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
             viewDataBinding.viewModel?.currentMemo?.scheduleDateYear = year
             viewDataBinding.viewModel?.currentMemo?.scheduleDateMonth = month
             viewDataBinding.viewModel?.currentMemo?.scheduleDateDay = dayOfMonth
-            viewDataBinding.viewModel?.getDateFormat()
+            MemoUtil().setMemoDate(viewModel.currentMemo)
         }
 
         if(yearValue != null && monthValue != null && dayOfMonthValue != null) {

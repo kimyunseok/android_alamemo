@@ -1,7 +1,7 @@
 package com.landvibe.alamemo.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.landvibe.alamemo.model.data.detail.prev.DetailMemo
+import com.landvibe.alamemo.model.data.detail.DetailMemo
 
 class DetailMemoDiffUtil(val oldList: MutableList<DetailMemo>, val newList: MutableList<DetailMemo>): DiffUtil.Callback() {
     override fun getOldListSize(): Int {

@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
@@ -19,20 +18,19 @@ import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
-import com.landvibe.alamemo.model.uimodel.LongClickViewModel
+import com.landvibe.alamemo.viewmodel.ui.LongClickViewModel
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.MainFragment
-import com.landvibe.alamemo.ui.fragment.snackbar.MemoDeleteSnackBar
-import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
+import com.landvibe.alamemo.ui.snackbar.MemoDeleteSnackBar
+import com.landvibe.alamemo.util.MemoUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MemoLongClickRecyclerViewAdapter (val context: Context,
                                         val dialog: BottomSheetDialogFragment,
-                                        val memo: Memo,
-                                        val memoHolderViewModel: MemoHolderViewModel):
+                                        val memo: Memo):
     RecyclerView.Adapter<MemoLongClickRecyclerViewAdapter.Holder>() {
 
     private val itemList = mutableListOf(
@@ -109,23 +107,23 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
                 memo.icon + " " + memo.title
             } else {
                 memo.icon + " " + memo.title + "\n" +
-                        memoHolderViewModel.getDateFormat() + " " + memoHolderViewModel.getTimeFormat()
+                        memo.showDateFormat + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
             }
 
-            sortDetailMemoList(detailMemoList)
+            MemoUtil().sortDetailMemoList(detailMemoList)
 
             if(memo.type != 2 && detailMemoList.isEmpty().not()) {
-                contentText += "\n\n"
+                contentText += "\n"
                 //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
                 contentText += context.getString(
                     R.string.notification_fix_notify_slash) +
-                        detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
+                        detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon + " " + it.title }
 
             } else if(detailMemoList.isEmpty().not()){
-                contentText += "\n\n"
+                contentText += "\n"
                 contentText +=
-                    detailMemoList.joinToString("\n") { memoHolderViewModel.getDateFormat() + " " + memoHolderViewModel.getTimeFormat() + " - "+
-                            memo.icon.toString() + " " + memo.title }
+                    detailMemoList.joinToString("\n") { it.showDateFormat + " " + MemoUtil().getTimeFormat(it.scheduleDateHour, it.scheduleDateMinute) + " - "+
+                            it.icon + " " + it.title }
             }
 
 
@@ -139,42 +137,25 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
 
     private fun copyMemo() {
         val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipData = ClipData.newPlainText(context.getString(R.string.app_name), memo.icon.value + " " + memo.title.value)
+        val clipData = ClipData.newPlainText(context.getString(R.string.app_name), memo.icon + " " + memo.title)
         clipBoard.setPrimaryClip(clipData)
         Toast.makeText(context, context.getString(R.string.memo_copy_complete), Toast.LENGTH_SHORT).show()
     }
 
     private fun finishMemoBtn() {
         //메모/일정 완료
-        AppDataBase.instance.memoDao().modifyMemo(
-            id = memo.id,
-            type = memo.type,
-            icon = memo.icon,
-            title = memo.title,
-            scheduleDateYear = memo.scheduleDateYear,
-            scheduleDateMonth = memo.scheduleDateMonth,
-            scheduleDateDay = memo.scheduleDateDay,
-            scheduleDateHour = memo.scheduleDateHour,
-            scheduleDateMinute = memo.scheduleDateMinute,
-            alarmStartTimeHour = memo.alarmStartTimeHour,
-            alarmStartTimeMinute = memo.alarmStartTimeMinute,
-            scheduleFinish = MutableLiveData(true),
-            fixNotify = MutableLiveData(false),
-            setAlarm = MutableLiveData(false),
-            repeatDay = memo.repeatDay,
-            alarmStartTimeType = MutableLiveData(1)
-        )
+        CoroutineScope(Dispatchers.IO).launch {
+            AppDataBase.instance.memoDao().setMemoFinish(memo.id)
 
-        if(memo.setAlarm.value == true) {
-            //알람설정 돼 있었다면 알람해제.
-            AlarmHandler().cancelAlarm(context, memo.id)
+            if(memo.setAlarm) {
+                //알람설정 돼 있었다면 알람해제.
+                AlarmHandler().cancelAlarm(context, memo.id)
+            }
+            if(memo.fixNotify) {
+                //고성설정 돼 있었다면 알람해제.
+                FixNotifyHandler().cancelFixNotify(context, memo.id)
+            }
         }
-        if(memo.fixNotify.value == true) {
-            //고성설정 돼 있었다면 알람해제.
-            FixNotifyHandler().cancelFixNotify(context, memo.id)
-        }
-
-        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
     }
 
     private fun modifyMemoBtn() {
@@ -189,35 +170,27 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
     }
 
     private fun removeMemoBtn() {
-        val removedDetailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id)
+        CoroutineScope(Dispatchers.IO).launch {
+            AppDataBase.instance.memoDao().deleteMemoByID(memo.id)
 
-        if(memo.setAlarm.value == true) {
-            //알람설정 돼 있었다면 알람해제.
-            AlarmHandler().cancelAlarm(context, memo.id)
-        }
+            val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
-        if(memo.fixNotify.value == true) {
-            //고성설정 돼 있었다면 알람해제.
-            FixNotifyHandler().cancelFixNotify(context, memo.id)
-        }
+            if(memo.setAlarm) {
+                //알람설정 돼 있었다면 알람해제.
+                AlarmHandler().cancelAlarm(context, memo.id)
+            }
 
-        AppDataBase.instance.detailMemoDao().deleteDetailMemoByMemoID(memo.id)
-        AppDataBase.instance.memoDao().deleteMemoByID(memo.id)
+            if(memo.fixNotify) {
+                //고성설정 돼 있었다면 알람해제.
+                FixNotifyHandler().cancelFixNotify(context, memo.id)
+            }
 
-        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
-            if(it is MainFragment) {
-                it.onResume()
-                MemoDeleteSnackBar(context, it.viewDataBinding.root, memo, removedDetailMemoList).showSnackBar()
+            (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
+                if(it is MainFragment) {
+                    MemoDeleteSnackBar(context, it.viewDataBinding.root, memo, detailMemoList).showSnackBar()
+                }
             }
         }
     }
 
-    private fun sortDetailMemoList(itemList: MutableList<DetailMemo>?) {
-        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-        )
-    }
 }

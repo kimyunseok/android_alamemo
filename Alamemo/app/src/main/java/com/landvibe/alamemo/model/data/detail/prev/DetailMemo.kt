@@ -25,32 +25,6 @@ class DetailMemo(
 ) {
     var showDateFormat = MutableLiveData("")
 
-    fun setScheduleDate(year: Int, month: Int, day: Int) {
-        scheduleDateYear.value = (year)
-        scheduleDateMonth.value = (month)
-        scheduleDateDay.value = (day)
-        getDateFormat()
-    }
-
-    fun setSceduleTime(hour: Int, minute: Int) {
-        scheduleDateHour.value = hour
-        scheduleDateMinute.value = (minute)
-        getDateFormat()
-    }
-
-    fun getDateFormat(): String {
-        val calendar = Calendar.getInstance()
-        scheduleDateYear.value?.let { year -> calendar.set(Calendar.YEAR, year) }
-        scheduleDateMonth.value?.let { month -> calendar.set(Calendar.MONTH, month) }
-        scheduleDateDay.value?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
-        val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
-
-        showDateFormat.value =
-            "${scheduleDateYear.value}년 ${scheduleDateMonth.value?.plus(1)}월 ${scheduleDateDay.value}일 ${dayOfWeek}요일"
-
-        return showDateFormat.value.toString()
-    }
-
     fun getDDay(): String {
         val dDay = getDDayInteger()
 
@@ -103,38 +77,6 @@ class DetailMemo(
         }
 
         return "${hour}:${minute}"
-    }
-
-    fun setMemoScheduleTimeToday() {
-        val calendar = Calendar.getInstance()
-        setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-        setSceduleTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
-        getDateFormat()
-    }
-
-    fun getMaxDate(): Long {
-        val calendar = Calendar.getInstance()
-        memoScheduleDateYear?.let { calendar.set(Calendar.YEAR, it) }
-        memoScheduleDateMonth?.let { calendar.set(Calendar.MONTH, it) }
-        memoScheduleDateDay?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
-
-        return calendar.time.time
-    }
-
-    fun checkScheduleTime() {
-        val todayCalendar = Calendar.getInstance()
-        val checkCalendar = Calendar.getInstance().apply {
-            scheduleDateYear.value?.let { set(Calendar.YEAR, it) }
-            scheduleDateMonth.value?.let { set(Calendar.MONTH, it) }
-            scheduleDateDay.value?.let { set(Calendar.DAY_OF_MONTH, it) }
-            scheduleDateHour.value?.let { set(Calendar.HOUR_OF_DAY, it) }
-            scheduleDateMinute.value?.let { set(Calendar.MINUTE, it) }
-        }
-
-        //메모에 설정된 시간이 이전 시간이라면 오늘 시간으로 변경한다.
-        if(checkCalendar.timeInMillis < todayCalendar.timeInMillis) {
-            setMemoScheduleTimeToday()
-        }
     }
 
 }

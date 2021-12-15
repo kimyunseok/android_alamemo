@@ -11,6 +11,7 @@ import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.dialog.DetailMemoClickDialog
+import com.landvibe.alamemo.viewmodel.ui.DetailMemoHolderViewModel
 
 class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<DetailMemo>):
     RecyclerView.Adapter<DetailMemoRecyclerViewAdapter.Holder>() {
@@ -31,7 +32,7 @@ class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableL
 
     inner class Holder(var binding: HolderDetailBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: DetailMemo) {
-            binding.model = item
+            binding.viewModel = DetailMemoHolderViewModel(item)
 
             itemView.setOnClickListener {
                 DetailMemoClickDialog().apply {

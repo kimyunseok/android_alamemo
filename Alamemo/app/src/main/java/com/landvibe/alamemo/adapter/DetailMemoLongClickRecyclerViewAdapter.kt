@@ -16,13 +16,18 @@ import com.landvibe.alamemo.databinding.HolderLongClickMenuBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
-import com.landvibe.alamemo.model.uimodel.LongClickViewModel
+import com.landvibe.alamemo.viewmodel.ui.LongClickViewModel
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
-import com.landvibe.alamemo.ui.fragment.snackbar.DetailMemoDeleteSnackBar
+import com.landvibe.alamemo.ui.snackbar.DetailMemoDeleteSnackBar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class DetailMemoLongClickRecyclerViewAdapter (val context: Context, val dialog: BottomSheetDialogFragment, val detailMemo: DetailMemo):
+class DetailMemoLongClickRecyclerViewAdapter (val context: Context,
+                                              val dialog: BottomSheetDialogFragment,
+                                              val detailMemo: DetailMemo):
     RecyclerView.Adapter<DetailMemoLongClickRecyclerViewAdapter.Holder>() {
 
     private val itemList = mutableListOf(
@@ -96,27 +101,31 @@ class DetailMemoLongClickRecyclerViewAdapter (val context: Context, val dialog: 
     }
 
     private fun removeMemoBtn() {
-        val memoID = detailMemo.memoId
-        val detailMemoID = detailMemo.id
+        CoroutineScope(Dispatchers.IO).launch {
 
-        AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemoID)
+            val memoID = detailMemo.memoId
+            val detailMemoID = detailMemo.id
 
-        //알람 업데이트
-        val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
-        if(tmpMemo.setAlarm) {
-            //알람설정 돼 있었다면 알람재설정
-            AlarmHandler().setMemoAlarm(context, tmpMemo)
-        }
-        if(tmpMemo.fixNotify) {
-            //고성설정 돼 있었다면 고정재설정
-            FixNotifyHandler().setMemoFixNotify(context, tmpMemo)
-        }
+            AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemoID)
 
-        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
-            if(it is DetailFragment) {
-                it.onResume()
-                DetailMemoDeleteSnackBar(context, it.viewDataBinding.root, detailMemo).showSnackBar()
+            //알람 업데이트
+            val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
+            if(tmpMemo.setAlarm) {
+                //알람설정 돼 있었다면 알람재설정
+                AlarmHandler().setMemoAlarm(context, tmpMemo)
             }
+            if(tmpMemo.fixNotify) {
+                //고성설정 돼 있었다면 고정재설정
+                FixNotifyHandler().setMemoFixNotify(context, tmpMemo)
+            }
+
+            (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
+                if(it is DetailFragment) {
+                    it.onResume()
+                    DetailMemoDeleteSnackBar(context, it.viewDataBinding.root, detailMemo).showSnackBar()
+                }
+            }
+
         }
     }
 }

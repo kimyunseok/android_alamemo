@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="com.landvibe.alamemo.model.uimodel.LongClickViewModel" />
+            type="com.landvibe.alamemo.viewmodel.ui.LongClickViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

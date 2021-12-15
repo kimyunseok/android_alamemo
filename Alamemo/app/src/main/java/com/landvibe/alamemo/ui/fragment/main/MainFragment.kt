@@ -1,14 +1,12 @@
 package com.landvibe.alamemo.ui.fragment.main
 
 import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.ViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.FragmentPageAdapter
 import com.landvibe.alamemo.databinding.FragmentMainBinding
 import com.landvibe.alamemo.databinding.HolderTabButtonBinding
-import com.landvibe.alamemo.model.uimodel.TabButtonViewModel
+import com.landvibe.alamemo.viewmodel.ui.TabButtonViewModel
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.helper.HelperFragment
@@ -42,8 +40,6 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         repeatFragment.onPause()
         finishFragment.onPause()
     }
-
-
 
     private fun setUpBtnOnClickListener() {
         viewDataBinding.mainAddMemoButton.setOnClickListener {
@@ -91,7 +87,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
 
     private fun createTabView(position: Int): View {
         val tabBtnBinding = HolderTabButtonBinding.inflate(layoutInflater)
-        var tabBtnModel = TabButtonViewModel()
+        val tabBtnModel = TabButtonViewModel()
         return when(position) {
             0 -> {
                 tabBtnModel.emoji.value = getString(R.string.memo_emoji)

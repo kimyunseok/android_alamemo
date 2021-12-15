@@ -16,7 +16,7 @@ import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
-import com.landvibe.alamemo.ui.fragment.snackbar.DetailMemoDeleteSnackBar
+import com.landvibe.alamemo.ui.snackbar.DetailMemoDeleteSnackBar
 import com.landvibe.alamemo.util.SwipeAction
 import com.landvibe.alamemo.viewmodel.aac.DetailFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
@@ -57,7 +57,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
         viewModel.removedDetailMemo.observe(viewLifecycleOwner) {
 
-            DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel).showSnackBar()
+            DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel.savedDetailMemo).showSnackBar()
         }
 
         viewModel.memoForAlarmSetting.observe(viewLifecycleOwner) {

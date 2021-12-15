@@ -13,6 +13,7 @@ import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
 import com.landvibe.alamemo.ui.fragment.main.dialog.MemoLongClickDialog
@@ -40,7 +41,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
 
     inner class Holder(var binding: HolderMemoBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Memo) {
-            binding.viewModel = MemoHolderViewModel(item, MemoRepository())
+            binding.viewModel = MemoHolderViewModel(item)
 
             itemView.setOnClickListener {
                 val bundle = Bundle().apply {
@@ -79,7 +80,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
             binding.holderCompleteCb.setOnClickListener {
                 CoroutineScope(Dispatchers.IO).launch {
                     //일정 종료처리
-                    binding.viewModel?.finishMemo()
+                    AppDataBase.instance.memoDao().setMemoFinish(item.id)
 
                     if(item.setAlarm) {
                         //알람설정 돼 있었다면 알람해제.
@@ -89,9 +90,6 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                         //고성설정 돼 있었다면 알람해제.
                         FixNotifyHandler().cancelFixNotify(context, item.id)
                     }
-
-                    (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.onResume()
-
                 }
             }
         }

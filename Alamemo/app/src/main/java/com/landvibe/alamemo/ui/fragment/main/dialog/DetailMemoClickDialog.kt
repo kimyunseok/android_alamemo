@@ -11,11 +11,12 @@ import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.DetailMemoLongClickRecyclerViewAdapter
 import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.DialogMemoMenuBinding
+import com.landvibe.alamemo.viewmodel.ui.DetailMemoHolderViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DetailMemoClickDialog: BottomSheetDialogFragment() {
+class DetailMemoClickDialog(): BottomSheetDialogFragment() {
 
     lateinit var binding: DialogMemoMenuBinding
 

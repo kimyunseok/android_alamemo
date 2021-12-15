@@ -5,14 +5,13 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.IconSelectRecyclerViewAdapter
 import com.landvibe.alamemo.adapter.IconTypeSelectRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.DialogSelectIconBinding
-import com.landvibe.alamemo.model.uimodel.IconTypeViewModel
+import com.landvibe.alamemo.viewmodel.ui.IconTypeViewModel
 
 class SelectIconDialog(context: Context, val icon: String): Dialog(context) {
     private val binding = DialogSelectIconBinding.inflate(layoutInflater)

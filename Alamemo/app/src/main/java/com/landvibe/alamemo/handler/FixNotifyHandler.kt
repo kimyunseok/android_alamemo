@@ -8,36 +8,46 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.model.database.AppDataBase
-import com.landvibe.alamemo.model.data.detail.prev.DetailMemo
-import com.landvibe.alamemo.model.data.memo.prev.Memo
+import com.landvibe.alamemo.model.data.detail.DetailMemo
+import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.ui.activity.MainActivity
+import com.landvibe.alamemo.util.MemoUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FixNotifyHandler {
     lateinit var builder: NotificationCompat.Builder
     lateinit var pendingIntent: PendingIntent
 
     fun setUpAllFixNotify(context: Context) {
-        val memoList = AppDataBase.instance.memoDao().getFixNotifyMemo().toMutableList()
+        CoroutineScope(Dispatchers.IO).launch {
+            val memoList = AppDataBase.instance.memoDao().getFixNotifyMemo().toMutableList()
 
-        for(memo in memoList) {
-            setMemoFixNotify(context, memo)
+            for(memo in memoList) {
+                setMemoFixNotify(context, memo)
+            }
         }
     }
 
     //개별로 상단바 고정 설정해주기.
-    fun setMemoFixNotify(context: Context, memo: Memo) {
-        val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
+    fun setMemoFixNotify(context: Context, memo: Memo?) {
+        memo?.let {
+            CoroutineScope(Dispatchers.IO).launch {
+                val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(it.id).toMutableList()
 
-        initPendingIntent(context, memo)
-        initNotificationCompatBuilder(context, memo, detailMemoList)
+                initPendingIntent(context, it)
+                initNotificationCompatBuilder(context, it, detailMemoList)
+            }
+        }
     }
 
     private fun initPendingIntent(context: Context, memo: Memo) {
         val mainActivityIntent = Intent(context, MainActivity::class.java).apply {
             putExtra("memoId", memo.id)
-            putExtra("memoIcon", memo.icon.value)
-            putExtra("memoTitle", memo.title.value)
-            putExtra("memoType", memo.type.value)
+            putExtra("memoIcon", memo.icon)
+            putExtra("memoTitle", memo.title)
+            putExtra("memoType", memo.type)
         }
 
         pendingIntent = TaskStackBuilder.create(context).run {
@@ -50,7 +60,7 @@ class FixNotifyHandler {
 
     private fun initNotificationCompatBuilder(context: Context, memo: Memo, detailMemoList: MutableList<DetailMemo>) {
         builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
-            .setContentTitle(memo.icon.value + " " + memo.title.value)
+            .setContentTitle(memo.icon + " " + memo.title)
             .setSmallIcon(R.drawable.iconfinder_icon)
             .setStyle(NotificationCompat.BigTextStyle())
             .setContentIntent(pendingIntent)
@@ -61,25 +71,25 @@ class FixNotifyHandler {
             .setShowWhen(false)
 
         //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
-        var contentText = if(memo.type.value == 1) {
+        var contentText = if(memo.type == 1) {
             ""
         } else {
-            memo.getDateFormat() + " " + memo.getTimeFormat()
+            memo.showDateFormat + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
         }
 
-        sortDetailMemoList(detailMemoList)
+        MemoUtil().sortDetailMemoList(detailMemoList)
 
-        if(memo.type.value != 2 && detailMemoList.isEmpty().not()) {
+        if(memo.type != 2 && detailMemoList.isEmpty().not()) {
             contentText += "\n\n"
             //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
             contentText += context.getString(
                 R.string.notification_fix_notify_slash) +
-                    detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon.value.toString() + " " + it.title.value.toString() }
+                    detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon + " " + it.title }
 
         } else if(detailMemoList.isEmpty().not()){
             contentText += "\n\n"
             contentText +=
-                detailMemoList.joinToString("\n") { it.getDateFormat() + " - " + it.icon.value.toString() + " " + it.getTitleInclueTime() }
+                detailMemoList.joinToString("\n") { it.showDateFormat + " - " + it.icon + " " + MemoUtil().getDetailMemoTitleInclueTime(it) }
         }
 
         builder.setContentText(contentText)
@@ -95,14 +105,5 @@ class FixNotifyHandler {
             val fixNotifyId = 0 - memoId
             cancel(fixNotifyId.toInt())
         }
-    }
-
-    private fun sortDetailMemoList(itemList: MutableList<DetailMemo>?) {
-        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear.value}
-            .thenBy { it.scheduleDateMonth.value }
-            .thenBy { it.scheduleDateDay.value }
-            .thenBy { it.scheduleDateHour.value }
-            .thenBy { it.scheduleDateMinute.value }
-        )
     }
 }

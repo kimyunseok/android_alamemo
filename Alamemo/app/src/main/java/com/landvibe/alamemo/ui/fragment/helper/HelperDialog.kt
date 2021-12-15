@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.DialogHelperBinding
-import com.landvibe.alamemo.model.uimodel.HelperDialogViewModel
+import com.landvibe.alamemo.viewmodel.ui.HelperDialogViewModel
 
 /**
  * Type에 따라서 보여주는 목록이 다름.
@@ -33,11 +33,11 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
         setUpBtnListener()
 
         binding.model = HelperDialogViewModel(
-            MutableLiveData(getTitle()),
-            MutableLiveData(helperShowModelList[0].image),
-            MutableLiveData(helperShowModelList[0].description),
-            prevEnable = MutableLiveData(false),
-            nextEnable = MutableLiveData(helperShowModelList.size > 1)
+            getTitle(),
+            helperShowModelList[0].image,
+            helperShowModelList[0].description,
+            prevEnable = false,
+            nextEnable = helperShowModelList.size > 1
         )
     }
 
@@ -106,23 +106,23 @@ class HelperDialog(context: Context, val type: Int): Dialog(context) {
     private fun setUpBtnListener() {
         binding.cancelBtn.setOnClickListener { onBackPressed() }
         binding.prevBtn.setOnClickListener {
-            binding.model?.image?.value = helperShowModelList[--curSelectIdx].image
-            binding.model?.description?.value = helperShowModelList[curSelectIdx].description
+            binding.model?.image = helperShowModelList[--curSelectIdx].image
+            binding.model?.description = helperShowModelList[curSelectIdx].description
             checkBtnEnabled()
             binding.invalidateAll()
         }
 
         binding.nextBtn.setOnClickListener {
-            binding.model?.image?.value = helperShowModelList[++curSelectIdx].image
-            binding.model?.description?.value = helperShowModelList[curSelectIdx].description
+            binding.model?.image = helperShowModelList[++curSelectIdx].image
+            binding.model?.description = helperShowModelList[curSelectIdx].description
             checkBtnEnabled()
             binding.invalidateAll()
         }
     }
 
     private fun checkBtnEnabled() {
-        binding.model?.prevEnable?.value = (curSelectIdx == 0).not()
-        binding.model?.nextEnable?.value = (curSelectIdx == (helperShowModelList.size - 1)).not()
+        binding.model?.prevEnable = (curSelectIdx == 0).not()
+        binding.model?.nextEnable = (curSelectIdx == (helperShowModelList.size - 1)).not()
     }
 
     private fun getTitle(): String {

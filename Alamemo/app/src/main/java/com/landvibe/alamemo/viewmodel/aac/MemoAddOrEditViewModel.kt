@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.util.AboutDay
+import com.landvibe.alamemo.util.MemoUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +23,6 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
     val memoSaveComplete: LiveData<Boolean>
         get() = _memoSaveComplete
 
-    //
     fun initMemo() {
         val calendar = Calendar.getInstance()
 
@@ -42,13 +42,13 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
             setAlarm = (false),
             repeatDay = mutableListOf(),
             alarmStartTimeType = (1),
-            showDateFormat = getDateFormat()
+            showDateFormat = "${(calendar.get(Calendar.YEAR))}년 ${(calendar.get(Calendar.MONTH)).plus(1)}월 " +
+                    "${(calendar.get(Calendar.DAY_OF_MONTH))}일 ${calendar.get(Calendar.DAY_OF_WEEK)}요일"
         )
-        checkScheduleTime()
         _memoInfo.postValue(memo)
     }
 
-    fun getMemoInfo(id: Long) {
+    fun getMemoInfoById(id: Long) {
         CoroutineScope(Dispatchers.IO).launch {
             val memo = memoRepository.getMemoById(id)
             _memoInfo.postValue(memo)
@@ -126,13 +126,13 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         currentMemo?.scheduleDateYear = year
         currentMemo?.scheduleDateMonth = month
         currentMemo?.scheduleDateMonth = day
-        getDateFormat()
+        MemoUtil().setMemoDate(currentMemo)
     }
 
     fun setSceduleTime(hour: Int, minute: Int) {
         currentMemo?.scheduleDateHour = hour
         currentMemo?.scheduleDateMinute = minute
-        getDateFormat()
+        MemoUtil().setMemoDate(currentMemo)
     }
 
     fun setAlarmStartTime(hour: Int, minute: Int) {
@@ -160,32 +160,14 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         currentMemo?.alarmStartTimeType = type
     }
 
-    fun getDateFormat(): String {
-        val calendar = Calendar.getInstance()
-        currentMemo?.scheduleDateYear?.let { year -> calendar.set(Calendar.YEAR, year) }
-        currentMemo?.scheduleDateMonth?.let { month -> calendar.set(Calendar.MONTH, month) }
-        currentMemo?.scheduleDateDay?.let { day -> calendar.set(Calendar.DAY_OF_MONTH, day) }
-
-        val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
-
-        if (currentMemo?.type != 3) {
-            currentMemo?.showDateFormat =
-                "${currentMemo?.scheduleDateYear}년 ${currentMemo?.scheduleDateMonth?.plus(1)}월 ${currentMemo?.scheduleDateDay}일 ${dayOfWeek}요일"
-        } else {
-            currentMemo?.repeatDay?.sortWith(AboutDay.DayCompare())
-            currentMemo?.showDateFormat = currentMemo?.repeatDay.toString()
-        }
-        return currentMemo?.showDateFormat.toString()
-    }
-
     private fun setMemoScheduleTimeToday() {
         val calendar = Calendar.getInstance()
         setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
         setSceduleTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
-        getDateFormat()
+        MemoUtil().setMemoDate(currentMemo)
     }
 
-    fun checkScheduleTime() {
+    private fun checkScheduleTime() {
         val todayCalendar = Calendar.getInstance()
         val checkCalendar = Calendar.getInstance().apply {
             currentMemo?.scheduleDateYear?.let { set(Calendar.YEAR, it) }
