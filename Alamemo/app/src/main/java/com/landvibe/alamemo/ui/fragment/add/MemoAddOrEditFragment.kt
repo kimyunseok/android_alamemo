@@ -48,26 +48,21 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         viewModel.memoSaveComplete.observe(this) {
             if(it) {
                 //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
-                viewModel.currentMemo?.id?.let { memoId ->
-                    AlarmHandler().cancelAlarm(requireContext(),
-                        memoId
-                    )
-
-                    FixNotifyHandler().cancelFixNotify(requireContext(),
-                        memoId
-                    )
+                if(viewModel.memoIdValue != 0L) {
+                    AlarmHandler().cancelAlarm(requireContext(), viewModel.memoIdValue)
+                    FixNotifyHandler().cancelFixNotify(requireContext(), viewModel.memoIdValue)
                 }
 
                 //알람설정.
-                if(viewModel.currentMemo?.setAlarm == true) {
-                    AlarmHandler().setMemoAlarm(requireContext(), viewModel.currentMemo)
+                if(viewModel.setAlarm) {
+                    AlarmHandler().setMemoAlarm(requireContext(), viewModel.memoIdValue)
                 }
                 //상단바 고정 설정
-                if(viewModel.currentMemo?.fixNotify == true) {
-                    FixNotifyHandler().setMemoFixNotify(requireContext(), viewModel.currentMemo)
+                if(viewModel.fixNotify) {
+                    FixNotifyHandler().setMemoFixNotify(requireContext(), viewModel.memoIdValue)
                 }
 
-                if(viewModel.currentMemo?.id != 0L) {
+                if(viewModel.memoIdValue != 0L) {
                     //Memo Edit
                     Toast.makeText(
                         requireContext(),
@@ -95,19 +90,12 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
         //저장하기 버튼
         viewDataBinding.addOkBtn.setOnClickListener {
-            if(viewModel.currentMemo == null) {
-                Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT).show()
-                requireActivity().supportFragmentManager.popBackStack()
-            } else {
-                viewModel.saveMemo()
-            }
+            viewModel.saveMemo()
         }
 
         //아이콘 선택 버튼
         viewDataBinding.addIconSelectBtn.setOnClickListener {
-            viewDataBinding.viewModel?.currentMemo?.icon?.let { iconLiveData ->
-                SelectIconDialog(requireContext(), iconLiveData).show()
-            }
+            SelectIconDialog(requireContext(), viewModel.memoIcon).show()
         }
         
         //달력으로 보기 버튼
@@ -118,15 +106,12 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     }
 
     private fun showCalendarDialogBtn() {
-        val yearValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateYear
-        val monthValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateMonth
-        val dayOfMonthValue = viewDataBinding.viewModel?.currentMemo?.scheduleDateDay
+        val yearValue = viewDataBinding.viewModel?.scheduleDateYear
+        val monthValue = viewDataBinding.viewModel?.scheduleDateMonth
+        val dayOfMonthValue = viewDataBinding.viewModel?.scheduleDateDay
 
         val calendarOnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            viewDataBinding.viewModel?.currentMemo?.scheduleDateYear = year
-            viewDataBinding.viewModel?.currentMemo?.scheduleDateMonth = month
-            viewDataBinding.viewModel?.currentMemo?.scheduleDateDay = dayOfMonth
-            MemoUtil().setMemoDate(viewModel.currentMemo)
+            viewModel.setScheduleDate(year, month, dayOfMonth)
         }
 
         if(yearValue != null && monthValue != null && dayOfMonthValue != null) {

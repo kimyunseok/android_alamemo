@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
-                    android:visibility="@{viewModel.detailMemoInfo.type == 1 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{viewModel.detailMemoType == 1 ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +90,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
-                        android:visibility="@{viewModel.detailMemoInfo.type == 3 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.detailMemoType == 3 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toTopOf="parent" >
 
                         <DatePicker
@@ -99,9 +99,9 @@
                             android:layout_height="wrap_content"
                             android:calendarViewShown="false"
                             android:datePickerMode="spinner"
-                            android:year="@={viewModel.detailMemoInfo.scheduleDateYear}"
-                            android:month="@={viewModel.detailMemoInfo.scheduleDateMonth}"
-                            android:day="@={viewModel.detailMemoInfo.scheduleDateDay}"
+                            android:year="@={viewModel.detailMemoScheduleDateYear}"
+                            android:month="@={viewModel.detailMemoScheduleDateMonth}"
+                            android:day="@={viewModel.detailMemoScheduleDateDay}"
                             android:minDate="@{System.currentTimeMillis()}"
                             android:maxDate="@{viewModel.maxDate}"
                             android:onDateChanged="@{(_, year, month, day) -> viewModel.setScheduleDate(year, month, day)}"
@@ -161,8 +161,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:hour="@={viewModel.detailMemoInfo.scheduleDateHour}"
-                        android:minute="@={viewModel.detailMemoInfo.scheduleDateMinute}"
+                        android:hour="@={viewModel.detailMemoScheduleDateHour}"
+                        android:minute="@={viewModel.detailMemoScheduleDateMinute}"
                         android:timePickerMode="spinner"
                         android:onTimeChanged="@{(_, hour, minute) -> viewModel.setSceduleTime(hour, minute)}"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -174,7 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/LightGrey"
-                        android:visibility="@{viewModel.detailMemoInfo.type != 2 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.detailMemoType != 2 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toBottomOf="@+id/add_time_picker"
                         app:layout_constraintBottom_toTopOf="@+id/add_date_layout"/>
 
@@ -183,7 +183,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:visibility="@{viewModel.detailMemoInfo.type != 2 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.detailMemoType != 2 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toBottomOf="@+id/add_time_picker">
 
                         <TextView
@@ -200,7 +200,7 @@
                             android:id="@+id/add_date_show_tv"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.detailMemoInfo.showDateFormat}"
+                            android:text="@{viewModel.detailMemoScheduleDateFormat}"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -250,7 +250,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:checked="@{viewModel.detailMemoInfo.type == 2}"
+                            android:checked="@{viewModel.detailMemoType == 2}"
                             android:enabled="false"
                             android:text="@string/schedule" />
 
@@ -258,7 +258,7 @@
                             android:id="@+id/add_type_memo_radio_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.detailMemoInfo.type == 1}"
+                            android:checked="@{viewModel.detailMemoType == 1}"
                             android:enabled="false"
                             android:text="@string/memo" />
 
@@ -290,7 +290,7 @@
                         android:background="@drawable/selector_radius_background"
                         android:elevation="20dp"
                         android:padding="10dp"
-                        android:text="@{viewModel.detailMemoInfo.icon}"
+                        android:text="@{viewModel.detailMemoIcon}"
                         android:textColor="@color/black"
                         android:textAlignment="center"
                         android:textSize="36sp"
@@ -311,7 +311,7 @@
                         android:lines="3"
                         android:paddingVertical="5dp"
                         android:paddingStart="15dp"
-                        android:text="@={viewModel.detailMemoInfo.title}"
+                        android:text="@={viewModel.detailMemoTitle}"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:clickable="true"

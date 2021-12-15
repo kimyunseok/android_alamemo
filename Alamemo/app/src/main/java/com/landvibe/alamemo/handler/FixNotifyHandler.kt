@@ -25,20 +25,22 @@ class FixNotifyHandler {
             val memoList = AppDataBase.instance.memoDao().getFixNotifyMemo().toMutableList()
 
             for(memo in memoList) {
-                setMemoFixNotify(context, memo)
+                val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
+
+                initPendingIntent(context, memo)
+                initNotificationCompatBuilder(context, memo, detailMemoList)
             }
         }
     }
 
     //개별로 상단바 고정 설정해주기.
-    fun setMemoFixNotify(context: Context, memo: Memo?) {
-        memo?.let {
-            CoroutineScope(Dispatchers.IO).launch {
-                val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(it.id).toMutableList()
+    fun setMemoFixNotify(context: Context, memoId: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
+            val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
-                initPendingIntent(context, it)
-                initNotificationCompatBuilder(context, it, detailMemoList)
-            }
+            initPendingIntent(context, memo)
+            initNotificationCompatBuilder(context, memo, detailMemoList)
         }
     }
 
@@ -71,10 +73,16 @@ class FixNotifyHandler {
             .setShowWhen(false)
 
         //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
-        var contentText = if(memo.type == 1) {
-            ""
-        } else {
-            memo.showDateFormat + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
+        var contentText = when {
+            memo.type == 1 -> {
+                ""
+            }
+            memo.type != 3 -> {
+                MemoUtil().getScheduleDateFormat(memo.scheduleDateYear, memo.scheduleDateMonth, memo.scheduleDateDay) + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
+            }
+            else -> {
+                MemoUtil().getRepeatScheduleDateFormat(memo.repeatDay) + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
+            }
         }
 
         MemoUtil().sortDetailMemoList(detailMemoList)
@@ -89,7 +97,10 @@ class FixNotifyHandler {
         } else if(detailMemoList.isEmpty().not()){
             contentText += "\n\n"
             contentText +=
-                detailMemoList.joinToString("\n") { it.showDateFormat + " - " + it.icon + " " + MemoUtil().getDetailMemoTitleInclueTime(it) }
+                detailMemoList.joinToString("\n") {
+                    MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
+                            " - " + it.icon +
+                            " " + MemoUtil().getDetailMemoTitleInclueTime(it) }
         }
 
         builder.setContentText(contentText)

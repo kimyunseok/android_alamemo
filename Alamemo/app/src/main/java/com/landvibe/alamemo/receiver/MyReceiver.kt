@@ -77,7 +77,8 @@ class MyReceiver: BroadcastReceiver() {
         val detailListText = detailMemoList.joinToString("\n") {
             if (memo.type == 2) {
                 // 일정이라면 날짜도 보여준다.
-                memo.showDateFormat + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute) + " - " + it.icon + " " + it.title
+                MemoUtil().getScheduleDateFormat(memo.scheduleDateYear, memo.scheduleDateMonth, memo.scheduleDateDay)+
+                        " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute) + " - " + it.icon + " " + it.title
             } else {
                 it.icon + " " + it.title
             }
@@ -119,7 +120,7 @@ class MyReceiver: BroadcastReceiver() {
     }
 
     private fun setUpRepeatMemoAlarm(context: Context, memo: Memo) {
-        AlarmHandler().setMemoAlarm(context, memo)
+        AlarmHandler().setMemoAlarm(context, memo.id)
     }
 
 }

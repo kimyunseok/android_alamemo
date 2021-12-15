@@ -14,10 +14,5 @@ data class DetailMemo(
     var scheduleDateMonth: Int,
     var scheduleDateDay: Int,
     var scheduleDateHour: Int,
-    var scheduleDateMinute: Int,
-    //아래는 세부메모 최대날짜 설정하기 용도.
-    var memoScheduleDateYear: Int?,
-    var memoScheduleDateMonth: Int?,
-    var memoScheduleDateDay: Int?,
-    var showDateFormat: String // 보여주는 날짜
+    var scheduleDateMinute: Int
 )

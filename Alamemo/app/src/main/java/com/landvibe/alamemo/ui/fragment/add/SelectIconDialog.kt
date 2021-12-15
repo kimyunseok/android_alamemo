@@ -5,15 +5,18 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.IconSelectRecyclerViewAdapter
 import com.landvibe.alamemo.adapter.IconTypeSelectRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.DialogSelectIconBinding
+import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.ui.IconTypeViewModel
 
-class SelectIconDialog(context: Context, val icon: String): Dialog(context) {
+class SelectIconDialog(context: Context, val iconLiveData: MutableLiveData<String>): Dialog(context) {
     private val binding = DialogSelectIconBinding.inflate(layoutInflater)
 
     lateinit var iconSelectAdapter: IconSelectRecyclerViewAdapter
@@ -43,7 +46,7 @@ class SelectIconDialog(context: Context, val icon: String): Dialog(context) {
     }
 
     private fun initIconRecyclerView() {
-        iconSelectAdapter = IconSelectRecyclerViewAdapter(context, iconTypeList[0].iconList, this, icon)
+        iconSelectAdapter = IconSelectRecyclerViewAdapter(context, iconTypeList[0].iconList, this, iconLiveData)
         binding.recyclerView.adapter = iconSelectAdapter
         binding.recyclerView.layoutManager = GridLayoutManager(context, 4)
     }

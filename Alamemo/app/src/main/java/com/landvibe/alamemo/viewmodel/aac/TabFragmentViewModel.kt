@@ -1,5 +1,6 @@
 package com.landvibe.alamemo.viewmodel.aac
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +44,7 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
             } else {
                 memoRepository.getFinishMemo()
             }
+            Log.d("get Memo From Room", memoList.toString())
             _memoList.postValue(memoList.toMutableList())
         }
     }

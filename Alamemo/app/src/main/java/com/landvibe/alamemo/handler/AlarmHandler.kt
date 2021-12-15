@@ -23,26 +23,32 @@ class AlarmHandler {
         CoroutineScope(Dispatchers.IO).launch {
             val memoList = AppDataBase.instance.memoDao().getAlarmMemo()
             for(memo in memoList) {
-                setMemoAlarm(context, memo)
+                initPendingIntent(context, memo.id)
+
+                if(memo.type == 2) {
+                    //그냥 일정이라면
+                    initAlarmManagerForSchedule(context, memo)
+                } else {
+                    //반복 일정이라면
+                    initAlarmManagerForRepeatSchedule(context, memo)
+                }
             }
         }
     }
 
-    fun setMemoAlarm(context: Context, memo: Memo?) {
-        memo?.let {
-            CoroutineScope(Dispatchers.IO).launch {
-                initPendingIntent(context, it.id)
+    fun setMemoAlarm(context: Context, memoId: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val memo = AppDataBase.instance.memoDao().getMemoById(memoId)
+            initPendingIntent(context, memoId)
 
-                if(it.type == 2) {
-                    //그냥 일정이라면
-                    initAlarmManagerForSchedule(context, it)
-                } else {
-                    //반복 일정이라면
-                    initAlarmManagerForRepeatSchedule(context, it)
-                }
+            if(memo.type == 2) {
+                //그냥 일정이라면
+                initAlarmManagerForSchedule(context, memo)
+            } else {
+                //반복 일정이라면
+                initAlarmManagerForRepeatSchedule(context, memo)
             }
         }
-
     }
 
     private fun initPendingIntent(context: Context, memoId: Long) {
@@ -110,7 +116,11 @@ class AlarmHandler {
         }
 
         val alarmCalendar = Calendar.getInstance()
-        alarmCalendar.timeInMillis = AboutDay.AboutDayOfWeek().findMinTimeAboutDayOfWeekBySpecificTime(memo, curScheduleCalendar.timeInMillis)
+        alarmCalendar.timeInMillis = AboutDay.AboutDayOfWeek().findMinTimeAboutDayOfWeekBySpecificTime(memo.repeatDay,
+            memo.alarmStartTimeHour,
+            memo.alarmStartTimeMinute,
+            curScheduleCalendar.timeInMillis
+        )
 
         //반복 일정의 날짜를 찾은 다음 날짜로 바꾼다.
         val yearLivedata = alarmCalendar.get(Calendar.YEAR)

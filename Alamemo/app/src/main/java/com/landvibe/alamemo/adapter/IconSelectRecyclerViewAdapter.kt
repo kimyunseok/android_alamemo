@@ -4,12 +4,15 @@ import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.databinding.HolderIconBinding
+import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 
 class IconSelectRecyclerViewAdapter(context: Context, var itemList: MutableList<String>,
-                                    val dialog: Dialog, var icon: String): RecyclerView.Adapter<IconSelectRecyclerViewAdapter.Holder>() {
+                                    val dialog: Dialog, val iconLiveData: MutableLiveData<String>
+): RecyclerView.Adapter<IconSelectRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HolderIconBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,10 +30,10 @@ class IconSelectRecyclerViewAdapter(context: Context, var itemList: MutableList<
 
     inner class Holder(var binding: HolderIconBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(_icon: String) {
-            binding.icon = icon
+            binding.icon = _icon
 
             itemView.setOnClickListener {
-                icon = _icon
+                iconLiveData.postValue(_icon)
                 dialog.dismiss()
             }
         }

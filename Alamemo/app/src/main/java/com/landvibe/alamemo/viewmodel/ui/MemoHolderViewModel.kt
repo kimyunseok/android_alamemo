@@ -23,4 +23,12 @@ class MemoHolderViewModel(val memo: Memo) {
         return MemoUtil().getMemoTitleInclueTime(memo)
     }
 
+    fun showDateFormat(): String {
+        return if (memo.type != 3) {
+            MemoUtil().getScheduleDateFormat(memo.scheduleDateYear, memo.scheduleDateMonth, memo.scheduleDateDay)
+        } else {
+            MemoUtil().getRepeatScheduleDateFormat(memo.repeatDay)
+        }
+    }
+
 }

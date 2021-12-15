@@ -10,10 +10,10 @@ import kotlin.Comparator
 class AboutDay {
 
     class AboutDayOfWeek {
-        val calendar = Calendar.getInstance()
-
         fun checkRepeatDayToday(scheduleDays: MutableList<Char>): Boolean {
-            val todayDayOfWeek = getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK))
+            val calendar = Calendar.getInstance()
+
+            val todayDayOfWeek = getDayOfWeekByInteger(calendar.get(Calendar.DAY_OF_WEEK))
             for(day in scheduleDays) {
                 if(day == todayDayOfWeek) {
                     return true
@@ -22,8 +22,8 @@ class AboutDay {
             return false
         }
 
-        fun getDayOfWeek(day: Int): Char {
-           return when (day) {
+        fun getDayOfWeekByInteger(dayOfWeek: Int): Char {
+            return when (dayOfWeek) {
                 1 -> {
                     '일'
                 }
@@ -51,8 +51,43 @@ class AboutDay {
             }
         }
 
-        //가지고있는 반복요일에 대해 다시 알람설정.
-        fun findMinTimeAboutDayOfWeekBySpecificTime(memo: Memo?, specificTime: Long): Long {
+        fun getDayOfWeekByDate(year: Int?, month: Int?, dayOfMonth: Int?): Char {
+            val calendar = Calendar.getInstance()
+            year?.let { calendar.set(Calendar.YEAR, it) }
+            month?.let { calendar.set(Calendar.MONTH, it) }
+            dayOfMonth?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+
+           return when (calendar.get(Calendar.DAY_OF_WEEK)) {
+                1 -> {
+                    '일'
+                }
+                2 -> {
+                    '월'
+                }
+                3 -> {
+                    '화'
+                }
+                4 -> {
+                    '수'
+                }
+                5 -> {
+                    '목'
+                }
+                6 -> {
+                    '금'
+                }
+                7 -> {
+                    '토'
+                }
+                else -> {
+                    ' '
+                }
+            }
+        }
+
+        //가지고있는 반복요일에 대해 다시 알람설정. - specificTime 이후에 날짜로 설정
+        fun findMinTimeAboutDayOfWeekBySpecificTime(repeatDay: MutableList<Char>, alarmStartTimeHour: Int?,
+                                                    alarmStartTimeMinute: Int?, specificTime: Long): Long {
             val alarmCalendar = Calendar.getInstance().apply {
                 timeInMillis = specificTime
                 add(Calendar.DAY_OF_MONTH, 8)
@@ -61,25 +96,23 @@ class AboutDay {
 
             var checkCalendar: Calendar
 
-            memo?.let {
-                for(dayOfWeek in it.repeatDay) {
-                    val dayOfWeekToInt = DayCompare().getDaySequence(dayOfWeek)
+            for(dayOfWeek in repeatDay) {
+                val dayOfWeekToInt = DayCompare().getDaySequence(dayOfWeek)
 
-                    checkCalendar = Calendar.getInstance()
-                    checkCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeekToInt)
-                    checkCalendar.set(Calendar.HOUR_OF_DAY, it.alarmStartTimeHour)
-                    checkCalendar.set(Calendar.MINUTE, it.alarmStartTimeMinute)
-                    checkCalendar.set(Calendar.SECOND, 0)
+                checkCalendar = Calendar.getInstance()
+                checkCalendar.set(Calendar.DAY_OF_WEEK, dayOfWeekToInt)
+                alarmStartTimeHour?.let { checkCalendar.set(Calendar.HOUR_OF_DAY, it) }
+                alarmStartTimeMinute?.let { checkCalendar.set(Calendar.MINUTE, it) }
+                checkCalendar.set(Calendar.SECOND, 0)
 
-                    //오늘보다 이르다면 7일을 더해준다
-                    if (checkCalendar.timeInMillis < System.currentTimeMillis()) {
-                        checkCalendar.add(Calendar.DAY_OF_MONTH, 7)
-                    }
+                //오늘보다 이르다면 7일을 더해준다
+                if (checkCalendar.timeInMillis < System.currentTimeMillis()) {
+                    checkCalendar.add(Calendar.DAY_OF_MONTH, 7)
+                }
 
-                    //특정 시간보다 작다면 시간 변경
-                    if(checkCalendar.timeInMillis < alarmCalendar.timeInMillis) {
-                        alarmCalendar.time = checkCalendar.time
-                    }
+                //특정 시간보다 작다면 시간 변경
+                if(checkCalendar.timeInMillis < alarmCalendar.timeInMillis) {
+                    alarmCalendar.time = checkCalendar.time
                 }
             }
 

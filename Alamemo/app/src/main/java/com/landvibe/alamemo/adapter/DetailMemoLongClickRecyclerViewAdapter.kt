@@ -112,11 +112,11 @@ class DetailMemoLongClickRecyclerViewAdapter (val context: Context,
             val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
             if(tmpMemo.setAlarm) {
                 //알람설정 돼 있었다면 알람재설정
-                AlarmHandler().setMemoAlarm(context, tmpMemo)
+                AlarmHandler().setMemoAlarm(context, tmpMemo.id)
             }
             if(tmpMemo.fixNotify) {
                 //고성설정 돼 있었다면 고정재설정
-                FixNotifyHandler().setMemoFixNotify(context, tmpMemo)
+                FixNotifyHandler().setMemoFixNotify(context, tmpMemo.id)
             }
 
             (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {

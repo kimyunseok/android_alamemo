@@ -103,11 +103,20 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
             val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
             //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
-            var contentText = if(memo.type == 1) {
-                memo.icon + " " + memo.title
-            } else {
-                memo.icon + " " + memo.title + "\n" +
-                        memo.showDateFormat + " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
+            var contentText = when {
+                memo.type == 1 -> {
+                    memo.icon + " " + memo.title
+                }
+                memo.type != 3 -> {
+                    memo.icon + " " + memo.title + "\n" +
+                            MemoUtil().getScheduleDateFormat(memo.scheduleDateYear, memo.scheduleDateMonth, memo.scheduleDateDay) +
+                            " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
+                }
+                else -> {
+                    memo.icon + " " + memo.title + "\n" +
+                            MemoUtil().getRepeatScheduleDateFormat(memo.repeatDay) +
+                            " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
+                }
             }
 
             MemoUtil().sortDetailMemoList(detailMemoList)
@@ -122,7 +131,8 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
             } else if(detailMemoList.isEmpty().not()){
                 contentText += "\n"
                 contentText +=
-                    detailMemoList.joinToString("\n") { it.showDateFormat + " " + MemoUtil().getTimeFormat(it.scheduleDateHour, it.scheduleDateMinute) + " - "+
+                    detailMemoList.joinToString("\n") { MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
+                            " " + MemoUtil().getTimeFormat(it.scheduleDateHour, it.scheduleDateMinute) + " - "+
                             it.icon + " " + it.title }
             }
 

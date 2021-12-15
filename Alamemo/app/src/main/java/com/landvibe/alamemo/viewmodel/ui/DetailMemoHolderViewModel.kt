@@ -17,4 +17,8 @@ class DetailMemoHolderViewModel(val detailMemo: DetailMemo) {
         return MemoUtil().getDetailMemoTitleInclueTime(detailMemo)
     }
 
+    fun showDateFormat(): String {
+        return MemoUtil().getScheduleDateFormat(detailMemo.scheduleDateYear, detailMemo.scheduleDateMonth, detailMemo.scheduleDateDay)
+    }
+
 }

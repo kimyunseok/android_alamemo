@@ -81,7 +81,7 @@
                     android:id="@+id/holder_memo_date_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.memo.showDateFormat}"
+                    android:text="@{viewModel.showDateFormat}"
                     android:textColor="@{viewModel.memo.scheduleFinish ? @color/Gray : @color/black}"
                     android:textSize="14sp"
                     app:layout_constraintTop_toTopOf="parent"

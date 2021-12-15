@@ -36,11 +36,11 @@ class DetailMemoDeleteSnackBar(context: Context, rootView: View, val detailMemo:
 
                 if(memo.setAlarm) {
                     //알람설정 돼 있었다면 알람재설정
-                    AlarmHandler().setMemoAlarm(context, memo)
+                    AlarmHandler().setMemoAlarm(context, memo.id)
                 }
                 if(memo.fixNotify) {
                     //고성설정 돼 있었다면 고정재설정
-                    FixNotifyHandler().setMemoFixNotify(context, memo)
+                    FixNotifyHandler().setMemoFixNotify(context, memo.id)
                 }
             }
         }

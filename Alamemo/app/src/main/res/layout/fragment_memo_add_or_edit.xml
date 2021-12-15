@@ -92,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
-                        android:visibility="@{viewModel.memoInfo.type != 2 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.memoType != 2 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toTopOf="parent" >
 
                         <DatePicker
@@ -101,9 +101,9 @@
                             android:layout_height="wrap_content"
                             android:calendarViewShown="false"
                             android:datePickerMode="spinner"
-                            android:year="@={viewModel.memoInfo.scheduleDateYear}"
-                            android:month="@={viewModel.memoInfo.scheduleDateMonth}"
-                            android:day="@={viewModel.memoInfo.scheduleDateDay}"
+                            android:year="@={viewModel.memoScheduleDateYear}"
+                            android:month="@={viewModel.memoScheduleDateMonth}"
+                            android:day="@={viewModel.memoScheduleDateDay}"
                             android:minDate="@{System.currentTimeMillis()}"
                             android:onDateChanged="@{(_, year, month, day) -> viewModel.setScheduleDate(year, month, day)}"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/LightGrey"
-                        android:visibility="@{viewModel.memoInfo.type == 1 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.memoType == 1 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toBottomOf="@id/add_date_picker_layout"
                         app:layout_constraintBottom_toTopOf="@+id/add_time_picker"/>
 
@@ -164,11 +164,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:hour="@={viewModel.memoInfo.scheduleDateHour}"
-                        android:minute="@={viewModel.memoInfo.scheduleDateMinute}"
+                        android:hour="@={viewModel.memoScheduleDateHour}"
+                        android:minute="@={viewModel.memoScheduleDateMinute}"
                         android:timePickerMode="spinner"
                         android:onTimeChanged="@{(_, hour, minute) -> viewModel.setSceduleTime(hour, minute)}"
-                        android:visibility="@{viewModel.memoInfo.type == 1 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.memoType == 1 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/add_date_picker_layout" />
@@ -178,7 +178,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/LightGrey"
-                        android:visibility="@{viewModel.memoInfo.type != 2 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.memoType != 2 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toBottomOf="@+id/add_time_picker"
                         app:layout_constraintBottom_toTopOf="@+id/add_date_layout"/>
 
@@ -187,7 +187,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:visibility="@{viewModel.memoInfo.type != 2 ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.memoType != 2 ? View.GONE : View.VISIBLE}"
                         app:layout_constraintTop_toBottomOf="@+id/add_time_picker">
 
                         <TextView
@@ -204,7 +204,7 @@
                             android:id="@+id/add_date_show_tv"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@{viewModel.memoInfo.showDateFormat}"
+                            android:text="@{viewModel.memoScheduleDateFormat}"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -254,9 +254,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:checked="@{viewModel.memoInfo.type == 3}"
-                            android:onClick="@{() -> viewModel.memoInfo.setType(3)}"
-                            android:enabled="@{viewModel.memoInfo.id == 0 ? true : false}"
+                            android:checked="@{viewModel.memoType == 3}"
+                            android:onClick="@{() -> viewModel.setType(3)}"
+                            android:enabled="@{viewModel.memoId == 0 ? true : false}"
                             android:text="@string/repeat_schedule"/>
 
                         <RadioButton
@@ -264,18 +264,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:checked="@{viewModel.memoInfo.type == 2}"
-                            android:onClick="@{() -> viewModel.memoInfo.setType(2)}"
-                            android:enabled="@{viewModel.memoInfo.id == 0 ? true : false}"
+                            android:checked="@{viewModel.memoType == 2}"
+                            android:onClick="@{() -> viewModel.setType(2)}"
+                            android:enabled="@{viewModel.memoId == 0 ? true : false}"
                             android:text="@string/schedule" />
 
                         <RadioButton
                             android:id="@+id/add_type_memo_radio_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.type == 1}"
-                            android:onClick="@{() -> viewModel.memoInfo.setType(1)}"
-                            android:enabled="@{viewModel.memoInfo.id == 0 ? true : false}"
+                            android:checked="@{viewModel.memoType == 1}"
+                            android:onClick="@{() -> viewModel.setType(1)}"
+                            android:enabled="@{viewModel.memoId == 0 ? true : false}"
                             android:text="@string/memo" />
 
                     </RadioGroup>
@@ -287,7 +287,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/LightGrey"
-                    android:visibility="@{viewModel.memoInfo.type == 3 ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.memoType == 3 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_type_layout"
                     app:layout_constraintBottom_toTopOf="@+id/add_repeat_schedule_set_day_layout"/>
 
@@ -297,7 +297,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:animateLayoutChanges="true"
-                    android:visibility="@{viewModel.memoInfo.type == 3 ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.memoType == 3 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_type_layout">
 
                     <TextView
@@ -315,7 +315,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/mon"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('월')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('월')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('월')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_tue_cb"/>
@@ -325,7 +325,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/tue"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('화')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('화')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('화')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_wed_cb"/>
@@ -335,7 +335,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/wed"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('수')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('수')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('수')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/add_thu_cb"/>
@@ -345,7 +345,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/thu"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('목')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('목')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('목')}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
@@ -355,7 +355,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/fri"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('금')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('금')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('금')}"
                         app:layout_constraintTop_toBottomOf="@+id/add_tue_cb"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -366,7 +366,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sat"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('토')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('토')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('토')}"
                         app:layout_constraintTop_toBottomOf="@+id/add_wed_cb"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -377,7 +377,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/sun"
-                        android:checked="@{viewModel.memoInfo.repeatDay.contains('일')}"
+                        android:checked="@{viewModel.memoRepeatDay.contains('일')}"
                         android:onClick="@{() -> viewModel.setRepeatDay('일')}"
                         app:layout_constraintTop_toBottomOf="@+id/add_wed_cb"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -423,7 +423,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:checked="@{viewModel.memoInfo.fixNotify == true}"
+                            android:checked="@{viewModel.memoFixNotify == true}"
                             android:onClick="@{() -> viewModel.setNotify(true)}"
                             android:text="@string/use"/>
 
@@ -431,7 +431,7 @@
                             android:id="@+id/add_no_use_fix_notify_radio_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.fixNotify == false}"
+                            android:checked="@{viewModel.memoFixNotify == false}"
                             android:onClick="@{() -> viewModel.setNotify(false)}"
                             android:text="@string/no_use" />
 
@@ -444,7 +444,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/LightGrey"
-                    android:visibility="@{viewModel.memoInfo.type == 1 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{viewModel.memoType == 1 ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_notify_fix_layout"
                     app:layout_constraintBottom_toTopOf="@+id/add_alarm_layout"/>
 
@@ -454,7 +454,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:animateLayoutChanges="true"
-                    android:visibility="@{viewModel.memoInfo.type == 1 ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{viewModel.memoType == 1 ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_notify_fix_layout">
 
                     <TextView
@@ -480,7 +480,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
-                            android:checked="@{viewModel.memoInfo.setAlarm == true}"
+                            android:checked="@{viewModel.memoSetAlarm == true}"
                             android:onClick="@{() -> viewModel.setAlarm(true)}"
                             android:text="@string/use"/>
 
@@ -488,7 +488,7 @@
                             android:id="@+id/add_no_use_alarm_radio_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.setAlarm == false}"
+                            android:checked="@{viewModel.memoSetAlarm == false}"
                             android:onClick="@{() -> viewModel.setAlarm(false)}"
                             android:text="@string/no_use" />
 
@@ -501,7 +501,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/LightGrey"
-                    android:visibility="@{viewModel.memoInfo.type != 2 ? View.GONE : viewModel.memoInfo.setAlarm ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.memoType != 2 ? View.GONE : viewModel.memoSetAlarm ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout"
                     app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_start_time_layout"/>
 
@@ -511,7 +511,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:animateLayoutChanges="true"
-                    android:visibility="@{viewModel.memoInfo.type != 2 ? View.GONE : viewModel.memoInfo.setAlarm ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.memoType != 2 ? View.GONE : viewModel.memoSetAlarm ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_alarm_layout">
 
                     <TextView
@@ -537,7 +537,7 @@
                             android:id="@+id/add_alarm_time_every_day_rb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.alarmStartTimeType == 1}"
+                            android:checked="@{viewModel.memoAlarmStartTimeType == 1}"
                             android:onClick="@{() -> viewModel.setAlarmStartType(1)}"
                             android:text="@string/everyday"/>
 
@@ -545,7 +545,7 @@
                             android:id="@+id/add_alarm_time_one_week_rb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.alarmStartTimeType == 2}"
+                            android:checked="@{viewModel.memoAlarmStartTimeType == 2}"
                             android:onClick="@{() -> viewModel.setAlarmStartType(2)}"
                             android:text="@string/before_one_week"/>
 
@@ -553,7 +553,7 @@
                             android:id="@+id/add_alarm_time_three_day_rb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.alarmStartTimeType == 3}"
+                            android:checked="@{viewModel.memoAlarmStartTimeType == 3}"
                             android:onClick="@{() -> viewModel.setAlarmStartType(3)}"
                             android:text="@string/before_three_day"/>
 
@@ -561,7 +561,7 @@
                             android:id="@+id/add_alarm_time_one_day_rb"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{viewModel.memoInfo.alarmStartTimeType == 4}"
+                            android:checked="@{viewModel.memoAlarmStartTimeType == 4}"
                             android:onClick="@{() -> viewModel.setAlarmStartType(4)}"
                             android:text="@string/before_one_day" />
 
@@ -574,7 +574,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/LightGrey"
-                    android:visibility="@{viewModel.memoInfo.type == 1 ? View.GONE : viewModel.memoInfo.setAlarm ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.memoType == 1 ? View.GONE : viewModel.memoSetAlarm ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_start_time_layout"
                     app:layout_constraintBottom_toTopOf="@+id/add_alarm_set_time_layout"/>
 
@@ -584,7 +584,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:animateLayoutChanges="true"
-                    android:visibility="@{viewModel.memoInfo.type == 1 ? View.GONE : viewModel.memoInfo.setAlarm ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.memoType == 1 ? View.GONE : viewModel.memoSetAlarm ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toBottomOf="@+id/add_alarm_set_start_time_layout">
 
                     <TextView
@@ -603,8 +603,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
                         android:timePickerMode="spinner"
-                        android:hour="@={viewModel.memoInfo.alarmStartTimeHour}"
-                        android:minute="@={viewModel.memoInfo.alarmStartTimeMinute}"
+                        android:hour="@={viewModel.memoAlarmStartTimeHour}"
+                        android:minute="@={viewModel.memoAlarmStartTimeMinute}"
                         android:onTimeChanged="@{(_, hour, minute) -> viewModel.setAlarmStartTime(hour, minute)}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -636,7 +636,7 @@
                         android:background="@drawable/selector_radius_background"
                         android:elevation="20dp"
                         android:padding="10dp"
-                        android:text="@{viewModel.memoInfo.icon}"
+                        android:text="@{viewModel.memoIcon}"
                         android:textColor="@color/black"
                         android:textAlignment="center"
                         android:textSize="36sp"
@@ -657,7 +657,7 @@
                         android:lines="3"
                         android:paddingVertical="5dp"
                         android:paddingStart="15dp"
-                        android:text="@={viewModel.memoInfo.title}"
+                        android:text="@={viewModel.memoTitle}"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:clickable="true"

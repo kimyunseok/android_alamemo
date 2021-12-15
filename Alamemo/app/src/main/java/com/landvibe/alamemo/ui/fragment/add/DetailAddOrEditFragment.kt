@@ -50,7 +50,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     private fun setUpObserver() {
         viewModel.detailMemoSaveComplete.observe(viewLifecycleOwner) {
             if(it) {
-                if(viewModel.currentDetailMemo?.id != 0L) {
+                if(viewModel.detailMemoIdValue != 0L) {
                     //Memo Edit
                     Toast.makeText(
                         requireContext(),
@@ -79,12 +79,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     private fun setBtnOnClickListener() {
         //저장하기 버튼
         viewDataBinding.addOkBtn.setOnClickListener {
-            if (viewModel.currentDetailMemo == null) {
-                Toast.makeText(requireContext(), getString(R.string.error), Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                viewModel.saveDetailMemo()
-            }
+            viewModel.saveDetailMemo()
         }
 
         //뒤로가기 버튼
@@ -94,9 +89,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
         
         //아이콘 선택 버튼
         viewDataBinding.addIconSelectBtn.setOnClickListener {
-            viewDataBinding.viewModel?.currentDetailMemo?.icon?.let { iconLiveData ->
-                SelectIconDialog(requireContext(), iconLiveData).show()
-            }
+            SelectIconDialog(requireContext(), viewModel.detailMemoIcon).show()
         }
 
         //달력으로 보기 버튼
@@ -106,15 +99,12 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     }
 
     private fun showCalendarDialogBtn() {
-        val yearValue = viewDataBinding.viewModel?.currentDetailMemo?.scheduleDateYear
-        val monthValue = viewDataBinding.viewModel?.currentDetailMemo?.scheduleDateMonth
-        val dayOfMonthValue = viewDataBinding.viewModel?.currentDetailMemo?.scheduleDateDay
+        val yearValue = viewDataBinding.viewModel?.scheduleDateYear
+        val monthValue = viewDataBinding.viewModel?.scheduleDateMonth
+        val dayOfMonthValue = viewDataBinding.viewModel?.scheduleDateDay
 
         val calendarOnDateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            viewDataBinding.viewModel?.currentDetailMemo?.scheduleDateYear = year
-            viewDataBinding.viewModel?.currentDetailMemo?.scheduleDateMonth = month
-            viewDataBinding.viewModel?.currentDetailMemo?.scheduleDateDay = dayOfMonth
-            MemoUtil().setDetailMemoDate(viewDataBinding.viewModel?.currentDetailMemo)
+            viewModel.setScheduleDate(year, month, dayOfMonth)
         }
 
         if(yearValue != null && monthValue != null && dayOfMonthValue != null) {
@@ -134,12 +124,12 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
         //알람설정.
         if(memo?.setAlarm == true) {
             AlarmHandler().cancelAlarm(requireContext(), memo.id)
-            AlarmHandler().setMemoAlarm(requireContext(), memo)
+            AlarmHandler().setMemoAlarm(requireContext(), memo.id)
         }
         //상단바 고정 설정
         if(memo?.fixNotify == true) {
             FixNotifyHandler().cancelFixNotify(requireContext(), memo.id)
-            FixNotifyHandler().setMemoFixNotify(requireContext(), memo)
+            FixNotifyHandler().setMemoFixNotify(requireContext(), memo.id)
         }
     }
 }

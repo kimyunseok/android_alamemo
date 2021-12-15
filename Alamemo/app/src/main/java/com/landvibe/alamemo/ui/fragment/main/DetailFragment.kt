@@ -64,12 +64,12 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
             if(it.setAlarm) {
                 //알람설정 돼 있었다면 알람재설정
-                AlarmHandler().setMemoAlarm(requireContext(), it)
+                AlarmHandler().setMemoAlarm(requireContext(), it.id)
             }
 
             if(it.fixNotify) {
                 //고성설정 돼 있었다면 고정재설정
-                FixNotifyHandler().setMemoFixNotify(requireContext(), it)
+                FixNotifyHandler().setMemoFixNotify(requireContext(), it.id)
             }
         }
     }
