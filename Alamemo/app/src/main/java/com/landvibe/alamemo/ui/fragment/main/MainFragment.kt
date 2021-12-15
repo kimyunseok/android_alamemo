@@ -90,26 +90,26 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         val tabBtnModel = TabButtonViewModel()
         return when(position) {
             0 -> {
-                tabBtnModel.emoji.value = getString(R.string.memo_emoji)
-                tabBtnModel.title.value = getString(R.string.memo)
+                tabBtnModel.emoji = getString(R.string.memo_emoji)
+                tabBtnModel.title = getString(R.string.memo)
                 tabBtnBinding.model = tabBtnModel
                 tabBtnBinding.root
             }
             1 -> {
-                tabBtnModel.emoji.value = getString(R.string.today_emoji)
-                tabBtnModel.title.value = getString(R.string.today_schedule)
+                tabBtnModel.emoji = getString(R.string.today_emoji)
+                tabBtnModel.title = getString(R.string.today_schedule)
                 tabBtnBinding.model = tabBtnModel
                 tabBtnBinding.root
             }
             2 -> {
-                tabBtnModel.emoji.value = getString(R.string.repeat_emoji)
-                tabBtnModel.title.value = getString(R.string.repeat_schedule)
+                tabBtnModel.emoji = getString(R.string.repeat_emoji)
+                tabBtnModel.title = getString(R.string.repeat_schedule)
                 tabBtnBinding.model = tabBtnModel
                 tabBtnBinding.root
             }
             3 -> {
-                tabBtnModel.emoji.value = getString(R.string.finish_emoji)
-                tabBtnModel.title.value = getString(R.string.finish_schedule)
+                tabBtnModel.emoji = getString(R.string.finish_emoji)
+                tabBtnModel.title = getString(R.string.finish_schedule)
                 tabBtnBinding.model = tabBtnModel
                 tabBtnBinding.root
             }

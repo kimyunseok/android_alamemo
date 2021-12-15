@@ -44,6 +44,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         viewDataBinding.lifecycleOwner = viewLifecycleOwner
 
         initViewModel()
+        setUpObserver()
         setTitle()
         getMemoList()
 
