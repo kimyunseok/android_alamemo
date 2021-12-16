@@ -2,8 +2,10 @@ package com.landvibe.alamemo.common
 
 import android.app.Application
 import android.graphics.Typeface
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 
 /*
 안드로이드 기본 어플 state를 관리하는 객체.
@@ -30,6 +32,14 @@ class GlobalApplication : Application() {
             } else {
                 textView.setTypeface(null, Typeface.NORMAL)
             }
+        }
+
+        @BindingAdapter("bind_image")
+        @JvmStatic
+        fun bindImage(view: ImageView, res: Int?) {
+            Glide.with(view.context)
+                .load(res)
+                .into(view)
         }
     }
 }

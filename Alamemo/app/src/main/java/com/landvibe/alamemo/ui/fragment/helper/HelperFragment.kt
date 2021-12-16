@@ -26,15 +26,15 @@ class HelperFragment: BaseFragment<FragmentHelperBinding>() {
 
     private fun setUpFunctionRecyclerView() {
         val helperList = mutableListOf(
-            HelperViewModel(requireContext().getString(R.string.helper_function_add), 1),
-            HelperViewModel(requireContext().getString(R.string.helper_function_delete), 2),
-            HelperViewModel(requireContext().getString(R.string.helper_function_edit), 3),
-            HelperViewModel(requireContext().getString(R.string.helper_function_finish), 4),
-            HelperViewModel(requireContext().getString(R.string.helper_function_alarm), 5),
-            HelperViewModel(requireContext().getString(R.string.helper_function_detail), 6),
-            HelperViewModel(requireContext().getString(R.string.helper_function_detail_menu), 7)
+            HelperViewModel("메모/일정 추가", 1),
+            HelperViewModel("메모/일정 삭제", 2),
+            HelperViewModel("메모/일정 종료", 3),
+            HelperViewModel("알람/상단바 고정 관련", 4),
+            HelperViewModel("메모/일정 수정", 5),
+            HelperViewModel( "세부 메모/일정", 6),
+            HelperViewModel( "세부 메뉴(메모/일정 공유, 복사 기능 등)", 7)
         )
-        viewDataBinding.functionRecyclerView.adapter = HelperRecyclerViewAdapter(requireContext(), helperList)
+        viewDataBinding.functionRecyclerView.adapter = HelperRecyclerViewAdapter(childFragmentManager, helperList)
         viewDataBinding.functionRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 

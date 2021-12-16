@@ -1,158 +1,62 @@
 package com.landvibe.alamemo.ui.fragment.helper
 
-import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
-import com.landvibe.alamemo.R
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.databinding.DialogHelperBinding
-import com.landvibe.alamemo.viewmodel.ui.HelperDialogViewModel
+import com.landvibe.alamemo.viewmodel.aac.HelperDialogViewModel
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.HelperDialogViewModelFactory
 
 /**
  * Type에 따라서 보여주는 목록이 다름.
  * */
-class HelperDialog(context: Context, val type: Int): Dialog(context) {
-    private val binding = DialogHelperBinding.inflate(layoutInflater)
-    lateinit var helperShowModelList: MutableList<HelperShowModel>
-    private var curSelectIdx = 0
+class HelperDialog: DialogFragment() {
+    lateinit var binding: DialogHelperBinding
 
-    init {
-        setContentView(binding.root)
-
-        window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            attributes?.apply {
-                width = ViewGroup.LayoutParams.MATCH_PARENT
-                height = ViewGroup.LayoutParams.WRAP_CONTENT
-            }
-        }
-
-        initList()
-        setUpBtnListener()
-
-        binding.model = HelperDialogViewModel(
-            getTitle(),
-            helperShowModelList[0].image,
-            helperShowModelList[0].description,
-            prevEnable = false,
-            nextEnable = helperShowModelList.size > 1
-        )
+    private val viewModel: HelperDialogViewModel by lazy {
+        ViewModelProvider(this, HelperDialogViewModelFactory(type)).get(HelperDialogViewModel::class.java).apply { initViewModel() }
     }
 
-    private fun initList() {
-        when (type) {
-            1 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_add_1, context.getString(R.string.helper_function_add_description_1)),
-                    HelperShowModel(R.drawable.helper_add_2, context.getString(R.string.helper_function_add_description_2)),
-                    HelperShowModel(R.drawable.helper_add_3, context.getString(R.string.helper_function_add_description_3)),
-                    HelperShowModel(R.drawable.helper_add_4, context.getString(R.string.helper_function_add_description_4)),
-                    HelperShowModel(R.drawable.helper_add_5, context.getString(R.string.helper_function_add_description_5)),
-                    HelperShowModel(R.drawable.helper_add_6, context.getString(R.string.helper_function_add_description_6)),
-                    HelperShowModel(R.drawable.helper_add_7, context.getString(R.string.helper_function_add_description_7)),
-                    HelperShowModel(R.drawable.helper_add_8, context.getString(R.string.helper_function_add_description_8))
-                )
-            }
-            2 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_delete_1, context.getString(R.string.helper_function_delete_description_1)),
-                    HelperShowModel(R.drawable.helper_delete_2, context.getString(R.string.helper_function_delete_description_2)),
-                    HelperShowModel(R.drawable.helper_delete_3, context.getString(R.string.helper_function_delete_description_3))
-                )
-            }
-            3 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_edit_1, context.getString(R.string.helper_function_edit_description_1)),
-                    HelperShowModel(R.drawable.helper_edit_2, context.getString(R.string.helper_function_edit_description_2)),
-                    HelperShowModel(R.drawable.helper_edit_3, context.getString(R.string.helper_function_edit_description_3))
-                )
-            }
-            4 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_finish_1, context.getString(R.string.helper_function_finish_description_1)),
-                    HelperShowModel(R.drawable.helper_finish_2, context.getString(R.string.helper_function_finish_description_2))
-                )
-            }
-            5 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_alarm_fix_noti_1, context.getString(R.string.helper_function_alarm_fix_noti_description_1)),
-                    HelperShowModel(R.drawable.helper_alarm_fix_noti_2, context.getString(R.string.helper_function_alarm_fix_noti_description_2)),
-                    HelperShowModel(R.drawable.helper_alarm_fix_noti_3, context.getString(R.string.helper_function_alarm_fix_noti_description_3)),
-                    HelperShowModel(R.drawable.helper_alarm_fix_noti_4, context.getString(R.string.helper_function_alarm_fix_noti_description_4)),
-                    HelperShowModel(R.drawable.helper_alarm_fix_noti_5, context.getString(R.string.helper_function_alarm_fix_noti_description_5))
-                )
-            }
-            6 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_detail_1, context.getString(R.string.helper_function_detail_description_1)),
-                    HelperShowModel(R.drawable.helper_detail_2, context.getString(R.string.helper_function_detail_description_2)),
-                    HelperShowModel(R.drawable.helper_detail_3, context.getString(R.string.helper_function_detail_description_3))
-                )
-            }
-            7 -> {
-                helperShowModelList = mutableListOf(
-                    HelperShowModel(R.drawable.helper_share_1, context.getString(R.string.helper_function_share_copy_1)),
-                    HelperShowModel(R.drawable.helper_share_2, context.getString(R.string.helper_function_share_copy_2)),
-                    HelperShowModel(R.drawable.helper_share_3, context.getString(R.string.helper_function_share_copy_3)),
-                    HelperShowModel(R.drawable.helper_share_4, context.getString(R.string.helper_function_share_copy_4)),
-                    HelperShowModel(R.drawable.helper_share_5, context.getString(R.string.helper_function_share_copy_5))
-                )
-            }
+    private val type: Int by lazy {
+        arguments?.getInt("type") ?: -1
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DialogHelperBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.model = viewModel
+        dialog?.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
+
+        initView()
+
+        return binding.root
+    }
+
+    private fun initView() {
+        setUpBtnListener()
     }
 
     private fun setUpBtnListener() {
-        binding.cancelBtn.setOnClickListener { onBackPressed() }
+        binding.cancelBtn.setOnClickListener { dismiss() }
+
         binding.prevBtn.setOnClickListener {
-            binding.model?.image = helperShowModelList[--curSelectIdx].image
-            binding.model?.description = helperShowModelList[curSelectIdx].description
-            checkBtnEnabled()
-            binding.invalidateAll()
+            viewModel.getPrevData()
         }
 
         binding.nextBtn.setOnClickListener {
-            binding.model?.image = helperShowModelList[++curSelectIdx].image
-            binding.model?.description = helperShowModelList[curSelectIdx].description
-            checkBtnEnabled()
-            binding.invalidateAll()
+            viewModel.getNextData()
         }
     }
 
-    private fun checkBtnEnabled() {
-        binding.model?.prevEnable = (curSelectIdx == 0).not()
-        binding.model?.nextEnable = (curSelectIdx == (helperShowModelList.size - 1)).not()
-    }
-
-    private fun getTitle(): String {
-        return when (type) {
-            1 -> {
-                context.getString(R.string.helper_function_add)
-            }
-            2 -> {
-                context.getString(R.string.helper_function_delete)
-            }
-            3 -> {
-                context.getString(R.string.helper_function_edit)
-            }
-            4 -> {
-                context.getString(R.string.helper_function_finish)
-            }
-            5 -> {
-                context.getString(R.string.helper_function_alarm)
-            }
-            6 -> {
-                context.getString(R.string.helper_function_detail)
-            }
-            7 -> {
-                context.getString(R.string.helper_function_detail_menu)
-            }
-            else -> {
-                ""
-            }
-        }
-    }
-
-    inner class HelperShowModel (val image: Int, val description: String)
 }

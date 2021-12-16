@@ -1,14 +1,15 @@
 package com.landvibe.alamemo.adapter
 
-import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.databinding.HolderHelperBinding
 import com.landvibe.alamemo.viewmodel.ui.HelperViewModel
 import com.landvibe.alamemo.ui.fragment.helper.HelperDialog
 
-class HelperRecyclerViewAdapter(val context: Context, var itemList: MutableList<HelperViewModel>, ): RecyclerView.Adapter<HelperRecyclerViewAdapter.Holder>() {
+class HelperRecyclerViewAdapter(val fragmentManager: FragmentManager, var itemList: MutableList<HelperViewModel>, ): RecyclerView.Adapter<HelperRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HolderHelperBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,7 +30,9 @@ class HelperRecyclerViewAdapter(val context: Context, var itemList: MutableList<
             binding.model = helper
 
             itemView.setOnClickListener {
-                HelperDialog(context, helper.type).show()
+                HelperDialog().apply {
+                    arguments = Bundle().apply { putInt("type", helper.type) }
+                }.show(fragmentManager, null)
             }
         }
     }

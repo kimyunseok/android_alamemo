@@ -3,11 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <import type="androidx.core.content.ContextCompat"/>
-
         <variable
             name="model"
-            type="com.landvibe.alamemo.viewmodel.ui.HelperDialogViewModel" />
+            type="com.landvibe.alamemo.viewmodel.aac.HelperDialogViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -21,7 +19,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +39,7 @@
                     android:id="@+id/cancel_btn"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_gravity="start"
                     android:background="@drawable/selector_circle_square_background"
                     android:clickable="true"
                     android:focusable="true">
@@ -71,7 +70,7 @@
                 android:layout_height="360dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="30dp"
-                android:src="@{ContextCompat.getDrawable(context, model.image)}"
+                app:bind_image="@{model.image}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar_divider"
@@ -92,10 +91,12 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/button_layout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:paddingBottom="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/helper_description">
 
                 <Button
@@ -103,11 +104,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_square_background"
+                    android:enabled="@{model.prevEnable}"
                     android:text="@string/prev"
+                    android:textColor="@color/Gray"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/Gray"
-                    android:enabled="@{model.prevEnable}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/next_btn"
                     app:layout_constraintStart_toStartOf="parent"
@@ -117,15 +118,15 @@
                     android:id="@+id/next_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/next"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/Gray"
                     android:background="@drawable/selector_square_background"
                     android:enabled="@{model.nextEnable}"
+                    android:text="@string/next"
+                    android:textColor="@color/Gray"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/prev_btn"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/prev_btn"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
