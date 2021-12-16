@@ -15,60 +15,73 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoRepository,
-                                   private val memoRepository: MemoRepository): ViewModel() {
+class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
+                                   private val detailMemoRepository: DetailMemoRepository): ViewModel() {
     //메모관련 - Binding 목적
 
     private val _detailMemoId = MutableLiveData<Long>()
     val detailMemoId: LiveData<Long>
         get() = _detailMemoId
-    val detailMemoIdValue = detailMemoId.value
+    val detailMemoIdValue: Long
+        get() = detailMemoId.value?: -1L
 
     private val _memoId = MutableLiveData<Long>()
     val memoId: LiveData<Long>
         get() = _memoId
-    private val memoIdValue = memoId.value
+    private val memoIdValue: Long
+        get() = memoId.value?: -1L
 
     private val _detailMemoType = MutableLiveData<Int>()
     val detailMemoType: LiveData<Int>
         get() = _detailMemoType
-    private val type = detailMemoType.value
+    private val type: Int
+        get() = detailMemoType.value?: -1
 
     val detailMemoIcon = MutableLiveData<String>()
-    private val icon = detailMemoIcon.value
+    private val icon: String
+        get() = detailMemoIcon.value?: ""
 
     val detailMemoTitle = MutableLiveData<String>()
-    private val title = detailMemoTitle.value
+    private val title: String
+        get() = detailMemoTitle.value?: ""
 
     val detailMemoScheduleDateYear = MutableLiveData<Int>()
-    val scheduleDateYear = detailMemoScheduleDateYear.value
+    val scheduleDateYear: Int
+        get() = detailMemoScheduleDateYear.value?: Calendar.getInstance().get(Calendar.YEAR)
 
     val detailMemoScheduleDateMonth = MutableLiveData<Int>()
-    val scheduleDateMonth = detailMemoScheduleDateMonth.value
+    val scheduleDateMonth: Int
+        get() = detailMemoScheduleDateMonth.value?: Calendar.getInstance().get(Calendar.MONTH)
 
     val detailMemoScheduleDateDay = MutableLiveData<Int>()
-    val scheduleDateDay = detailMemoScheduleDateDay.value
+    val scheduleDateDay: Int
+        get() = detailMemoScheduleDateDay.value?: Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
     val detailMemoScheduleDateHour= MutableLiveData<Int>()
-    private val scheduleDateHour = detailMemoScheduleDateHour.value
+    private val scheduleDateHour: Int
+        get() = detailMemoScheduleDateHour.value?: Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 
     val detailMemoScheduleDateMinute = MutableLiveData<Int>()
-    private val scheduleDateMinute = detailMemoScheduleDateMinute.value
+    private val scheduleDateMinute: Int
+        get() = detailMemoScheduleDateMinute.value?: Calendar.getInstance().get(Calendar.MINUTE)
 
     private val _memoScheduleDateYear = MutableLiveData<Int>()
     private val memoScheduleDateYear: LiveData<Int>
         get() = _memoScheduleDateYear
-    private val memoScheduleDateYearValue = memoScheduleDateYear.value
+    private val memoScheduleDateYearValue: Int
+        get() = memoScheduleDateYear.value?: Calendar.getInstance().get(Calendar.YEAR)
 
     private val _memoScheduleDateMonth = MutableLiveData<Int>()
     private val memoScheduleDateMonth: LiveData<Int>
         get() = _memoScheduleDateMonth
-    private val memoScheduleDateMonthValue = memoScheduleDateMonth.value
+    private val memoScheduleDateMonthValue: Int
+        get() = memoScheduleDateMonth.value?: Calendar.getInstance().get(Calendar.MONTH)
 
     private val _memoScheduleDateDay = MutableLiveData<Int>()
     private val memoScheduleDateDay: LiveData<Int>
         get() = _memoScheduleDateDay
-    private val memoScheduleDateDayValue = memoScheduleDateDay.value
+    private val memoScheduleDateDayValue: Int
+        get() = memoScheduleDateDay.value?: Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
     private val _detailMemoScheduleDateFormat = MutableLiveData<String>()
     val detailMemoScheduleDateFormat: LiveData<String>
@@ -81,57 +94,58 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
     lateinit var memo: Memo
 
     fun initDetailMemo(memoId: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            memo = memoRepository.getMemoById(memoId)
+        memo = memoRepository.getMemoById(memoId)
 
-            val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
 
-            _detailMemoId.postValue(0L)
-            _memoId.postValue(memoId)
-            _detailMemoType.postValue(1)
-            detailMemoIcon.postValue("📝")
-            detailMemoTitle.postValue("")
-            detailMemoScheduleDateYear.postValue(calendar.get(Calendar.YEAR))
-            detailMemoScheduleDateMonth.postValue(calendar.get(Calendar.MONTH))
-            detailMemoScheduleDateDay.postValue(calendar.get(Calendar.DAY_OF_MONTH))
-            detailMemoScheduleDateHour.postValue(calendar.get(Calendar.HOUR_OF_DAY))
-            detailMemoScheduleDateMinute.postValue(calendar.get(Calendar.MINUTE))
-            _memoScheduleDateYear.postValue(memo.scheduleDateYear)
-            _memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
-            _memoScheduleDateDay.postValue(memo.scheduleDateDay)
+        _detailMemoId.postValue(0L)
+        _memoId.postValue(memoId)
+        _detailMemoType.postValue(1)
+        detailMemoIcon.postValue("📝")
+        detailMemoTitle.postValue("")
 
-            val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
-            _detailMemoScheduleDateFormat.postValue("${(calendar.get(Calendar.YEAR))}년 ${(calendar.get(Calendar.MONTH)).plus(1)}월 " +
-                    "${(calendar.get(Calendar.DAY_OF_MONTH))}일 ${dayOfWeek}요일")
-        }
+        detailMemoScheduleDateYear.value = calendar.get(Calendar.YEAR)
+        detailMemoScheduleDateMonth.value = calendar.get(Calendar.MONTH)
+        detailMemoScheduleDateDay.value = calendar.get(Calendar.DAY_OF_MONTH)
+        detailMemoScheduleDateHour.value = calendar.get(Calendar.HOUR_OF_DAY)
+        detailMemoScheduleDateMinute.value = calendar.get(Calendar.MINUTE)
+
+        _memoScheduleDateYear.postValue(memo.scheduleDateYear)
+        _memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
+        _memoScheduleDateDay.postValue(memo.scheduleDateDay)
+
+        val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
+        _detailMemoScheduleDateFormat.postValue("${(calendar.get(Calendar.YEAR))}년 ${(calendar.get(Calendar.MONTH)).plus(1)}월 " +
+                "${(calendar.get(Calendar.DAY_OF_MONTH))}일 ${dayOfWeek}요일")
     }
 
     fun getDetailMemoInfoById(id: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val detailMemo = detailMemoRepository.getDetailMemoById(id)
-            memo = memoRepository.getMemoById(detailMemo.memoId)
+        val detailMemo = detailMemoRepository.getDetailMemoById(id)
+        memo = memoRepository.getMemoById(detailMemo.memoId)
 
-            _detailMemoId.postValue(id)
-            _memoId.postValue(detailMemo.memoId)
-            _detailMemoType.postValue(detailMemo.type)
-            detailMemoIcon.postValue(detailMemo.icon)
-            detailMemoTitle.postValue(detailMemo.title)
-            detailMemoScheduleDateYear.postValue(detailMemo.scheduleDateYear)
-            detailMemoScheduleDateMonth.postValue(detailMemo.scheduleDateMonth)
-            detailMemoScheduleDateDay.postValue(detailMemo.scheduleDateDay)
-            detailMemoScheduleDateHour.postValue(detailMemo.scheduleDateHour)
-            detailMemoScheduleDateMinute.postValue(detailMemo.scheduleDateMinute)
-            _memoScheduleDateYear.postValue(memo.scheduleDateYear)
-            _memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
-            _memoScheduleDateDay.postValue(memo.scheduleDateDay)
+        _detailMemoId.postValue(id)
+        _memoId.postValue(detailMemo.memoId)
+        _detailMemoType.postValue(detailMemo.type)
+        detailMemoIcon.postValue(detailMemo.icon)
+        detailMemoTitle.postValue(detailMemo.title)
 
-            val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
+        //날짜는 바로 보여줘야 함.
+        detailMemoScheduleDateYear.value = detailMemo.scheduleDateYear
+        detailMemoScheduleDateMonth.value = detailMemo.scheduleDateMonth
+        detailMemoScheduleDateDay.value = detailMemo.scheduleDateDay
+        detailMemoScheduleDateHour.value = detailMemo.scheduleDateHour
+        detailMemoScheduleDateMinute.value = detailMemo.scheduleDateMinute
 
-            _detailMemoScheduleDateFormat.postValue("${memo.scheduleDateYear}년 ${(memo.scheduleDateMonth).plus(1)}월 " +
-                    "${memo.scheduleDateDay}일 ${dayOfWeek}요일")
+        _memoScheduleDateYear.postValue(memo.scheduleDateYear)
+        _memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
+        _memoScheduleDateDay.postValue(memo.scheduleDateDay)
 
-            checkScheduleTime()
-        }
+        val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
+
+        _detailMemoScheduleDateFormat.postValue("${memo.scheduleDateYear}년 ${(memo.scheduleDateMonth).plus(1)}월 " +
+                "${memo.scheduleDateDay}일 ${dayOfWeek}요일")
+
+        checkScheduleTime()
     }
 
     fun saveDetailMemo() {
@@ -145,14 +159,27 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
                     setMemoScheduleTimeToday()
                 }
 
-                if(detailMemoIdValue != null && memoIdValue != null && type != null && icon != null && title != null && scheduleDateYear != null &&
-                    scheduleDateMonth != null && scheduleDateDay != null && scheduleDateHour != null && scheduleDateMinute != null) {
+                if (detailMemoIdValue != 0L) {
+                    //만일 세부사항 수정하기라면
 
-                    if (detailMemoIdValue != 0L) {
-                        //만일 세부사항 수정하기라면
+                    detailMemoRepository.modifyDetailMemo(
+                        id = detailMemoIdValue,
+                        type = type,
+                        icon = icon,
+                        title = title,
+                        scheduleDateYear = scheduleDateYear,
+                        scheduleDateMonth = scheduleDateMonth,
+                        scheduleDateDay = scheduleDateDay,
+                        scheduleDateHour = scheduleDateHour,
+                        scheduleDateMinute = scheduleDateMinute,
+                    )
+                } else {
+                    //새로 생성이라면
 
-                        detailMemoRepository.modifyDetailMemo(
+                    detailMemoRepository.insertDetailMemo(
+                        DetailMemo(
                             id = detailMemoIdValue,
+                            memoId = memoIdValue,
                             type = type,
                             icon = icon,
                             title = title,
@@ -160,27 +187,10 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
                             scheduleDateMonth = scheduleDateMonth,
                             scheduleDateDay = scheduleDateDay,
                             scheduleDateHour = scheduleDateHour,
-                            scheduleDateMinute = scheduleDateMinute,
-                        )
-                    } else {
-                        //새로 생성이라면
-
-                        detailMemoRepository.insertDetailMemo(
-                            DetailMemo(
-                                id = detailMemoIdValue,
-                                memoId = memoIdValue,
-                                type = type,
-                                icon = icon,
-                                title = title,
-                                scheduleDateYear = scheduleDateYear,
-                                scheduleDateMonth = scheduleDateMonth,
-                                scheduleDateDay = scheduleDateDay,
-                                scheduleDateHour = scheduleDateHour,
-                                scheduleDateMinute = scheduleDateMinute)
-                        )
-                    }
-                    _detailMemoSaveComplete.postValue(true)
+                            scheduleDateMinute = scheduleDateMinute)
+                    )
                 }
+                _detailMemoSaveComplete.postValue(true)
             }
         }
     }

@@ -50,7 +50,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
 
     private fun setUpObserver() {
         viewModel.detailMemoList.observe(viewLifecycleOwner) {
-            sortDetailMemoList(it)
+            MemoUtil().sortDetailMemoList(it)
             setUpRecyclerView(it)
             viewModel.setEmpty(it.isEmpty())
         }
@@ -117,15 +117,6 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         val fadeAnimation = AlphaAnimation(0F, 1F)
         fadeAnimation.duration = 500
         viewDataBinding.detailRecycler.animation = fadeAnimation
-    }
-
-    private fun sortDetailMemoList(itemList: MutableList<DetailMemo>?) {
-        itemList?.sortWith(compareBy<DetailMemo> {it.scheduleDateYear}
-            .thenBy { it.scheduleDateMonth }
-            .thenBy { it.scheduleDateDay }
-            .thenBy { it.scheduleDateHour }
-            .thenBy { it.scheduleDateMinute }
-        )
     }
 
     private fun setBtnOnClickListener() {

@@ -10,16 +10,24 @@ import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.repository.DetailMemoRepository
+import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.viewmodel.aac.DetailMemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.DetailMemoViewModelFactory
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 import java.util.*
 
 class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     override val layoutId: Int = R.layout.fragment_detail_add_or_edit
 
     private val viewModel by lazy {
-        ViewModelProvider(this, DetailMemoViewModelFactory(DetailMemoRepository())).get(DetailMemoAddOrEditViewModel::class.java)
+        ViewModelProvider(this,
+            MemoAndDetailMemoViewModelFactory(MemoRepository(),
+                DetailMemoRepository())).get(DetailMemoAddOrEditViewModel::class.java)
+    }
+
+    private val memoId: Long by lazy {
+        arguments?.getLong("memoId") ?: -1L
     }
 
     override fun init() {
@@ -29,7 +37,6 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     }
 
     private fun initViewModel() {
-        val memoId = arguments?.getLong("memoId")
         val detailMemoId = arguments?.getLong("detailMemoId", -1)
         var type = arguments?.getInt("memoType")
 
@@ -41,7 +48,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
         if(detailMemoId != null && detailMemoId != (-1).toLong()) {
             viewModel.getDetailMemoInfoById(detailMemoId)
         } else {
-            memoId?.let { viewModel.initDetailMemo(it) }
+            viewModel.initDetailMemo(memoId)
         }
 
         viewDataBinding.viewModel = viewModel

@@ -97,52 +97,49 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
     }
 
     private fun shearMessageBtn() {
+        //메시지, 메신저로 메모/일정 공유하기
+        val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
-        CoroutineScope(Dispatchers.Main).launch {
-            //메시지, 메신저로 메모/일정 공유하기
-            val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
-
-            //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
-            var contentText = when {
-                memo.type == 1 -> {
-                    memo.icon + " " + memo.title
-                }
-                memo.type != 3 -> {
-                    memo.icon + " " + memo.title + "\n" +
-                            MemoUtil().getScheduleDateFormat(memo.scheduleDateYear, memo.scheduleDateMonth, memo.scheduleDateDay) +
-                            " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
-                }
-                else -> {
-                    memo.icon + " " + memo.title + "\n" +
-                            MemoUtil().getRepeatScheduleDateFormat(memo.repeatDay) +
-                            " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
-                }
+        //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
+        var contentText = when {
+            memo.type == 1 -> {
+                memo.icon + " " + memo.title
             }
-
-            MemoUtil().sortDetailMemoList(detailMemoList)
-
-            if(memo.type != 2 && detailMemoList.isEmpty().not()) {
-                contentText += "\n"
-                //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
-                contentText += context.getString(
-                    R.string.notification_fix_notify_slash) +
-                        detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon + " " + it.title }
-
-            } else if(detailMemoList.isEmpty().not()){
-                contentText += "\n"
-                contentText +=
-                    detailMemoList.joinToString("\n") { MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
-                            " " + MemoUtil().getTimeFormat(it.scheduleDateHour, it.scheduleDateMinute) + " - "+
-                            it.icon + " " + it.title }
+            memo.type != 3 -> {
+                memo.icon + " " + memo.title + "\n" +
+                        MemoUtil().getScheduleDateFormat(memo.scheduleDateYear, memo.scheduleDateMonth, memo.scheduleDateDay) +
+                        " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
             }
-
-
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, contentText)
+            else -> {
+                memo.icon + " " + memo.title + "\n" +
+                        MemoUtil().getRepeatScheduleDateFormat(memo.repeatDay) +
+                        " " + MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute)
             }
-            context.startActivity(intent)
         }
+
+        MemoUtil().sortDetailMemoList(detailMemoList)
+
+        if(memo.type != 2 && detailMemoList.isEmpty().not()) {
+            contentText += "\n"
+            //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
+            contentText += context.getString(
+                R.string.notification_fix_notify_slash) +
+                    detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon + " " + it.title }
+
+        } else if(detailMemoList.isEmpty().not()){
+            contentText += "\n"
+            contentText +=
+                detailMemoList.joinToString("\n") { MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
+                        " " + MemoUtil().getTimeFormat(it.scheduleDateHour, it.scheduleDateMinute) + " - "+
+                        it.icon + " " + it.title }
+        }
+
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, contentText)
+        }
+        context.startActivity(intent)
     }
 
     private fun copyMemo() {

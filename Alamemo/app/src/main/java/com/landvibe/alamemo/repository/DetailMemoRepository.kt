@@ -1,15 +1,14 @@
 package com.landvibe.alamemo.repository
 
-import androidx.lifecycle.MutableLiveData
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.model.data.detail.DetailMemo
+import com.landvibe.alamemo.model.database.AppDataBase
 
 class DetailMemoRepository {
     private val detailMemoDataBase = AppDataBase.instance.detailMemoDao()
 
     /*DetailMemo*/
     suspend fun getDetailMemoByMemoId(memoId: Long) = detailMemoDataBase.getDetailMemoByMemoId(memoId)
-    suspend fun getDetailMemoById(id: Long) = detailMemoDataBase.getDetailMemoById(id)
+    fun getDetailMemoById(id: Long) = detailMemoDataBase.getDetailMemoById(id)
     suspend fun insertDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.insertDetailMemo(detailMemo)
     suspend fun deleteDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.deleteDetailMemo(detailMemo)
     suspend fun deleteDetailMemoByID(id: Long) = detailMemoDataBase.deleteDetailMemoByID(id)

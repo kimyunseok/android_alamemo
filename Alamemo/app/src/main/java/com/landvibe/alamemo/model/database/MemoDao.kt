@@ -18,7 +18,7 @@ interface MemoDao {
     suspend fun getAllMemo(): List<Memo>
 
     @Query("SELECT * FROM Memo Where id = :id")
-    suspend fun getMemoById(id: Long): Memo
+    fun getMemoById(id: Long): Memo
 
     @Query("SELECT * FROM Memo Where type = :type and scheduleFinish = :scheduleFinish")
     suspend fun getMemoByType(type: Int, scheduleFinish: Boolean = false): List<Memo>

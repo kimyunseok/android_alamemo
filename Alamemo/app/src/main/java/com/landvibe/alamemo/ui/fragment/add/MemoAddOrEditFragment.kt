@@ -6,22 +6,31 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.FragmentMemoAddOrEditBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
+import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.util.MemoUtil
+import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override val layoutId: Int = R.layout.fragment_memo_add_or_edit
 
     private val viewModel by lazy {
         ViewModelProvider(this, MemoViewModelFactory(MemoRepository())).get(MemoAddOrEditViewModel::class.java)
+    }
+
+    // 메모 수정 시 불러오는 memoId, 메모 최초 작성시에는 해당 값이 -1
+    private val memoId: Long by lazy {
+        arguments?.getLong("memoId", -1) ?: -1L
     }
 
     override fun init() {
@@ -35,9 +44,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     private fun initViewModel() {
         viewDataBinding.viewModel = viewModel
 
-        val memoId = arguments?.getLong("memoId", -1)
-
-        if(memoId != null && memoId != (-1).toLong()) {
+        if(memoId != -1L) {
             viewModel.getMemoInfoById(memoId)
         } else {
             viewModel.initMemo()
@@ -46,25 +53,23 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
     private fun setUpObserver() {
         viewModel.memoSaveComplete.observe(this) {
-            if(it) {
-                if(viewModel.memoIdValue != 0L) {
-                    viewModel.memoIdValue?.let { id ->
-                        //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
-                        AlarmHandler().cancelAlarm(requireContext(), id)
-                        FixNotifyHandler().cancelFixNotify(requireContext(), id)
+            if(it != -1L) {
+                viewModel.memoIdValue.let { id ->
+                    //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
+                    AlarmHandler().cancelAlarm(requireContext(), id)
+                    FixNotifyHandler().cancelFixNotify(requireContext(), id)
 
-                        //알람설정.
-                        if(viewModel.setAlarm == true) {
-                            AlarmHandler().setMemoAlarm(requireContext(), id)
-                        }
-                        //상단바 고정 설정
-                        if(viewModel.fixNotify == true) {
-                            FixNotifyHandler().setMemoFixNotify(requireContext(), id)
-                        }
+                    //알람설정.
+                    if(viewModel.setAlarm) {
+                        AlarmHandler().setMemoAlarm(requireContext(), id)
+                    }
+                    //상단바 고정 설정
+                    if(viewModel.fixNotify) {
+                        FixNotifyHandler().setMemoFixNotify(requireContext(), id)
                     }
                 }
 
-                if(viewModel.memoIdValue != 0L) {
+                if(memoId != -1L) {
                     //Memo Edit
                     Toast.makeText(
                         requireContext(),

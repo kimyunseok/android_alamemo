@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewModel() {
-    private val _memoSaveComplete = MutableLiveData<Boolean>()
-    val memoSaveComplete: LiveData<Boolean>
+    private val _memoSaveComplete = MutableLiveData<Long>()
+    val memoSaveComplete: LiveData<Long>
         get() = _memoSaveComplete
 
     //메모관련 - Binding 목적
@@ -46,7 +46,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
 
     val memoScheduleDateMonth = MutableLiveData<Int>()
     val scheduleDateMonth: Int
-        get() = memoScheduleDateMonth.value?: Calendar.getInstance().get(Calendar.MONTH).plus(1)
+        get() = memoScheduleDateMonth.value?: Calendar.getInstance().get(Calendar.MONTH)
 
     val memoScheduleDateDay = MutableLiveData<Int>()
     val scheduleDateDay: Int
@@ -98,83 +98,77 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         memoTitle.postValue("")
 
         //날짜는 바로 띄워줘야 하므로 setValue()로 처리
-        memoScheduleDateYear.value = (calendar.get(Calendar.YEAR))
-        memoScheduleDateMonth.value = (calendar.get(Calendar.MONTH))
-        memoScheduleDateDay.value = (calendar.get(Calendar.DAY_OF_MONTH))
+        memoScheduleDateYear.value = calendar.get(Calendar.YEAR)
+        memoScheduleDateMonth.value = calendar.get(Calendar.MONTH)
+        memoScheduleDateDay.value = calendar.get(Calendar.DAY_OF_MONTH)
+        memoScheduleDateHour.value = calendar.get(Calendar.HOUR_OF_DAY)
+        memoScheduleDateMinute.value = calendar.get(Calendar.MINUTE)
+        memoAlarmStartTimeHour.value = calendar.get(Calendar.HOUR_OF_DAY)
+        memoAlarmStartTimeMinute.value = calendar.get(Calendar.MINUTE)
 
-        memoScheduleDateHour.postValue(calendar.get(Calendar.HOUR_OF_DAY))
-        memoScheduleDateMinute.postValue(calendar.get(Calendar.MINUTE))
-        memoAlarmStartTimeHour.postValue(calendar.get(Calendar.HOUR_OF_DAY))
-        memoAlarmStartTimeMinute.postValue(calendar.get(Calendar.MINUTE))
         _memoFixNotify.postValue(false)
         _memoSetAlarm.postValue(false)
 
-        val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
-        _memoScheduleDateFormat.postValue("${(calendar.get(Calendar.YEAR))}년 ${(calendar.get(Calendar.MONTH)).plus(1)}월 " +
-                "${(calendar.get(Calendar.DAY_OF_MONTH))}일 ${dayOfWeek}요일")
+        setMemoScheduleDateFormatByDate()
     }
 
     fun getMemoInfoById(id: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val memo = memoRepository.getMemoById(id)
+        val memo = memoRepository.getMemoById(id)
 
-            _memoId.postValue(id)
+        _memoId.postValue(id)
 
-            _memoType.postValue(memo.type)
-            memoIcon.postValue(memo.icon)
-            memoTitle.postValue(memo.title)
-            //날짜는 바로 띄워줘야 하므로 setValue()로 처리
-            memoScheduleDateYear.value = memo.scheduleDateYear
-            memoScheduleDateMonth.value = memo.scheduleDateMonth
-            memoScheduleDateDay.value = memo.scheduleDateDay
+        _memoType.postValue(memo.type)
+        memoIcon.postValue(memo.icon)
+        memoTitle.postValue(memo.title)
 
-            memoScheduleDateHour.postValue(memo.scheduleDateHour)
-            memoScheduleDateMinute.postValue(memo.scheduleDateMinute)
-            memoAlarmStartTimeHour.postValue(memo.alarmStartTimeHour)
-            memoAlarmStartTimeMinute.postValue(memo.alarmStartTimeMinute)
-            memoRepeatDay = memo.repeatDay
-            memoAlarmStartTimeType = memo.alarmStartTimeType
-            _memoFixNotify.postValue(memo.fixNotify)
-            _memoSetAlarm.postValue(memo.setAlarm)
+        //날짜는 바로 띄워줘야 하므로 setValue()로 처리
+        memoScheduleDateYear.value = memo.scheduleDateYear
+        memoScheduleDateMonth.value = memo.scheduleDateMonth
+        memoScheduleDateDay.value = memo.scheduleDateDay
+        memoScheduleDateHour.value = memo.scheduleDateHour
+        memoScheduleDateMinute.value = memo.scheduleDateMinute
+        memoAlarmStartTimeHour.value = memo.alarmStartTimeHour
+        memoAlarmStartTimeMinute.value = memo.alarmStartTimeMinute
 
-            val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
+        memoRepeatDay = memo.repeatDay
+        memoAlarmStartTimeType = memo.alarmStartTimeType
 
-            _memoScheduleDateFormat.postValue("${memo.scheduleDateYear}년 ${(memo.scheduleDateMonth).plus(1)}월 " +
-                    "${memo.scheduleDateDay}일 ${dayOfWeek}요일")
+        _memoFixNotify.postValue(memo.fixNotify)
+        _memoSetAlarm.postValue(memo.setAlarm)
 
-            checkScheduleTime()
-        }
+        setMemoScheduleDateFormatByDate()
+
+        checkScheduleTime()
     }
 
     fun saveMemo() {
-        CoroutineScope(Dispatchers.IO).launch {
-            if(title.trim() == "") {
-                _memoSaveComplete.postValue(false)
+        if(title.trim() == "") {
+            _memoSaveComplete.postValue(-1)
+        } else {
+            Log.d("MemoAddOrEdit", "Memo Save To Room")
+            if(type == 1) {
+                //메모라면 날짜를 오늘로 수정.
+                setMemoScheduleTimeToday()
+                _memoSetAlarm.postValue(false) // 메모라면 알람기능 해제
+            }
+
+            if(type != 3) {
+                //반복 일정 아니라면, 반복 요일 선택했던 거 다 지움.
+                memoRepeatDay.clear()
             } else {
-                Log.d("MemoAddOrEdit", "Memo Save To Room")
-                if(type == 1) {
-                    //메모라면 날짜를 오늘로 수정.
-                    setMemoScheduleTimeToday()
-                    _memoSetAlarm.postValue(false) // 메모라면 알람기능 해제
-                }
+                //반복 일정이라면 반복 요일 중 최초로 해당하는 날로 scheduleDay 설정.
+                val calendar = Calendar.getInstance()
+                calendar.timeInMillis = AboutDay.AboutDayOfWeek()
+                    .findMinTimeAboutDayOfWeekBySpecificTime(memoRepeatDay,
+                        alarmStartTimeHour,
+                        alarmStartTimeMinute,
+                        System.currentTimeMillis()
+                    )
 
-                if(type != 3) {
-                    //반복 일정 아니라면, 반복 요일 선택했던 거 다 지움.
-                    memoRepeatDay.clear()
-                } else {
-                    //반복 일정이라면 반복 요일 중 최초로 해당하는 날로 scheduleDay 설정.
-                    val calendar = Calendar.getInstance()
-                    calendar.timeInMillis = AboutDay.AboutDayOfWeek()
-                        .findMinTimeAboutDayOfWeekBySpecificTime(memoRepeatDay,
-                            alarmStartTimeHour,
-                            alarmStartTimeMinute,
-                            System.currentTimeMillis()
-                        )
+                setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            }
 
-                    setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-                }
-
-
+            CoroutineScope(Dispatchers.IO).launch {
                 if (memoIdValue != 0L) {
                     // 메모 id가 존재한다면, 즉 수정하기라면
                     memoRepository.modifyMemo(
@@ -195,11 +189,9 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                         repeatDay = memoRepeatDay,
                         alarmStartTimeType = memoAlarmStartTimeType
                     )
-
                 } else {
                     //메모 새로 생성하기라면 메모 삽입
-
-                    memoRepository.insertMemo(
+                    val memoId = memoRepository.insertMemo(
                         Memo(
                             id = memoIdValue,
                             type = type,
@@ -220,8 +212,9 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                         )
                     )
 
+                    _memoId.postValue(memoId)
                 }
-                _memoSaveComplete.postValue(true)
+                _memoSaveComplete.postValue(memoIdValue)
             }
         }
     }
@@ -234,7 +227,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         memoScheduleDateYear.value = year
         memoScheduleDateMonth.value = month
         memoScheduleDateDay.value = day
-        resetMemoScheduleDateFormatByDate()
+        setMemoScheduleDateFormatByDate()
     }
 
     fun setSceduleTime(hour: Int, minute: Int) {
@@ -271,7 +264,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         val calendar = Calendar.getInstance()
         setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
         setSceduleTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
-        resetMemoScheduleDateFormatByDate()
+        setMemoScheduleDateFormatByDate()
     }
 
     private fun checkScheduleTime() {
@@ -290,11 +283,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         }
     }
 
-    private fun resetMemoScheduleDateFormatByDate() {
-        if (type != 3) {
-            _memoScheduleDateFormat.postValue(MemoUtil().getScheduleDateFormat(scheduleDateYear, scheduleDateMonth, scheduleDateDay))
-        } else {
-            _memoScheduleDateFormat.postValue(MemoUtil().getRepeatScheduleDateFormat(memoRepeatDay))
-        }
+    private fun setMemoScheduleDateFormatByDate() {
+        _memoScheduleDateFormat.postValue(MemoUtil().getScheduleDateFormat(scheduleDateYear, scheduleDateMonth, scheduleDateDay))
     }
 }

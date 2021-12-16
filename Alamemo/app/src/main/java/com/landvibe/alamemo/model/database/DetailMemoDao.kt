@@ -1,6 +1,5 @@
 package com.landvibe.alamemo.model.database
 
-import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,10 +9,10 @@ import com.landvibe.alamemo.model.data.detail.DetailMemo
 @Dao
 interface DetailMemoDao {
     @Query("SELECT * FROM DetailMemo Where memoId = :memoId ")
-    suspend fun getDetailMemoByMemoId(memoId: Long): List<DetailMemo>
+    fun getDetailMemoByMemoId(memoId: Long): List<DetailMemo>
 
     @Query("SELECT * FROM DetailMemo Where id = :id")
-    suspend fun getDetailMemoById(id: Long): DetailMemo
+    fun getDetailMemoById(id: Long): DetailMemo
 
     @Insert
     suspend fun insertDetailMemo(detailMemo: DetailMemo)
