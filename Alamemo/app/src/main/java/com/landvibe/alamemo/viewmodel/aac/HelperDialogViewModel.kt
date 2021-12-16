@@ -78,24 +78,24 @@ class HelperDialogViewModel(private val type: Int): ViewModel() {
             }
             3 -> {
                 mutableListOf(
-                    HelperShowModel(R.drawable.helper_edit_1, "메모의 우측에 있는\n수정 버튼을 누릅니다."),
-                    HelperShowModel(R.drawable.helper_edit_2, "메모 수정 창이 나옵니다.\n수정할 내용을 입력하고\n저장하기를 누릅니다."),
-                    HelperShowModel(R.drawable.helper_edit_3, "메모가 수정되어서\n저장됩니다.")
-                )
-            }
-            4 -> {
-                mutableListOf(
                     HelperShowModel(R.drawable.helper_finish_1, "메모의 아이콘 왼쪽에 있는\n체크 박스를 체크합니다."),
                     HelperShowModel(R.drawable.helper_finish_2, "메모가 종료처리 되며\n[종료]탭으로 이동됩니다.\n이렇게 종료된 메모는\n알람, 상단바 고정이 해제됩니다.")
                 )
             }
-            5 -> {
+            4 -> {
                 mutableListOf(
-                        HelperShowModel(R.drawable.helper_alarm_fix_noti_1, "일정은 알람 기능을\n사용할 수 있습니다.\n메모를 작성/수정할 때\n시작 날짜와 알람 시간을\n설정할 수 있습니다."),
+                    HelperShowModel(R.drawable.helper_alarm_fix_noti_1, "일정은 알람 기능을\n사용할 수 있습니다.\n메모를 작성/수정할 때\n시작 날짜와 알람 시간을\n설정할 수 있습니다."),
                     HelperShowModel(R.drawable.helper_alarm_fix_noti_2, "반복 일정도 알람 기능을 사용할 수 있습니다."),
                     HelperShowModel(R.drawable.helper_alarm_fix_noti_3, "알람을 설정하면\n알람 시간에 맞춰서\n알람이 오게 됩니다.\n일정과 반복 일정은 각각\n다른 형식으로 알람이 갑니다."),
                     HelperShowModel(R.drawable.helper_alarm_fix_noti_4, "상단바 고정을 설정하면\n상단바에 메모에 대한 정보가\n고정됩니다.\n각 유형들은 다른 형식으로\n고정됩니다."),
                     HelperShowModel(R.drawable.helper_alarm_fix_noti_5, "상단바 고정과 알람 기능을\n같이 사용할 수 있습니다.")
+                )
+            }
+            5 -> {
+                mutableListOf(
+                    HelperShowModel(R.drawable.helper_edit_1, "메모의 우측에 있는\n수정 버튼을 누릅니다."),
+                    HelperShowModel(R.drawable.helper_edit_2, "메모 수정 창이 나옵니다.\n수정할 내용을 입력하고\n저장하기를 누릅니다."),
+                    HelperShowModel(R.drawable.helper_edit_3, "메모가 수정되어서\n저장됩니다.")
                 )
             }
             6 -> {
