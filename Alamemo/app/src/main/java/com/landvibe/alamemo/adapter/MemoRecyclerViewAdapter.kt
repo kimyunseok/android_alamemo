@@ -14,15 +14,14 @@ import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.model.database.AppDataBase
-import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
-import com.landvibe.alamemo.ui.fragment.main.dialog.MemoLongClickDialog
+import com.landvibe.alamemo.ui.dialog.MemoLongClickDialog
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>
-): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
+class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>, val memoListUpdateViewModel: MemoListUpdateViewModel): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = HolderMemoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -48,8 +47,10 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                     putLong("memoId", item.id)
                     putString("memoIcon", item.icon)
                     putString("memoTitle", item.title)
-                    item.type.let { type -> putInt("memoType", type) }
+                    putInt("memoType", item.type)
                 }
+
+                memoListUpdateViewModel.getRecentDetailMemoList(item.id)
 
                 (context as MainActivity).supportFragmentManager
                     .beginTransaction()
@@ -60,7 +61,7 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
             }
 
             itemView.setOnLongClickListener {
-                MemoLongClickDialog().apply {
+                MemoLongClickDialog(memoListUpdateViewModel).apply {
                     arguments = Bundle().apply { putLong("memoId", item.id) }
                 }.show((context as MainActivity).supportFragmentManager, "longClick")
                 true

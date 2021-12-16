@@ -10,10 +10,11 @@ import com.landvibe.alamemo.databinding.HolderDetailBinding
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
-import com.landvibe.alamemo.ui.fragment.main.dialog.DetailMemoClickDialog
+import com.landvibe.alamemo.ui.dialog.DetailMemoClickDialog
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.ui.DetailMemoHolderViewModel
 
-class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<DetailMemo>):
+class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<DetailMemo>, val memoListUpdateViewModel: MemoListUpdateViewModel):
     RecyclerView.Adapter<DetailMemoRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -35,7 +36,7 @@ class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableL
             binding.viewModel = DetailMemoHolderViewModel(item)
 
             itemView.setOnClickListener {
-                DetailMemoClickDialog().apply {
+                DetailMemoClickDialog(memoListUpdateViewModel).apply {
                     arguments = Bundle().apply { putLong("detailMemoId", item.id) }
                 }.show((context as MainActivity).supportFragmentManager, "click")
                 true

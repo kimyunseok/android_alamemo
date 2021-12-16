@@ -7,7 +7,7 @@ class DetailMemoRepository {
     private val detailMemoDataBase = AppDataBase.instance.detailMemoDao()
 
     /*DetailMemo*/
-    suspend fun getDetailMemoByMemoId(memoId: Long) = detailMemoDataBase.getDetailMemoByMemoId(memoId)
+    fun getDetailMemoByMemoId(memoId: Long) = detailMemoDataBase.getDetailMemoByMemoId(memoId)
     fun getDetailMemoById(id: Long) = detailMemoDataBase.getDetailMemoById(id)
     suspend fun insertDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.insertDetailMemo(detailMemo)
     suspend fun deleteDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.deleteDetailMemo(detailMemo)

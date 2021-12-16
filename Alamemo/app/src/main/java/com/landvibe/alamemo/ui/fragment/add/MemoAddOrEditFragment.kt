@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.FragmentMemoAddOrEditBinding
@@ -16,10 +15,8 @@ import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
-import com.landvibe.alamemo.ui.BaseFragment
-import com.landvibe.alamemo.util.MemoUtil
+import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
-import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {

@@ -9,11 +9,13 @@ import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.database.AppDataBase
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DetailMemoDeleteSnackBar(context: Context, rootView: View, val detailMemo: DetailMemo?) {
+class DetailMemoDeleteSnackBar(context: Context, rootView: View, val detailMemo: DetailMemo?,
+                               val memoListUpdateViewModel: MemoListUpdateViewModel) {
 
     private var snackBar: Snackbar =
         Snackbar.make(rootView, context.getString(R.string.delete_detail_memo_snackbar_message), Snackbar.LENGTH_SHORT).apply {
@@ -42,6 +44,7 @@ class DetailMemoDeleteSnackBar(context: Context, rootView: View, val detailMemo:
                     //고성설정 돼 있었다면 고정재설정
                     FixNotifyHandler().setMemoFixNotify(context, memo.id)
                 }
+                memoListUpdateViewModel.getRecentDetailMemoList(detailMemo.memoId)
             }
         }
     }

@@ -8,6 +8,7 @@ import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.util.EventWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,16 +24,9 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
     val memoList: LiveData<MutableList<Memo>>
         get() = _memoList
 
-    private val _removedMemo = MutableLiveData<Memo>()
-    val removedMemo: LiveData<Memo>
-        get() = _removedMemo
-
-    val savedMemo: Memo?
-        get() = removedMemo.value
-
-    private val _removedDetailMemoList = MutableLiveData<MutableList<DetailMemo>>()
-    val savedDetailMemoList: MutableList<DetailMemo>?
-        get() = _removedDetailMemoList.value
+    private val _removedMemoAndDetailMemoList = MutableLiveData<EventWrapper<RemovedMemoAndDetailMemoList>>()
+    val removedMemoAndDetailMemoList: LiveData<EventWrapper<RemovedMemoAndDetailMemoList>>
+        get() = _removedMemoAndDetailMemoList
 
     private val _newMemoList = MutableLiveData<MutableList<Memo>>()
     val newMemoList: LiveData<MutableList<Memo>>
@@ -54,17 +48,9 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
         }
     }
 
-    fun saveRemovedMemo(memo: Memo) {
-        CoroutineScope(Dispatchers.IO).launch {
-            _removedMemo.postValue(memo)
-        }
-    }
-
-    fun saveRemovedDetailMemoListByMemoId(memoId: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
-            _removedDetailMemoList.postValue(detailMemoList.toMutableList())
-        }
+    fun saveRemovedMemoAndDetailMemoList(memo: Memo) {
+        val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memo.id).toMutableList()
+        _removedMemoAndDetailMemoList.postValue(EventWrapper(RemovedMemoAndDetailMemoList(memo, detailMemoList)))
     }
 
     fun deleteMemoByID(memoId: Long) {
@@ -114,4 +100,5 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
         }
     }
 
+    data class RemovedMemoAndDetailMemoList(val removedMemo: Memo, val removedDetailMemoList: MutableList<DetailMemo>)
 }

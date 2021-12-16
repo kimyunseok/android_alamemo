@@ -7,8 +7,8 @@ import com.landvibe.alamemo.adapter.FragmentPageAdapter
 import com.landvibe.alamemo.databinding.FragmentMainBinding
 import com.landvibe.alamemo.databinding.FragmentTabBinding
 import com.landvibe.alamemo.databinding.HolderTabButtonBinding
-import com.landvibe.alamemo.ui.BaseFragment
-import com.landvibe.alamemo.ui.BaseTabFragment
+import com.landvibe.alamemo.ui.base.BaseFragment
+import com.landvibe.alamemo.ui.base.BaseTabFragment
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.helper.HelperFragment
 import com.landvibe.alamemo.viewmodel.ui.TabButtonViewModel

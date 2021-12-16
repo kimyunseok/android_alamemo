@@ -8,7 +8,7 @@ import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.HelperRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.FragmentHelperBinding
 import com.landvibe.alamemo.viewmodel.ui.HelperViewModel
-import com.landvibe.alamemo.ui.BaseFragment
+import com.landvibe.alamemo.ui.base.BaseFragment
 
 class HelperFragment: BaseFragment<FragmentHelperBinding>() {
     override val layoutId: Int = R.layout.fragment_helper

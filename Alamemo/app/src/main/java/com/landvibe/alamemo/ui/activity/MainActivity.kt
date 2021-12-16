@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.ActivityMainBinding
-import com.landvibe.alamemo.ui.BaseActivity
+import com.landvibe.alamemo.ui.base.BaseActivity
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.ui.fragment.main.MainFragment
 import com.landvibe.alamemo.handler.AlarmHandler

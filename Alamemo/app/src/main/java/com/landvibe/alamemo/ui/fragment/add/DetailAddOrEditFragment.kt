@@ -4,18 +4,15 @@ import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.FragmentDetailAddOrEditBinding
-import com.landvibe.alamemo.ui.BaseFragment
+import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
-import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.viewmodel.aac.DetailMemoAddOrEditViewModel
-import com.landvibe.alamemo.viewmodel.viewmodelfactory.DetailMemoViewModelFactory
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
-import java.util.*
 
 class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     override val layoutId: Int = R.layout.fragment_detail_add_or_edit
@@ -24,6 +21,11 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
         ViewModelProvider(this,
             MemoAndDetailMemoViewModelFactory(MemoRepository(),
                 DetailMemoRepository())).get(DetailMemoAddOrEditViewModel::class.java)
+    }
+
+    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
+        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
     }
 
     private val memoId: Long by lazy {
@@ -74,6 +76,8 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
                 }
 
                 resetAlarmAndFixNotify()
+
+                memoListUpdateViewModel.getRecentDetailMemoList(memoId)
 
                 requireActivity().supportFragmentManager.popBackStack()
 

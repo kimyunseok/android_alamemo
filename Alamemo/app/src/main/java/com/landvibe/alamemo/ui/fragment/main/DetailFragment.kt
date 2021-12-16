@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.animation.AlphaAnimation
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,14 +14,18 @@ import com.landvibe.alamemo.databinding.FragmentDetailBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
+import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
-import com.landvibe.alamemo.ui.BaseFragment
+import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.snackbar.DetailMemoDeleteSnackBar
+import com.landvibe.alamemo.util.DetailMemoDiffUtil
+import com.landvibe.alamemo.util.MemoDiffUtil
 import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.util.SwipeAction
 import com.landvibe.alamemo.viewmodel.aac.DetailFragmentViewModel
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
 class DetailFragment: BaseFragment<FragmentDetailBinding>() {
@@ -29,6 +34,11 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     private val viewModel: DetailFragmentViewModel by lazy {
         ViewModelProvider(this, MemoAndDetailMemoViewModelFactory(MemoRepository(),  DetailMemoRepository())).get(
             DetailFragmentViewModel::class.java) }
+
+    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
+        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
+    }
 
     lateinit var recyclerViewAdapter: DetailMemoRecyclerViewAdapter
 
@@ -58,11 +68,12 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         }
 
         viewModel.removedDetailMemo.observe(viewLifecycleOwner) {
-            DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel.savedDetailMemo).showSnackBar()
+            it.contentIfNotHandled?.let { removedDetailMemo ->
+                DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, removedDetailMemo, memoListUpdateViewModel).showSnackBar()
+            }
         }
 
         viewModel.memoForAlarmSetting.observe(viewLifecycleOwner) {
-
             if(it.setAlarm) {
                 //알람설정 돼 있었다면 알람재설정
                 AlarmHandler().setMemoAlarm(requireContext(), it.id)
@@ -71,6 +82,16 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
             if(it.fixNotify) {
                 //고성설정 돼 있었다면 고정재설정
                 FixNotifyHandler().setMemoFixNotify(requireContext(), it.id)
+            }
+        }
+
+        memoListUpdateViewModel.recentDetailMemoList.observe(viewLifecycleOwner) {
+            if(this::recyclerViewAdapter.isInitialized) {
+                Log.d("detail MemoList Update", "Detail MemoList has been Updated")
+                it.contentIfNotHandled?.let { newList ->
+                    refreshItemList(newList)
+                    viewModel.setEmpty(newList.isEmpty())
+                }
             }
         }
     }
@@ -82,12 +103,11 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     private fun setUpRecyclerView(itemList: MutableList<DetailMemo>) {
         setAnimation()
 
-        recyclerViewAdapter = DetailMemoRecyclerViewAdapter(requireContext(), itemList)
+        recyclerViewAdapter = DetailMemoRecyclerViewAdapter(requireContext(), itemList, memoListUpdateViewModel)
         viewDataBinding.detailRecycler.adapter = recyclerViewAdapter
         viewDataBinding.detailRecycler.layoutManager = LinearLayoutManager(context)
         viewDataBinding.detailRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
         ItemTouchHelper(setSwipeToDelete()).attachToRecyclerView(viewDataBinding.detailRecycler)
-
     }
 
     private fun setSwipeToDelete(): SwipeAction {
@@ -141,5 +161,18 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         viewDataBinding.detailBackButton.setOnClickListener {
             requireActivity().onBackPressed()
         }
+    }
+
+    private fun refreshItemList(newItemList: MutableList<DetailMemo>) {
+        val oldItemList = recyclerViewAdapter.itemList
+
+        MemoUtil().sortDetailMemoList(newItemList)
+
+        //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
+
+        //대체 코드
+        val diffUtil = DiffUtil.calculateDiff(DetailMemoDiffUtil(oldItemList, newItemList), false)
+        diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
+        recyclerViewAdapter.itemList = newItemList
     }
 }

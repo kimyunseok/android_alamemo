@@ -24,13 +24,15 @@ import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.MainFragment
 import com.landvibe.alamemo.ui.snackbar.MemoDeleteSnackBar
 import com.landvibe.alamemo.util.MemoUtil
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MemoLongClickRecyclerViewAdapter (val context: Context,
                                         val dialog: BottomSheetDialogFragment,
-                                        val memo: Memo):
+                                        val memo: Memo,
+                                        val memoListUpdateViewModel: MemoListUpdateViewModel):
     RecyclerView.Adapter<MemoLongClickRecyclerViewAdapter.Holder>() {
 
     private val itemList = mutableListOf(
@@ -194,7 +196,7 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
 
             (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
                 if(it is MainFragment) {
-                    MemoDeleteSnackBar(context, it.viewDataBinding.root, memo, detailMemoList).showSnackBar()
+                    MemoDeleteSnackBar(context, it.viewDataBinding.root, memo, detailMemoList, memoListUpdateViewModel).showSnackBar()
                 }
             }
         }

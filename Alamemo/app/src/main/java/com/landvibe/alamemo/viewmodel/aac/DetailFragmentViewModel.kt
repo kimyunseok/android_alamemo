@@ -7,6 +7,7 @@ import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.util.EventWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,11 +26,11 @@ class DetailFragmentViewModel(private val memoRepository: MemoRepository,
     val detailMemoList: LiveData<MutableList<DetailMemo>>
         get() = _detailMemoList
 
-    private val _removedDetailMemo = MutableLiveData<DetailMemo>()
-    val removedDetailMemo : LiveData<DetailMemo>
+    private val _removedDetailMemo = MutableLiveData<EventWrapper<DetailMemo>>()
+    val removedDetailMemo : LiveData<EventWrapper<DetailMemo>>
         get() = _removedDetailMemo
     val savedDetailMemo: DetailMemo?
-        get() = _removedDetailMemo.value
+        get() = _removedDetailMemo.value?.peekContent()
 
     private val _memoForAlarmSetting = MutableLiveData<Memo>()
     val memoForAlarmSetting: LiveData<Memo>
@@ -62,7 +63,7 @@ class DetailFragmentViewModel(private val memoRepository: MemoRepository,
 
     fun saveRemovedDetailMemo(detailMemo: DetailMemo) {
         CoroutineScope(Dispatchers.IO).launch {
-            _removedDetailMemo.postValue(detailMemo)
+            _removedDetailMemo.postValue(EventWrapper(detailMemo))
         }
     }
 
