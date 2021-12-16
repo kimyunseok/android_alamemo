@@ -16,11 +16,10 @@ import com.landvibe.alamemo.viewmodel.ui.TabButtonViewModel
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
 
-    object memoFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 1 }
-    // type 4는 실제로는 쓰지 않는 type. 프래그먼트에서만 사용.
-    object finishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }
-    object repeatFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 3 }
-    object scheduleFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 2 }
+    object MemoFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 1 }
+    object FinishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }// type 4는 실제로는 쓰지 않는 type. 프래그먼트에서만 사용.
+    object RepeatFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 3 }
+    object ScheduleFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 2 }
 
     override fun init() {
         setUpBtnOnClickListener()
@@ -45,17 +44,16 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
                 .replace(R.id.main_container, HelperFragment())
                 .addToBackStack(null)
                 .commit()
-
         }
     }
 
     private fun initViewPager() {
         val pagerAdapter = FragmentPageAdapter(requireActivity())
         pagerAdapter.apply {
-            addFragment(memoFragment)
-            addFragment(scheduleFragment)
-            addFragment(repeatFragment)
-            addFragment(finishFragment)
+            addFragment(MemoFragment)
+            addFragment(ScheduleFragment)
+            addFragment(RepeatFragment)
+            addFragment(FinishFragment)
         }
 
         viewDataBinding.mainViewPager.adapter = pagerAdapter

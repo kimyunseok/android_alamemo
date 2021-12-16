@@ -26,12 +26,17 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
     private val _removedMemo = MutableLiveData<Memo>()
     val removedMemo: LiveData<Memo>
         get() = _removedMemo
+
     val savedMemo: Memo?
         get() = removedMemo.value
 
     private val _removedDetailMemoList = MutableLiveData<MutableList<DetailMemo>>()
     val savedDetailMemoList: MutableList<DetailMemo>?
         get() = _removedDetailMemoList.value
+
+    private val _newMemoList = MutableLiveData<MutableList<Memo>>()
+    val newMemoList: LiveData<MutableList<Memo>>
+        get() = _newMemoList
 
     fun setEmpty(isEmpty: Boolean) {
         _memoEmpty.postValue(isEmpty)
@@ -59,18 +64,6 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
         CoroutineScope(Dispatchers.IO).launch {
             val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
             _removedDetailMemoList.postValue(detailMemoList.toMutableList())
-        }
-    }
-
-    fun insertMemo(memo: Memo) {
-        CoroutineScope(Dispatchers.IO).launch {
-            memoRepository.insertMemo(memo)
-        }
-    }
-
-    fun insertDetailMemo(detailMemo: DetailMemo) {
-        CoroutineScope(Dispatchers.IO).launch {
-            detailMemoRepository.insertDetailMemo(detailMemo)
         }
     }
 
@@ -106,6 +99,18 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
             4 -> {
                 title = "🏁 종료"
             }
+        }
+    }
+
+    fun getRecentMemoList(type: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val memoList = if(type != 4) {
+                memoRepository.getMemoByType(type)
+            } else {
+                memoRepository.getFinishMemo()
+            }
+            Log.d("get Memo From Room", memoList.toString())
+            _newMemoList.postValue(memoList.toMutableList())
         }
     }
 

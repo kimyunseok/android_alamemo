@@ -2,6 +2,10 @@ package com.landvibe.alamemo.util
 
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.database.AppDataBase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MemoUtil {
@@ -18,6 +22,26 @@ class MemoUtil {
             }
             else -> {
                 "D - DAY"
+            }
+        }
+    }
+
+    fun finishScheduleBeforeCurrentTime(itemList: MutableList<Memo>) {
+        //일정 중에서 오늘날짜보다 지난것들은 종료처리.
+        val today = System.currentTimeMillis()
+        for(data in itemList) {
+            val calendar = Calendar.getInstance()
+            data.scheduleDateYear.let { calendar.set(Calendar.YEAR, it) }
+            data.scheduleDateMonth.let { calendar.set(Calendar.MONTH, it) }
+            data.scheduleDateDay.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+            //시간은 상관없이 당일의 모든 일정을 보여주도록 하기위해 비교하는 날의 시간은 23:59분으로 맞춤.
+            calendar.set(Calendar.HOUR_OF_DAY, 23)
+            calendar.set(Calendar.MINUTE, 59)
+            val checkDay = calendar.time.time
+
+            if(checkDay < today) {
+                AppDataBase.instance.memoDao().setMemoFinish(data.id)
+                itemList.remove(data)
             }
         }
     }
@@ -70,7 +94,7 @@ class MemoUtil {
         }
     }
 
-    fun getDetailMemoTitleInclueTime(detailMemo: DetailMemo): String {
+    fun getDetailMemoTitleIncludeTime(detailMemo: DetailMemo): String {
         return if(detailMemo.type == 2) {
             MemoUtil().getTimeFormat(detailMemo.scheduleDateHour, detailMemo.scheduleDateMinute) + " " + detailMemo.title
         } else {

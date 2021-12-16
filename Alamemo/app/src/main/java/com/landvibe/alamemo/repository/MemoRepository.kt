@@ -12,7 +12,7 @@ class MemoRepository {
     suspend fun getMemoByType(type: Int, scheduleFinish: Boolean = false) = memoDataBase.getMemoByType(type, scheduleFinish)
     suspend fun getFinishMemo(scheduleFinish: Boolean = true) = memoDataBase.getFinishMemo()
     suspend fun deleteMemoByID(id: Long) = memoDataBase.deleteMemoByID(id)
-    suspend fun setMemoFinish(id: Long, scheduleFinish: Boolean = true) = memoDataBase.setMemoFinish(id, scheduleFinish)
+    fun setMemoFinish(id: Long, scheduleFinish: Boolean = true) = memoDataBase.setMemoFinish(id, scheduleFinish)
     suspend fun modifyMemo(id: Long, type: Int, icon: String,
                    title: String, scheduleDateYear: Int,
                    scheduleDateMonth: Int, scheduleDateDay: Int,

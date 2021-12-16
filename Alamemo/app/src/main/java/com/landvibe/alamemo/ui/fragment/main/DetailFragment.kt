@@ -1,6 +1,7 @@
 package com.landvibe.alamemo.ui.fragment.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -17,6 +18,7 @@ import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.snackbar.DetailMemoDeleteSnackBar
+import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.util.SwipeAction
 import com.landvibe.alamemo.viewmodel.aac.DetailFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
@@ -56,7 +58,6 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         }
 
         viewModel.removedDetailMemo.observe(viewLifecycleOwner) {
-
             DetailMemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel.savedDetailMemo).showSnackBar()
         }
 
@@ -107,7 +108,6 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
                 
                 //알람 업데이트
                 viewModel.getMemoByIdForAlarm(memoID)
-
             }
 
         }

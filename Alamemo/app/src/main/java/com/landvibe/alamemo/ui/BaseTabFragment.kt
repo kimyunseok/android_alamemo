@@ -1,6 +1,7 @@
 package com.landvibe.alamemo.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,23 +10,27 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
+import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.FragmentTabBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.ui.snackbar.MemoDeleteSnackBar
+import com.landvibe.alamemo.util.MemoDiffUtil
 import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.util.SwipeAction
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 import java.util.*
 
 abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     lateinit var viewDataBinding: T
-    abstract val layoutId: Int
+    private val layoutId: Int = R.layout.fragment_tab
     abstract val type: Int
 
     lateinit var recyclerViewAdapter: MemoRecyclerViewAdapter
@@ -33,6 +38,11 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     private val viewModel: TabFragmentViewModel by lazy {
         ViewModelProvider(this, MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
             TabFragmentViewModel::class.java)
+    }
+
+    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
+        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -68,13 +78,19 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         viewModel.memoList.observe(viewLifecycleOwner) {
             if(type == 2) {
                 //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-                finishScheduleBeforeCurrentTime(it)
+                MemoUtil().finishScheduleBeforeCurrentTime(it)
             }
 
             MemoUtil().sortMemoList(it)
             setRecyclerView(it)
 
             viewModel.setEmpty(it.isEmpty())
+        }
+
+        memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
+            if(this::recyclerViewAdapter.isInitialized && memoListUpdateViewModel.type == type) {
+                refreshItemList(it)
+            }
         }
 
         viewModel.removedMemo.observe(viewLifecycleOwner) {
@@ -128,24 +144,25 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         viewDataBinding.tabMemoRecycler.animation = fadeAnimation
     }
 
-    private fun finishScheduleBeforeCurrentTime(itemList: MutableList<Memo>) {
-        //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-        val today = System.currentTimeMillis()
-        for(data in itemList) {
-            val calendar = Calendar.getInstance()
-            data.scheduleDateYear.let { calendar.set(Calendar.YEAR, it) }
-            data.scheduleDateMonth.let { calendar.set(Calendar.MONTH, it) }
-            data.scheduleDateDay.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
-            //시간은 상관없이 당일의 모든 일정을 보여주도록 하기위해 비교하는 날의 시간은 23:59분으로 맞춤.
-            calendar.set(Calendar.HOUR_OF_DAY, 23)
-            calendar.set(Calendar.MINUTE, 59)
-            val checkDay = calendar.time.time
+    fun getRecentItemList() {
+        viewModel.getRecentMemoList(type)
+    }
 
-            if(checkDay < today) {
-                viewModel.setMemoFinish(data.id)
-                itemList.remove(data)
-            }
+    private fun refreshItemList(newItemList: MutableList<Memo>) {
+        val oldItemList = recyclerViewAdapter.itemList
+
+        if(type == 2) {
+            //일정 중에서 오늘날짜보다 지난것들은 종료처리.
+            MemoUtil().finishScheduleBeforeCurrentTime(newItemList)
         }
+        MemoUtil().sortMemoList(newItemList)
+
+        //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
+
+        //대체 코드
+        val diffUtil = DiffUtil.calculateDiff(MemoDiffUtil(oldItemList, newItemList), false)
+        diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
+        recyclerViewAdapter.itemList = newItemList
     }
 
 }

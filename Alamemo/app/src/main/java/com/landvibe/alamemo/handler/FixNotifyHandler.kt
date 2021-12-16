@@ -100,7 +100,7 @@ class FixNotifyHandler {
                 detailMemoList.joinToString("\n") {
                     MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
                             " - " + it.icon +
-                            " " + MemoUtil().getDetailMemoTitleInclueTime(it) }
+                            " " + MemoUtil().getDetailMemoTitleIncludeTime(it) }
         }
 
         builder.setContentText(contentText)

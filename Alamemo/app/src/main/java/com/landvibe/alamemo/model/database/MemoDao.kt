@@ -42,7 +42,7 @@ interface MemoDao {
     suspend fun modifyMemoType(id: Long, type: Int)
 
     @Query("UPDATE Memo SET scheduleFinish = :scheduleFinish Where id = :id")
-    suspend fun setMemoFinish(id: Long, scheduleFinish: Boolean = true)
+    fun setMemoFinish(id: Long, scheduleFinish: Boolean = true)
 
     @Query("UPDATE Memo SET type = :type, icon = :icon, title = :title, scheduleDateYear = :scheduleDateYear, scheduleDateMonth = :scheduleDateMonth, scheduleDateDay = :scheduleDateDay, scheduleDateHour = :scheduleDateHour, scheduleDateMinute = :scheduleDateMinute, alarmStartTimeHour = :alarmStartTimeHour, alarmStartTimeMinute = :alarmStartTimeMinute, scheduleFinish = :scheduleFinish, fixNotify = :fixNotify, setAlarm = :setAlarm, repeatDay = :repeatDay, alarmStartTimeType = :alarmStartTimeType Where id = :id")
     suspend fun modifyMemo(id: Long, type: Int, icon: String,

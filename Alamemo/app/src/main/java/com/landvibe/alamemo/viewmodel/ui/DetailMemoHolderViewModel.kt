@@ -14,7 +14,7 @@ class DetailMemoHolderViewModel(val detailMemo: DetailMemo) {
     }
 
     fun getTitleInclueTime(): String {
-        return MemoUtil().getDetailMemoTitleInclueTime(detailMemo)
+        return MemoUtil().getDetailMemoTitleIncludeTime(detailMemo)
     }
 
     fun showDateFormat(): String {

@@ -28,7 +28,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
     private val _memoType = MutableLiveData<Int>()
     val memoType: LiveData<Int>
         get() = _memoType
-    private val type: Int
+    val type: Int
         get() = memoType.value?: -1
 
     val memoIcon = MutableLiveData<String>()

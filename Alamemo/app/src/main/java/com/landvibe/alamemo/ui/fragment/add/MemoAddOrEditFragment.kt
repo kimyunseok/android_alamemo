@@ -18,6 +18,7 @@ import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
 import com.landvibe.alamemo.ui.BaseFragment
 import com.landvibe.alamemo.util.MemoUtil
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
@@ -26,6 +27,11 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
     private val viewModel by lazy {
         ViewModelProvider(this, MemoViewModelFactory(MemoRepository())).get(MemoAddOrEditViewModel::class.java)
+    }
+
+    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
+        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
     }
 
     // 메모 수정 시 불러오는 memoId, 메모 최초 작성시에는 해당 값이 -1
@@ -84,6 +90,8 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
+                memoListUpdateViewModel.getRecentMemoList(viewModel.type)
 
                 requireActivity().supportFragmentManager.popBackStack()
             } else {
