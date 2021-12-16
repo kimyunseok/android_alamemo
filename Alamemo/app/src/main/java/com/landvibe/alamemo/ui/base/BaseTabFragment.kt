@@ -154,10 +154,6 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         viewDataBinding.tabMemoRecycler.animation = fadeAnimation
     }
 
-    fun getRecentItemList() {
-        viewModel.getRecentMemoList(type)
-    }
-
     private fun refreshItemList(newItemList: MutableList<Memo>) {
         val oldItemList = recyclerViewAdapter.itemList
 

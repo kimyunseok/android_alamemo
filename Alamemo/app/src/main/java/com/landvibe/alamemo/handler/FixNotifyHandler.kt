@@ -88,14 +88,14 @@ class FixNotifyHandler {
         MemoUtil().sortDetailMemoList(detailMemoList)
 
         if(memo.type != 2 && detailMemoList.isEmpty().not()) {
-            contentText += "\n\n"
+            contentText += "\n"
             //메모, 반복일정의 경우에는 시간표시가 안되므로 '-'로 구분지어줘야 한다.
             contentText += context.getString(
                 R.string.notification_fix_notify_slash) +
                     detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon + " " + it.title }
 
         } else if(detailMemoList.isEmpty().not()){
-            contentText += "\n\n"
+            contentText += "\n"
             contentText +=
                 detailMemoList.joinToString("\n") {
                     MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
