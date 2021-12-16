@@ -22,53 +22,53 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
     private val _detailMemoId = MutableLiveData<Long>()
     val detailMemoId: LiveData<Long>
         get() = _detailMemoId
-    val detailMemoIdValue = detailMemoId.value as Long
+    val detailMemoIdValue = detailMemoId.value
 
     private val _memoId = MutableLiveData<Long>()
     val memoId: LiveData<Long>
         get() = _memoId
-    val memoIdValue = memoId.value as Long
+    private val memoIdValue = memoId.value
 
     private val _detailMemoType = MutableLiveData<Int>()
     val detailMemoType: LiveData<Int>
         get() = _detailMemoType
-    private val type = detailMemoType.value as Int
+    private val type = detailMemoType.value
 
     val detailMemoIcon = MutableLiveData<String>()
-    private val icon = detailMemoIcon.value as String
+    private val icon = detailMemoIcon.value
 
     val detailMemoTitle = MutableLiveData<String>()
-    private val title = detailMemoTitle.value as String
+    private val title = detailMemoTitle.value
 
     val detailMemoScheduleDateYear = MutableLiveData<Int>()
-    val scheduleDateYear = detailMemoScheduleDateYear.value as Int
+    val scheduleDateYear = detailMemoScheduleDateYear.value
 
     val detailMemoScheduleDateMonth = MutableLiveData<Int>()
-    val scheduleDateMonth = detailMemoScheduleDateMonth.value as Int
+    val scheduleDateMonth = detailMemoScheduleDateMonth.value
 
     val detailMemoScheduleDateDay = MutableLiveData<Int>()
-    val scheduleDateDay = detailMemoScheduleDateDay.value as Int
+    val scheduleDateDay = detailMemoScheduleDateDay.value
 
     val detailMemoScheduleDateHour= MutableLiveData<Int>()
-    val scheduleDateHour = detailMemoScheduleDateHour.value as Int
+    private val scheduleDateHour = detailMemoScheduleDateHour.value
 
     val detailMemoScheduleDateMinute = MutableLiveData<Int>()
-    val scheduleDateMinute = detailMemoScheduleDateMinute.value as Int
+    private val scheduleDateMinute = detailMemoScheduleDateMinute.value
 
     private val _memoScheduleDateYear = MutableLiveData<Int>()
     private val memoScheduleDateYear: LiveData<Int>
         get() = _memoScheduleDateYear
-    private val memoScheduleDateYearValue = memoScheduleDateYear.value as Int
+    private val memoScheduleDateYearValue = memoScheduleDateYear.value
 
     private val _memoScheduleDateMonth = MutableLiveData<Int>()
     private val memoScheduleDateMonth: LiveData<Int>
         get() = _memoScheduleDateMonth
-    private val memoScheduleDateMonthValue = memoScheduleDateMonth.value as Int
+    private val memoScheduleDateMonthValue = memoScheduleDateMonth.value
 
     private val _memoScheduleDateDay = MutableLiveData<Int>()
     private val memoScheduleDateDay: LiveData<Int>
         get() = _memoScheduleDateDay
-    private val memoScheduleDateDayValue = memoScheduleDateDay.value as Int
+    private val memoScheduleDateDayValue = memoScheduleDateDay.value
 
     private val _detailMemoScheduleDateFormat = MutableLiveData<String>()
     val detailMemoScheduleDateFormat: LiveData<String>
@@ -137,7 +137,7 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
     fun saveDetailMemo() {
         CoroutineScope(Dispatchers.IO).launch {
             Log.d("DetailMemoAddOrEdit", "Detail Memo Save To Room")
-            if(title.trim() == "") {
+            if(title?.trim() == "") {
                 _detailMemoSaveComplete.postValue(false)
             } else {
                 if(type == 1) {
@@ -145,41 +145,42 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
                     setMemoScheduleTimeToday()
                 }
 
-                if (detailMemoIdValue != 0L) {
-                    //만일 세부사항 수정하기라면
+                if(detailMemoIdValue != null && memoIdValue != null && type != null && icon != null && title != null && scheduleDateYear != null &&
+                    scheduleDateMonth != null && scheduleDateDay != null && scheduleDateHour != null && scheduleDateMinute != null) {
 
-                    detailMemoRepository.modifyDetailMemo(
-                        id = detailMemoIdValue,
-                        type = type,
-                        icon = icon,
-                        title = title,
-                        scheduleDateYear = scheduleDateYear,
-                        scheduleDateMonth = scheduleDateMonth,
-                        scheduleDateDay = scheduleDateDay,
-                        scheduleDateHour = scheduleDateHour,
-                        scheduleDateMinute = scheduleDateMinute,
-                    )
-                } else {
-                    //새로 생성이라면
+                    if (detailMemoIdValue != 0L) {
+                        //만일 세부사항 수정하기라면
 
-                    detailMemoRepository.insertDetailMemo(
-                        DetailMemo(
-                        id = detailMemoIdValue,
-                        memoId = memoIdValue,
-                        type = type,
-                        icon = icon,
-                        title = title,
-                        scheduleDateYear = scheduleDateYear,
-                        scheduleDateMonth = scheduleDateMonth,
-                        scheduleDateDay = scheduleDateDay,
-                        scheduleDateHour = scheduleDateHour,
-                        scheduleDateMinute = scheduleDateMinute
-                    )
-                    )
+                        detailMemoRepository.modifyDetailMemo(
+                            id = detailMemoIdValue,
+                            type = type,
+                            icon = icon,
+                            title = title,
+                            scheduleDateYear = scheduleDateYear,
+                            scheduleDateMonth = scheduleDateMonth,
+                            scheduleDateDay = scheduleDateDay,
+                            scheduleDateHour = scheduleDateHour,
+                            scheduleDateMinute = scheduleDateMinute,
+                        )
+                    } else {
+                        //새로 생성이라면
 
+                        detailMemoRepository.insertDetailMemo(
+                            DetailMemo(
+                                id = detailMemoIdValue,
+                                memoId = memoIdValue,
+                                type = type,
+                                icon = icon,
+                                title = title,
+                                scheduleDateYear = scheduleDateYear,
+                                scheduleDateMonth = scheduleDateMonth,
+                                scheduleDateDay = scheduleDateDay,
+                                scheduleDateHour = scheduleDateHour,
+                                scheduleDateMinute = scheduleDateMinute)
+                        )
+                    }
+                    _detailMemoSaveComplete.postValue(true)
                 }
-
-                _detailMemoSaveComplete.postValue(true)
             }
         }
     }
@@ -194,11 +195,11 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
     private fun checkScheduleTime() {
         val todayCalendar = Calendar.getInstance()
         val checkCalendar = Calendar.getInstance().apply {
-            set(Calendar.YEAR, scheduleDateYear)
-            set(Calendar.MONTH, scheduleDateMonth)
-            set(Calendar.DAY_OF_MONTH, scheduleDateDay)
-            set(Calendar.HOUR_OF_DAY, scheduleDateHour)
-            set(Calendar.MINUTE, scheduleDateMinute)
+            scheduleDateYear?.let { set(Calendar.YEAR, it) }
+            scheduleDateMonth?.let { set(Calendar.MONTH, it) }
+            scheduleDateDay?.let { set(Calendar.DAY_OF_MONTH, it) }
+            scheduleDateHour?.let { set(Calendar.HOUR_OF_DAY, it) }
+            scheduleDateMinute?.let { set(Calendar.MINUTE, it) }
         }
 
         //메모에 설정된 시간이 이전 시간이라면 오늘 시간으로 변경한다.
@@ -210,7 +211,7 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
     fun setScheduleDate(year: Int, month: Int, day: Int) {
         detailMemoScheduleDateYear.postValue(year)
         detailMemoScheduleDateMonth.postValue(month)
-        detailMemoScheduleDateMonth.postValue(day)
+        detailMemoScheduleDateDay.postValue(day)
         resetMemoScheduleDateFormatByDate()
     }
 
@@ -221,9 +222,9 @@ class DetailMemoAddOrEditViewModel(private val detailMemoRepository: DetailMemoR
 
     fun getMaxDate(): Long {
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.YEAR, memoScheduleDateYearValue)
-        calendar.set(Calendar.MONTH, memoScheduleDateMonthValue)
-        calendar.set(Calendar.DAY_OF_MONTH, memoScheduleDateDayValue)
+        memoScheduleDateYearValue?.let { calendar.set(Calendar.YEAR, it) }
+        memoScheduleDateMonthValue?.let { calendar.set(Calendar.MONTH, it) }
+        memoScheduleDateDayValue?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
 
         return calendar.time.time
     }

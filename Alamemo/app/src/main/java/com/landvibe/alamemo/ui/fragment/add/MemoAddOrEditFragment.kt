@@ -47,19 +47,21 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     private fun setUpObserver() {
         viewModel.memoSaveComplete.observe(this) {
             if(it) {
-                //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
                 if(viewModel.memoIdValue != 0L) {
-                    AlarmHandler().cancelAlarm(requireContext(), viewModel.memoIdValue)
-                    FixNotifyHandler().cancelFixNotify(requireContext(), viewModel.memoIdValue)
-                }
+                    viewModel.memoIdValue?.let { id ->
+                        //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
+                        AlarmHandler().cancelAlarm(requireContext(), id)
+                        FixNotifyHandler().cancelFixNotify(requireContext(), id)
 
-                //알람설정.
-                if(viewModel.setAlarm) {
-                    AlarmHandler().setMemoAlarm(requireContext(), viewModel.memoIdValue)
-                }
-                //상단바 고정 설정
-                if(viewModel.fixNotify) {
-                    FixNotifyHandler().setMemoFixNotify(requireContext(), viewModel.memoIdValue)
+                        //알람설정.
+                        if(viewModel.setAlarm == true) {
+                            AlarmHandler().setMemoAlarm(requireContext(), id)
+                        }
+                        //상단바 고정 설정
+                        if(viewModel.fixNotify == true) {
+                            FixNotifyHandler().setMemoFixNotify(requireContext(), id)
+                        }
+                    }
                 }
 
                 if(viewModel.memoIdValue != 0L) {

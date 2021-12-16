@@ -34,10 +34,10 @@ class MemoUtil {
         return (setDateDay - today).toInt()
     }
 
-    fun getScheduleDateFormat(_year: Int, _month: Int, _dayOfMonth: Int): String {
+    fun getScheduleDateFormat(_year: Int?, _month: Int?, _dayOfMonth: Int?): String {
         val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(_year, _month, _dayOfMonth)
 
-        return "${_year}년 ${_month.plus(1)}월 ${_dayOfMonth}일 ${dayOfWeek}요일"
+        return "${_year}년 ${_month?.plus(1)}월 ${_dayOfMonth}일 ${dayOfWeek}요일"
     }
 
     fun getRepeatScheduleDateFormat(_repeatDay: MutableList<Char>): String {

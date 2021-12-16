@@ -22,49 +22,63 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
     private val _memoId = MutableLiveData<Long>()
     val memoId: LiveData<Long>
         get() = _memoId
-    val memoIdValue = memoId.value as Long
+    val memoIdValue: Long
+        get() = memoId.value?: -1L
 
     private val _memoType = MutableLiveData<Int>()
     val memoType: LiveData<Int>
         get() = _memoType
-    private val type = memoType.value as Int
+    private val type: Int
+        get() = memoType.value?: -1
 
     val memoIcon = MutableLiveData<String>()
-    private val icon = memoIcon.value as String
+    private val icon: String
+        get() = memoIcon.value?: ""
 
     val memoTitle = MutableLiveData<String>()
-    private val title = memoTitle.value as String
+    private val title: String
+        get() = memoTitle.value?: ""
 
     val memoScheduleDateYear = MutableLiveData<Int>()
-    val scheduleDateYear = memoScheduleDateYear.value as Int
+    val scheduleDateYear
+        get() = memoScheduleDateYear.value?: Calendar.getInstance().get(Calendar.YEAR)
+
 
     val memoScheduleDateMonth = MutableLiveData<Int>()
-    val scheduleDateMonth = memoScheduleDateMonth.value as Int
+    val scheduleDateMonth: Int
+        get() = memoScheduleDateMonth.value?: Calendar.getInstance().get(Calendar.MONTH).plus(1)
 
     val memoScheduleDateDay = MutableLiveData<Int>()
-    val scheduleDateDay = memoScheduleDateDay.value as Int
+    val scheduleDateDay: Int
+        get() = memoScheduleDateDay.value?: Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
     val memoScheduleDateHour= MutableLiveData<Int>()
-    val scheduleDateHour = memoScheduleDateHour.value as Int
+    val scheduleDateHour: Int
+        get() = memoScheduleDateHour.value?: Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 
     val memoScheduleDateMinute = MutableLiveData<Int>()
-    val scheduleDateMinute = memoScheduleDateMinute.value as Int
+    val scheduleDateMinute: Int
+        get() = memoScheduleDateMinute.value?: Calendar.getInstance().get(Calendar.MINUTE)
 
     val memoAlarmStartTimeHour = MutableLiveData<Int>()
-    private val alarmStartTimeHour = memoAlarmStartTimeHour.value as Int
+    private val alarmStartTimeHour: Int
+        get() = memoAlarmStartTimeHour.value ?: Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 
     val memoAlarmStartTimeMinute = MutableLiveData<Int>()
-    private val alarmStartTimeMinute = memoAlarmStartTimeMinute.value as Int
+    private val alarmStartTimeMinute: Int
+        get() = memoAlarmStartTimeMinute.value ?: Calendar.getInstance().get(Calendar.MINUTE)
 
     private val _memoFixNotify = MutableLiveData<Boolean>()
     val memoFixNotify: LiveData<Boolean>
         get() = _memoFixNotify
-    val fixNotify = memoFixNotify.value as Boolean
+    val fixNotify: Boolean
+        get() = memoFixNotify.value ?: false
 
     private val _memoSetAlarm = MutableLiveData<Boolean>()
     val memoSetAlarm: LiveData<Boolean>
         get() = _memoSetAlarm
-    val setAlarm = memoSetAlarm.value as Boolean
+    val setAlarm: Boolean
+        get() = memoSetAlarm.value ?: false
 
     var memoRepeatDay = mutableListOf<Char>()
     var memoAlarmStartTimeType = 1
@@ -82,9 +96,12 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         _memoType.postValue(1)
         memoIcon.postValue("📝")
         memoTitle.postValue("")
-        memoScheduleDateYear.postValue(calendar.get(Calendar.YEAR))
-        memoScheduleDateMonth.postValue(calendar.get(Calendar.MONTH))
-        memoScheduleDateDay.postValue(calendar.get(Calendar.DAY_OF_MONTH))
+
+        //날짜는 바로 띄워줘야 하므로 setValue()로 처리
+        memoScheduleDateYear.value = (calendar.get(Calendar.YEAR))
+        memoScheduleDateMonth.value = (calendar.get(Calendar.MONTH))
+        memoScheduleDateDay.value = (calendar.get(Calendar.DAY_OF_MONTH))
+
         memoScheduleDateHour.postValue(calendar.get(Calendar.HOUR_OF_DAY))
         memoScheduleDateMinute.postValue(calendar.get(Calendar.MINUTE))
         memoAlarmStartTimeHour.postValue(calendar.get(Calendar.HOUR_OF_DAY))
@@ -106,9 +123,11 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
             _memoType.postValue(memo.type)
             memoIcon.postValue(memo.icon)
             memoTitle.postValue(memo.title)
-            memoScheduleDateYear.postValue(memo.scheduleDateYear)
-            memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
-            memoScheduleDateDay.postValue(memo.scheduleDateDay)
+            //날짜는 바로 띄워줘야 하므로 setValue()로 처리
+            memoScheduleDateYear.value = memo.scheduleDateYear
+            memoScheduleDateMonth.value = memo.scheduleDateMonth
+            memoScheduleDateDay.value = memo.scheduleDateDay
+
             memoScheduleDateHour.postValue(memo.scheduleDateHour)
             memoScheduleDateMinute.postValue(memo.scheduleDateMinute)
             memoAlarmStartTimeHour.postValue(memo.alarmStartTimeHour)
@@ -155,12 +174,11 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                     setScheduleDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
                 }
 
+
                 if (memoIdValue != 0L) {
                     // 메모 id가 존재한다면, 즉 수정하기라면
-                    // 메모 수정.
-
                     memoRepository.modifyMemo(
-                        memoIdValue,
+                        id = memoIdValue,
                         type = type,
                         icon = icon,
                         title = title,
@@ -183,7 +201,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
 
                     memoRepository.insertMemo(
                         Memo(
-                            0,
+                            id = memoIdValue,
                             type = type,
                             icon = icon,
                             title = title,
@@ -213,9 +231,9 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
     }
 
     fun setScheduleDate(year: Int, month: Int, day: Int) {
-        memoScheduleDateYear.postValue(year)
-        memoScheduleDateMonth.postValue(month)
-        memoScheduleDateMonth.postValue(day)
+        memoScheduleDateYear.value = year
+        memoScheduleDateMonth.value = month
+        memoScheduleDateDay.value = day
         resetMemoScheduleDateFormatByDate()
     }
 
