@@ -89,7 +89,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
         memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
             if(this::recyclerViewAdapter.isInitialized && memoListUpdateViewModel.type == type) {
-                refreshItemList(it)
+                it.contentIfNotHandled?.let { newList -> refreshItemList(newList) }
             }
         }
 
