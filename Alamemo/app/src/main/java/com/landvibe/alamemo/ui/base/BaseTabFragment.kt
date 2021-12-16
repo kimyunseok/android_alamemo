@@ -1,4 +1,4 @@
-package com.landvibe.alamemo.ui
+package com.landvibe.alamemo.ui.base
 
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +16,6 @@ import com.landvibe.alamemo.databinding.FragmentTabBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.memo.Memo
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.ui.snackbar.MemoDeleteSnackBar
@@ -26,7 +25,6 @@ import com.landvibe.alamemo.util.SwipeAction
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.aac.TabFragmentViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
-import java.util.*
 
 abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     lateinit var viewDataBinding: T
@@ -89,19 +87,32 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
         memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
             if(this::recyclerViewAdapter.isInitialized && memoListUpdateViewModel.type == type) {
-                it.contentIfNotHandled?.let { newList -> refreshItemList(newList) }
+                Log.d("memoList Update", "MemoList has been Updated")
+                it.contentIfNotHandled?.let { newList ->
+                    refreshItemList(newList)
+                    viewModel.setEmpty(newList.isEmpty())
+                }
             }
         }
 
-        viewModel.removedMemo.observe(viewLifecycleOwner) {
-            MemoDeleteSnackBar(requireContext(), viewDataBinding.root, viewModel.savedMemo, viewModel.savedDetailMemoList).showSnackBar()
+        viewModel.removedMemoAndDetailMemoList.observe(viewLifecycleOwner) {
+            Log.d("memo is", it.toString())
+            it.contentIfNotHandled?.let { removedMemoAndDetailMemo ->
+                MemoDeleteSnackBar(
+                    requireContext(),
+                    viewDataBinding.root,
+                    removedMemoAndDetailMemo.removedMemo,
+                    removedMemoAndDetailMemo.removedDetailMemoList,
+                    memoListUpdateViewModel
+                ).showSnackBar()
+            }
         }
     }
 
     private fun setRecyclerView(itemList: MutableList<Memo>) {
         setRecyclerViewAnimation()
 
-        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList)
+        recyclerViewAdapter = MemoRecyclerViewAdapter(requireContext(), itemList, memoListUpdateViewModel)
         viewDataBinding.tabMemoRecycler.adapter = recyclerViewAdapter
         viewDataBinding.tabMemoRecycler.layoutManager = LinearLayoutManager(context)
         viewDataBinding.tabMemoRecycler.itemAnimator = null // 약간 깜빡이는 현상 제거
@@ -114,8 +125,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
                 val position = viewHolder.adapterPosition
 
                 val tmpMemo = recyclerViewAdapter.itemList[position]
-                viewModel.saveRemovedMemo(tmpMemo)
-                viewModel.saveRemovedDetailMemoListByMemoId(tmpMemo.id)
+                viewModel.saveRemovedMemoAndDetailMemoList(tmpMemo)
 
                 if(tmpMemo.setAlarm) {
                     //알람설정 돼 있었다면 알람해제.
