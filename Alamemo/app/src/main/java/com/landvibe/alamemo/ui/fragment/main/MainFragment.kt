@@ -5,40 +5,27 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.FragmentPageAdapter
 import com.landvibe.alamemo.databinding.FragmentMainBinding
+import com.landvibe.alamemo.databinding.FragmentTabBinding
 import com.landvibe.alamemo.databinding.HolderTabButtonBinding
-import com.landvibe.alamemo.viewmodel.ui.TabButtonViewModel
 import com.landvibe.alamemo.ui.BaseFragment
+import com.landvibe.alamemo.ui.BaseTabFragment
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.helper.HelperFragment
+import com.landvibe.alamemo.viewmodel.ui.TabButtonViewModel
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
 
-    private val memoFragment = MemoFragment()
-    private val scheduleFragment = ScheduleFragment()
-    private val repeatFragment = RepeatFragment()
-    private val finishFragment = FinishFragment()
+    object memoFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 1 }
+    // type 4는 실제로는 쓰지 않는 type. 프래그먼트에서만 사용.
+    object finishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }
+    object repeatFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 3 }
+    object scheduleFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 2 }
 
     override fun init() {
         setUpBtnOnClickListener()
         initViewPager()
         initTabLayout()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        memoFragment.onResume()
-        scheduleFragment.onResume()
-        repeatFragment.onResume()
-        finishFragment.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        memoFragment.onPause()
-        scheduleFragment.onPause()
-        repeatFragment.onPause()
-        finishFragment.onPause()
     }
 
     private fun setUpBtnOnClickListener() {
@@ -49,8 +36,6 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
                 .replace(R.id.main_container, MemoAddOrEditFragment())
                 .addToBackStack(null)
                 .commit()
-
-            onStop()
         }
 
         viewDataBinding.mainGuideButton.setOnClickListener {
