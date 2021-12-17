@@ -10,7 +10,7 @@ import com.landvibe.alamemo.viewmodel.ui.IconTypeViewModel
 import com.landvibe.alamemo.util.IconTypeDiffUtil
 
 class IconTypeSelectRecyclerViewAdapter(context: Context, val itemList: MutableList<IconTypeViewModel>,
-                                        val iconSelectRecyclerViewAdapter: IconSelectRecyclerViewAdapter): RecyclerView.Adapter<IconTypeSelectRecyclerViewAdapter.Holder>() {
+                                        private val iconSelectRecyclerViewAdapter: IconSelectRecyclerViewAdapter): RecyclerView.Adapter<IconTypeSelectRecyclerViewAdapter.Holder>() {
 
     private var lastSelectIdx = 0 // 최초에는 0번째 선택.
 

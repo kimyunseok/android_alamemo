@@ -16,6 +16,7 @@ import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
 import com.landvibe.alamemo.ui.base.BaseFragment
+import com.landvibe.alamemo.ui.dialog.SelectIconDialog
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
@@ -107,7 +108,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
         //아이콘 선택 버튼
         viewDataBinding.addIconSelectBtn.setOnClickListener {
-            SelectIconDialog(requireContext(), viewModel.memoIcon).show()
+            SelectIconDialog(viewModel.memoIcon).show(childFragmentManager, null)
         }
         
         //달력으로 보기 버튼

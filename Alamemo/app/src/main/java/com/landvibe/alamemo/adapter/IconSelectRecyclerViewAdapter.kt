@@ -1,17 +1,14 @@
 package com.landvibe.alamemo.adapter
 
-import android.app.Dialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.databinding.HolderIconBinding
-import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 
-class IconSelectRecyclerViewAdapter(context: Context, var itemList: MutableList<String>,
-                                    val dialog: Dialog, val iconLiveData: MutableLiveData<String>
+class IconSelectRecyclerViewAdapter(var itemList: MutableList<String>,
+                                    val dialog: DialogFragment, val iconLiveData: MutableLiveData<String>
 ): RecyclerView.Adapter<IconSelectRecyclerViewAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
