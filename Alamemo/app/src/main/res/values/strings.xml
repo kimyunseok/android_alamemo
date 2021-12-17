@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Alamemo</string>
-    <string name="app_name_add_kor">Alamemo - 알람메모</string>
+    <string name="app_name">ALAMEMO</string>
     <string name="text">텍스트</string>
     <string name="memo_emoji">📝</string>
     <string name="today_emoji">📋</string>
