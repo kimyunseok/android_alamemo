@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="titleIncludeIcon"
-            type="java.lang.String" />
+            name="viewModel"
+            type="com.landvibe.alamemo.viewmodel.aac.LongClickDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{titleIncludeIcon}"
+                android:text="@{viewModel.titleIncludeIcon}"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

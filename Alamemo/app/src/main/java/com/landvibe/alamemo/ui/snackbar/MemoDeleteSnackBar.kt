@@ -1,6 +1,7 @@
 package com.landvibe.alamemo.ui.snackbar
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -41,6 +42,9 @@ class MemoDeleteSnackBar(context: Context, rootView: View, val memo: Memo?, val 
                 FixNotifyHandler().setMemoFixNotify(context, it.id)
             }
             memoListUpdateViewModel.getRecentMemoList(it.type)
+            if(it.scheduleFinish) {
+                memoListUpdateViewModel.getRecentMemoList(4)
+            }
         }
 
         detailMemoList?.let {

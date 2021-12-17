@@ -4,14 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.DetailMemoLongClickRecyclerViewAdapter
+import com.landvibe.alamemo.adapter.MemoLongClickRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.DialogMemoMenuBinding
 import com.landvibe.alamemo.model.database.AppDataBase
+import com.landvibe.alamemo.repository.DetailMemoRepository
+import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.viewmodel.aac.LongClickDialogViewModel
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,16 +26,22 @@ class DetailMemoClickDialog(val memoListUpdateViewModel: MemoListUpdateViewModel
 
     lateinit var binding: DialogMemoMenuBinding
 
+    private val viewModel: LongClickDialogViewModel by lazy {
+        ViewModelProvider(this, MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            LongClickDialogViewModel::class.java)
+    }
+
+    private val detailMemoId: Long by lazy { arguments?.getLong("detailMemoId", -1)?: -1 }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogMemoMenuBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        CoroutineScope(Dispatchers.Main).launch {
-            setUpView()
-        }
+        setUpView()
 
         return binding.root
     }
@@ -49,16 +61,16 @@ class DetailMemoClickDialog(val memoListUpdateViewModel: MemoListUpdateViewModel
     }
 
     private fun setUpView() {
-        val detailMemoId = arguments?.getLong("detailMemoId", -1)
-        if(detailMemoId != null && detailMemoId != (-1).toLong()) {
-            val detailMemo = AppDataBase.instance.detailMemoDao().getDetailMemoById(detailMemoId)
+        binding.viewModel = viewModel
+        if(detailMemoId != (-1).toLong()) {
 
-            //1. 클릭 타이틀 설정
-            binding.titleIncludeIcon = detailMemo.icon + " " + detailMemo.title
+            viewModel.detailMemo.observe(viewLifecycleOwner) {
+                binding.recyclerView.adapter = DetailMemoLongClickRecyclerViewAdapter(requireContext(), this, it, memoListUpdateViewModel)
+                binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            }
 
-            //2. 아래 메뉴 설정
-            binding.recyclerView.adapter = DetailMemoLongClickRecyclerViewAdapter(requireContext(), this, detailMemo, memoListUpdateViewModel)
-            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            viewModel.getDetailMemoInfo(detailMemoId)
+
         }
     }
 

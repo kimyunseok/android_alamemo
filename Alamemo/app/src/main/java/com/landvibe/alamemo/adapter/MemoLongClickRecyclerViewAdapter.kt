@@ -196,6 +196,9 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
         }
 
         memoListUpdateViewModel.getRecentMemoList(memo.type) // 해당 타입 메모 리스트 다시 받아옴
+        if(memo.scheduleFinish) {
+            memoListUpdateViewModel.getRecentMemoList(4)
+        }
 
         (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
             if(it is MainFragment) {
