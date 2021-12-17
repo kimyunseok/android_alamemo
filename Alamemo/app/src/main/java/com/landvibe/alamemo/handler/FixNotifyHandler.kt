@@ -71,6 +71,7 @@ class FixNotifyHandler {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOnlyAlertOnce(true)
             .setShowWhen(false)
+            .setSilent(true)
 
         //상단 바 고정 시 날짜를 표기해주는 용도. 메모는 표기하지 않는다.
         var contentText = when {
