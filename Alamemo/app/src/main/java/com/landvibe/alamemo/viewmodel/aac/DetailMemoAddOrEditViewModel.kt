@@ -164,16 +164,16 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
     }
 
     fun saveDetailMemo() {
-        CoroutineScope(Dispatchers.IO).launch {
+        if(title.trim() == "") {
+            _detailMemoSaveComplete.postValue(false)
+        } else {
             Log.d("DetailMemoAddOrEdit", "Detail Memo Save To Room")
-            if(title.trim() == "") {
-                _detailMemoSaveComplete.postValue(false)
-            } else {
-                if(type == 1) {
-                    //메모라면 날짜를 오늘로 수정.
-                    setMemoScheduleTimeToday()
-                }
 
+            if(type == 1) {
+                //메모라면 날짜를 오늘로 수정.
+                setMemoScheduleTimeToday()
+            }
+            CoroutineScope(Dispatchers.IO).launch {
                 if (detailMemoIdValue != 0L) {
                     //만일 세부사항 수정하기라면
 
