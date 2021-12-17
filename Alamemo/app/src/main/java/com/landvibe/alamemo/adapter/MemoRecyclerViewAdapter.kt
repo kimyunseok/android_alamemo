@@ -45,7 +45,6 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
                     putLong("memoId", item.id)
                     putString("memoIcon", item.icon)
                     putString("memoTitle", item.title)
-                    putInt("memoType", item.type)
                 }
 
                 memoListUpdateViewModel.getRecentDetailMemoList(item.id)

@@ -41,12 +41,6 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
             MemoListUpdateViewModel::class.java)
 
         val detailMemoId = arguments?.getLong("detailMemoId", -1)
-        var type = arguments?.getInt("memoType")
-
-        if(type == 3) {
-            //반복 일정의 경우 세부메모만 가능.
-            type = 1
-        }
 
         if(detailMemoId != null && detailMemoId != (-1).toLong()) {
             viewModel.getDetailMemoInfoById(detailMemoId)

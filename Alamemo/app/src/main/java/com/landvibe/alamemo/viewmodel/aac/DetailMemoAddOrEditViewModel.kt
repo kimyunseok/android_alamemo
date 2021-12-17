@@ -100,7 +100,13 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
 
         _detailMemoId.postValue(0L)
         _memoId.postValue(memoId)
-        _detailMemoType.postValue(1)
+
+        val type = if(memo.type != 2) {
+            1
+        } else {
+            2
+        }
+        _detailMemoType.postValue(type)
         detailMemoIcon.postValue("📝")
         detailMemoTitle.postValue("")
 
@@ -151,7 +157,7 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
     fun saveDetailMemo() {
         CoroutineScope(Dispatchers.IO).launch {
             Log.d("DetailMemoAddOrEdit", "Detail Memo Save To Room")
-            if(title?.trim() == "") {
+            if(title.trim() == "") {
                 _detailMemoSaveComplete.postValue(false)
             } else {
                 if(type == 1) {
@@ -205,11 +211,11 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
     private fun checkScheduleTime() {
         val todayCalendar = Calendar.getInstance()
         val checkCalendar = Calendar.getInstance().apply {
-            scheduleDateYear?.let { set(Calendar.YEAR, it) }
-            scheduleDateMonth?.let { set(Calendar.MONTH, it) }
-            scheduleDateDay?.let { set(Calendar.DAY_OF_MONTH, it) }
-            scheduleDateHour?.let { set(Calendar.HOUR_OF_DAY, it) }
-            scheduleDateMinute?.let { set(Calendar.MINUTE, it) }
+            set(Calendar.YEAR, scheduleDateYear)
+            set(Calendar.MONTH, scheduleDateMonth)
+            set(Calendar.DAY_OF_MONTH, scheduleDateDay)
+            set(Calendar.HOUR_OF_DAY, scheduleDateHour)
+            set(Calendar.MINUTE, scheduleDateMinute)
         }
 
         //메모에 설정된 시간이 이전 시간이라면 오늘 시간으로 변경한다.
@@ -232,9 +238,9 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
 
     fun getMaxDate(): Long {
         val calendar = Calendar.getInstance()
-        memoScheduleDateYearValue?.let { calendar.set(Calendar.YEAR, it) }
-        memoScheduleDateMonthValue?.let { calendar.set(Calendar.MONTH, it) }
-        memoScheduleDateDayValue?.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
+        calendar.set(Calendar.YEAR, memoScheduleDateYearValue)
+        calendar.set(Calendar.MONTH, memoScheduleDateMonthValue)
+        calendar.set(Calendar.DAY_OF_MONTH, memoScheduleDateDayValue)
 
         return calendar.time.time
     }
