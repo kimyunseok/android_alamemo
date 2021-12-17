@@ -38,7 +38,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun init() {
-        NotificationChannelMaker().createNotificationChannel(applicationContext) // 노티피케이션 채널 생성
+        NotificationChannelMaker().createAlarmNotificationChannel(applicationContext) // 노티피케이션 채널 생성
+        NotificationChannelMaker().createFixNotificationChannel(applicationContext)
         setUpFixNotifyAndAlarm(applicationContext)
 
         setUpFragment()

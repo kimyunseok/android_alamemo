@@ -36,7 +36,7 @@ class MyBootAndUpdateReceiver: BroadcastReceiver() {
         val splashIntent = Intent(context, SplashActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, BOOT_REQUEST_CODE, splashIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
+        val builder = NotificationCompat.Builder(context, context.getString(R.string.alarm_channel_id))
             .setSmallIcon(R.drawable.iconfinder_icon)
             .setContentTitle(context.getString(R.string.memo_emoji) + " " + context.getString(R.string.app_name))
             .setContentIntent(pendingIntent)

@@ -62,7 +62,7 @@ class MyReceiver: BroadcastReceiver() {
     }
 
     private fun initNotificationCompatBuilder(context: Context, memo: Memo) {
-        builder = NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
+        builder = NotificationCompat.Builder(context, context.getString(R.string.alarm_channel_id))
             .setContentTitle(memo.icon + " " +memo.title)
             .setSmallIcon(R.drawable.iconfinder_icon)
             .setStyle(NotificationCompat.BigTextStyle())

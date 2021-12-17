@@ -13,7 +13,7 @@ import com.landvibe.alamemo.R
  */
 class NotificationChannelMaker {
 
-    fun createNotificationChannel(context: Context) {
+    fun createAlarmNotificationChannel(context: Context) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -21,7 +21,29 @@ class NotificationChannelMaker {
             val descriptionText = context.getString(R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(
-                context.getString(R.string.notification_channel_id),
+                context.getString(R.string.alarm_channel_id),
+                name,
+                importance)
+                .apply {
+                    description = descriptionText
+                    setShowBadge(false) // 뱃지 안보이게 설정
+                }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun createFixNotificationChannel(context: Context) {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = context.getString(R.string.notification_channel_name)
+            val descriptionText = context.getString(R.string.app_name)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(
+                context.getString(R.string.fix_channel_id),
                 name,
                 importance)
                 .apply {
