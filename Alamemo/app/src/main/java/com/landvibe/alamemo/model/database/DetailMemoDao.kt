@@ -37,4 +37,7 @@ interface DetailMemoDao {
                    scheduleDateMonth: Int, scheduleDateDay: Int,
                    scheduleDateHour: Int, scheduleDateMinute: Int
     )
+
+    @Query("UPDATE DetailMemo SET type = :type WHERE id = :id")
+    fun modifyDetailMemoType(id: Long, type: Int)
 }

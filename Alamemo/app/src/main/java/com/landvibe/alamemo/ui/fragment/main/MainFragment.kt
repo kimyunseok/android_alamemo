@@ -17,9 +17,9 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
 
     object MemoFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 1 }
-    object FinishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }
-    object RepeatFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 3 }
     object ScheduleFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 2 }
+    object RepeatFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 3 }
+    object FinishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }
 
     override fun init() {
         setUpBtnOnClickListener()

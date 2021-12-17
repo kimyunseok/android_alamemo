@@ -18,5 +18,5 @@ class DetailMemoRepository {
                                  scheduleDateMonth: Int, scheduleDateDay: Int,
                                  scheduleDateHour: Int, scheduleDateMinute: Int
     ) = detailMemoDataBase.modifyDetailMemo(id, type, icon, title, scheduleDateYear, scheduleDateMonth, scheduleDateDay, scheduleDateHour, scheduleDateMinute)
-
+    fun modifyDetailMemoType(id: Long, type: Int) = detailMemoDataBase.modifyDetailMemoType(id, type)
 }

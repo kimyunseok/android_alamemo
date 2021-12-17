@@ -64,6 +64,9 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
                 -2L -> {
                     Toast.makeText(requireContext(), getString(R.string.warn_type_message), Toast.LENGTH_SHORT).show()
                 }
+                -3L -> {
+                    Toast.makeText(requireContext(), getString(R.string.warn_repeat_day_empty_message), Toast.LENGTH_SHORT).show()
+                }
                 else -> {
                     viewModel.memoIdValue.let { id ->
                         //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
@@ -98,6 +101,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
                     if(viewModel.prevType != -1 && viewModel.prevType != viewModel.type) {
                         memoListUpdateViewModel.getRecentMemoList(viewModel.prevType)
+                        memoListUpdateViewModel.changeDetailMemoType(memoId, viewModel.type)
                     }
                     memoListUpdateViewModel.getRecentMemoList(viewModel.type)
 

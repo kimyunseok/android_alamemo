@@ -44,6 +44,7 @@
     <string name="memo_hint">추가할 메모/일정을 입력하세요.</string>
     <string name="warn_empty_title_message">메모를 입력해 주세요.</string>
     <string name="warn_type_message">메모 유형이 잘못되었습니다.</string>
+    <string name="warn_repeat_day_empty_message">반복 일정의 요일이 비었습니다.</string>
     <string name="memo_save_complete">메모/일정 저장이 완료되었습니다.</string>
     <string name="detail_memo_save_complete">세부 메모/일정 저장이 완료되었습니다.</string>
     <string name="memo_modify_complete">메모/일정 수정이 완료되었습니다.</string>

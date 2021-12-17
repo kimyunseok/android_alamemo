@@ -32,4 +32,16 @@ class MemoListUpdateViewModel(private val memoRepository: MemoRepository,
         val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
         _recentDetailMemoList.value = EventWrapper(detailMemoList.toMutableList())
     }
+
+    fun changeDetailMemoType(memoId: Long, changedType: Int) {
+        val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
+
+        for(detailMemo in detailMemoList) {
+            if(changedType == 3) {
+                detailMemoRepository.modifyDetailMemoType(detailMemo.id, 1)
+            } else {
+                detailMemoRepository.modifyDetailMemoType(detailMemo.id, changedType)
+            }
+        }
+    }
 }

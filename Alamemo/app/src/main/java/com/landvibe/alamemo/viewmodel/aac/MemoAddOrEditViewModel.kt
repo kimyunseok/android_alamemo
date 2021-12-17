@@ -154,10 +154,10 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         if(title.trim() == "") {
             _memoSaveComplete.postValue(-1)
         } else if(type != 1 && type != 2 && type != 3) {
-            Log.d("type is", type.toString())
             _memoSaveComplete.postValue(-2)
-        }
-        else {
+        } else if(type == 3 && memoRepeatDay.isEmpty()) {
+            _memoSaveComplete.postValue(-3)
+        } else {
             Log.d("MemoAddOrEdit", "Memo Save To Room")
             if(type == 1) {
                 //메모라면 날짜를 오늘로 수정.
