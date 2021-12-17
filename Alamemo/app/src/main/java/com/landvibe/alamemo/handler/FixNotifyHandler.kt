@@ -95,7 +95,6 @@ class FixNotifyHandler {
                     detailMemoList.joinToString(context.getString(R.string.notification_fix_notify_slash_include_line_enter)) { it.icon + " " + it.title }
 
         } else if(detailMemoList.isEmpty().not()){
-            contentText += "\n"
             contentText +=
                 detailMemoList.joinToString("\n") {
                     MemoUtil().getScheduleDateFormat(it.scheduleDateYear, it.scheduleDateMonth, it.scheduleDateDay) +
