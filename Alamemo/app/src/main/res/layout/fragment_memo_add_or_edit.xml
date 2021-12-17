@@ -20,6 +20,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:clipChildren="false"
+            android:animateLayoutChanges="true"
             android:paddingBottom="55dp">
 
             <androidx.appcompat.widget.Toolbar
@@ -78,13 +79,13 @@
                 android:paddingBottom="55dp"
                 android:clipToPadding="false"
                 android:clipChildren="false"
+                android:animateLayoutChanges="true"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar_divider">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/add_set_date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
                     android:clipChildren="false"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -189,6 +190,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
                         android:visibility="@{viewModel.memoType != 2 ? View.GONE : View.VISIBLE}"
+                        android:animateLayoutChanges="true"
                         app:layout_constraintTop_toBottomOf="@+id/add_time_picker">
 
                         <TextView
