@@ -23,7 +23,8 @@ class MemoUtil {
         }
     }
 
-    fun finishScheduleBeforeCurrentTime(itemList: MutableList<Memo>) {
+    fun finishScheduleBeforeCurrentTime(itemList: MutableList<Memo>): Boolean {
+        var ret = false
         //일정 중에서 오늘날짜보다 지난것들은 종료처리.
         val today = System.currentTimeMillis()
         for(data in itemList) {
@@ -38,9 +39,10 @@ class MemoUtil {
 
             if(checkDay < today) {
                 AppDataBase.instance.memoDao().setMemoFinish(data.id)
-                itemList.remove(data)
+                ret = true
             }
         }
+        return ret
     }
 
     fun getDDayInteger(scheduleDateYear: Int, scheduleDateMonth: Int, scheduleDateDay: Int): Int {
