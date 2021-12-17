@@ -76,6 +76,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
     private fun setUpObserver() {
         viewModel.memoList.observe(viewLifecycleOwner) {
+            Log.d("get MemoList", "Type : $type -> MemoList has been Loaded.")
             if(type == 2) {
                 //일정 중에서 오늘날짜보다 지난것들은 종료처리.
                 MemoUtil().finishScheduleBeforeCurrentTime(it)
@@ -89,14 +90,8 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         }
 
         memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
-            Log.d("memoList Update", "Type : $type -> MemoList has been Updated")
-            if(this::recyclerViewAdapter.isInitialized.not()) {
-                it.contentIfNotHandled?.let { newList ->
-                    setRecyclerView(newList)
-                    viewModel.setEmpty(newList.isEmpty())
-                }
-            }
-            else if(memoListUpdateViewModel.type == type) {
+            if(this::recyclerViewAdapter.isInitialized && memoListUpdateViewModel.type == type) {
+                Log.d("memoList Update", "Type : $type -> MemoList has been Updated.")
                 it.contentIfNotHandled?.let { newList ->
                     refreshItemList(newList)
                     viewModel.setEmpty(newList.isEmpty())
@@ -105,7 +100,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         }
 
         viewModel.removedMemoAndDetailMemoList.observe(viewLifecycleOwner) {
-            Log.d("memo is", it.toString())
+            Log.d("memo remove", "Memo Has Been Removed. -> $it")
             it.contentIfNotHandled?.let { removedMemoAndDetailMemo ->
                 MemoDeleteSnackBar(
                     requireContext(),
