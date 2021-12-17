@@ -87,6 +87,7 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
     val memoScheduleDateFormat: LiveData<String>
         get() = _memoScheduleDateFormat
 
+    var prevType = -1
 
     fun initMemo() {
         val calendar = Calendar.getInstance()
@@ -117,7 +118,15 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
 
         _memoId.postValue(id)
 
-        _memoType.postValue(memo.type)
+        // 이전 Type 저장해서 이전 Type도 newList로 Update.
+        prevType = if(memo.type == 4) {
+            _memoType.postValue(1)
+            4
+        } else {
+            _memoType.postValue(memo.type)
+            memo.type
+        }
+
         memoIcon.postValue(memo.icon)
         memoTitle.postValue(memo.title)
 
@@ -144,7 +153,11 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
     fun saveMemo() {
         if(title.trim() == "") {
             _memoSaveComplete.postValue(-1)
-        } else {
+        } else if(type != 1 && type != 2 && type != 3) {
+            Log.d("type is", type.toString())
+            _memoSaveComplete.postValue(-2)
+        }
+        else {
             Log.d("MemoAddOrEdit", "Memo Save To Room")
             if(type == 1) {
                 //메모라면 날짜를 오늘로 수정.
@@ -183,7 +196,6 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                         scheduleDateMinute = scheduleDateMinute,
                         alarmStartTimeHour = alarmStartTimeHour,
                         alarmStartTimeMinute = alarmStartTimeMinute,
-                        false,
                         fixNotify = fixNotify,
                         setAlarm = setAlarm,
                         repeatDay = memoRepeatDay,
@@ -204,7 +216,6 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                             scheduleDateMinute = scheduleDateMinute,
                             alarmStartTimeHour = alarmStartTimeHour,
                             alarmStartTimeMinute = alarmStartTimeMinute,
-                            false,
                             fixNotify = fixNotify,
                             setAlarm = setAlarm,
                             repeatDay = memoRepeatDay,

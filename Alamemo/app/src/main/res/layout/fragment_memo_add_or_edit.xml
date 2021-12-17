@@ -257,7 +257,6 @@
                             android:layout_marginEnd="16dp"
                             android:checked="@{viewModel.memoType == 3}"
                             android:onClick="@{() -> viewModel.setType(3)}"
-                            android:enabled="@{viewModel.memoId == 0 ? true : false}"
                             android:text="@string/repeat_schedule"/>
 
                         <RadioButton
@@ -267,7 +266,6 @@
                             android:layout_marginEnd="16dp"
                             android:checked="@{viewModel.memoType == 2}"
                             android:onClick="@{() -> viewModel.setType(2)}"
-                            android:enabled="@{viewModel.memoId == 0 ? true : false}"
                             android:text="@string/schedule" />
 
                         <RadioButton
@@ -276,7 +274,6 @@
                             android:layout_height="wrap_content"
                             android:checked="@{viewModel.memoType == 1}"
                             android:onClick="@{() -> viewModel.setType(1)}"
-                            android:enabled="@{viewModel.memoId == 0 ? true : false}"
                             android:text="@string/memo" />
 
                     </RadioGroup>

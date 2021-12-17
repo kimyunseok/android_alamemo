@@ -17,7 +17,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main
 
     object MemoFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 1 }
-    object FinishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }// type 4는 실제로는 쓰지 않는 type. 프래그먼트에서만 사용.
+    object FinishFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 4 }
     object RepeatFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 3 }
     object ScheduleFragment: BaseTabFragment<FragmentTabBinding>() { override val type: Int = 2 }
 

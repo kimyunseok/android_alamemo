@@ -152,18 +152,17 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
     }
 
     private fun finishMemoBtn() {
+        Toast.makeText(context, context.getString(R.string.memo_complete), Toast.LENGTH_SHORT).show()
         //메모/일정 완료
-        CoroutineScope(Dispatchers.IO).launch {
-            AppDataBase.instance.memoDao().setMemoFinish(memo.id)
+        AppDataBase.instance.memoDao().setMemoFinish(memo.id)
 
-            if(memo.setAlarm) {
-                //알람설정 돼 있었다면 알람해제.
-                AlarmHandler().cancelAlarm(context, memo.id)
-            }
-            if(memo.fixNotify) {
-                //고성설정 돼 있었다면 알람해제.
-                FixNotifyHandler().cancelFixNotify(context, memo.id)
-            }
+        if(memo.setAlarm) {
+            //알람설정 돼 있었다면 알람해제.
+            AlarmHandler().cancelAlarm(context, memo.id)
+        }
+        if(memo.fixNotify) {
+            //고성설정 돼 있었다면 알람해제.
+            FixNotifyHandler().cancelFixNotify(context, memo.id)
         }
     }
 

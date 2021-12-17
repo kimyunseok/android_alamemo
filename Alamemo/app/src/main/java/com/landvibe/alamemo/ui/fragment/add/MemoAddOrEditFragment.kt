@@ -42,7 +42,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         setUpObserver()
         setUpBtnOnClickListener()
 
-        setUpAnimation()
+        setUpExpandAnimation()
     }
 
     private fun initViewModel() {
@@ -57,43 +57,52 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
     private fun setUpObserver() {
         viewModel.memoSaveComplete.observe(this) {
-            if(it != -1L) {
-                viewModel.memoIdValue.let { id ->
-                    //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
-                    AlarmHandler().cancelAlarm(requireContext(), id)
-                    FixNotifyHandler().cancelFixNotify(requireContext(), id)
-
-                    //알람설정.
-                    if(viewModel.setAlarm) {
-                        AlarmHandler().setMemoAlarm(requireContext(), id)
-                    }
-                    //상단바 고정 설정
-                    if(viewModel.fixNotify) {
-                        FixNotifyHandler().setMemoFixNotify(requireContext(), id)
-                    }
+            when (it) {
+                -1L -> {
+                    Toast.makeText(requireContext(), getString(R.string.warn_empty_title_message), Toast.LENGTH_SHORT).show()
                 }
-
-                if(memoId != -1L) {
-                    //Memo Edit
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.memo_modify_complete),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    //Memo First Save
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.memo_save_complete),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                -2L -> {
+                    Toast.makeText(requireContext(), getString(R.string.warn_type_message), Toast.LENGTH_SHORT).show()
                 }
+                else -> {
+                    viewModel.memoIdValue.let { id ->
+                        //알람 설정과 고정바 설정은 수정됐을 수도 있으므로 일단 해제시켜놓는다.
+                        AlarmHandler().cancelAlarm(requireContext(), id)
+                        FixNotifyHandler().cancelFixNotify(requireContext(), id)
 
-                memoListUpdateViewModel.getRecentMemoList(viewModel.type)
+                        //알람설정.
+                        if(viewModel.setAlarm) {
+                            AlarmHandler().setMemoAlarm(requireContext(), id)
+                        }
+                        //상단바 고정 설정
+                        if(viewModel.fixNotify) {
+                            FixNotifyHandler().setMemoFixNotify(requireContext(), id)
+                        }
+                    }
 
-                requireActivity().supportFragmentManager.popBackStack()
-            } else {
-                Toast.makeText(requireContext(), getString(R.string.warn_empty_title_message), Toast.LENGTH_SHORT).show()
+                    if(memoId != -1L) {
+                        //Memo Edit
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.memo_modify_complete),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        //Memo First Save
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.memo_save_complete),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    if(viewModel.prevType != -1 && viewModel.prevType != viewModel.type) {
+                        memoListUpdateViewModel.getRecentMemoList(viewModel.prevType)
+                    }
+                    memoListUpdateViewModel.getRecentMemoList(viewModel.type)
+
+                    requireActivity().supportFragmentManager.popBackStack()
+                }
             }
         }
     }
@@ -134,7 +143,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         }
     }
 
-    private fun setUpAnimation() {
+    private fun setUpExpandAnimation() {
         viewDataBinding.addOrEditMemoLayout.let { it.animation = expandAction(it) }
     }
 

@@ -85,7 +85,9 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
             viewModel.setEmpty(it.isEmpty())
         }
 
-        memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
+        memoListUpdateViewModel.recentMemoList.observe(requireActivity()) {
+            Log.d("recent Type is", memoListUpdateViewModel.type.toString())
+            Log.d("Fragment Type is", type.toString())
             if(this::recyclerViewAdapter.isInitialized && memoListUpdateViewModel.type == type) {
                 Log.d("memoList Update", "MemoList has been Updated")
                 it.contentIfNotHandled?.let { newList ->

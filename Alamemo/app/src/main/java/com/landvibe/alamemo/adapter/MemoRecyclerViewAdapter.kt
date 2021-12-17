@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.HolderMemoBinding
@@ -79,18 +80,24 @@ class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Me
             }
             
             binding.holderCompleteCb.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    //일정 종료처리
-                    AppDataBase.instance.memoDao().setMemoFinish(item.id)
+                Toast.makeText(context, context.getString(R.string.memo_complete), Toast.LENGTH_SHORT).show()
 
-                    if(item.setAlarm) {
-                        //알람설정 돼 있었다면 알람해제.
-                        AlarmHandler().cancelAlarm(context, item.id)
-                    }
-                    if(item.fixNotify) {
-                        //고성설정 돼 있었다면 알람해제.
-                        FixNotifyHandler().cancelFixNotify(context, item.id)
-                    }
+                notifyItemRemoved(itemList.indexOf(item))
+                itemList.remove(item)
+
+                //일정 종료처리
+                AppDataBase.instance.memoDao().setMemoFinish(item.id)
+
+                memoListUpdateViewModel.getRecentMemoList(item.type) // 해당 타입 메모 리스트 다시 받아옴
+                memoListUpdateViewModel.getRecentMemoList(4) // 종료 시킨 것도 다시 받아옴
+
+                if(item.setAlarm) {
+                    //알람설정 돼 있었다면 알람해제.
+                    AlarmHandler().cancelAlarm(context, item.id)
+                }
+                if(item.fixNotify) {
+                    //고성설정 돼 있었다면 알람해제.
+                    FixNotifyHandler().cancelFixNotify(context, item.id)
                 }
             }
         }

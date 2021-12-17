@@ -30,22 +30,20 @@ class DetailMemoDeleteSnackBar(context: Context, rootView: View, val detailMemo:
     }
 
     private fun undoDelete(context: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
-            detailMemo?.let {
-                AppDataBase.instance.detailMemoDao().insertDetailMemo(detailMemo)
+        detailMemo?.let {
+            AppDataBase.instance.detailMemoDao().insertDetailMemo(detailMemo)
 
-                val memo = AppDataBase.instance.memoDao().getMemoById(detailMemo.memoId)
+            val memo = AppDataBase.instance.memoDao().getMemoById(detailMemo.memoId)
 
-                if(memo.setAlarm) {
-                    //알람설정 돼 있었다면 알람재설정
-                    AlarmHandler().setMemoAlarm(context, memo.id)
-                }
-                if(memo.fixNotify) {
-                    //고성설정 돼 있었다면 고정재설정
-                    FixNotifyHandler().setMemoFixNotify(context, memo.id)
-                }
-                memoListUpdateViewModel.getRecentDetailMemoList(detailMemo.memoId)
+            if(memo.setAlarm) {
+                //알람설정 돼 있었다면 알람재설정
+                AlarmHandler().setMemoAlarm(context, memo.id)
             }
+            if(memo.fixNotify) {
+                //고성설정 돼 있었다면 고정재설정
+                FixNotifyHandler().setMemoFixNotify(context, memo.id)
+            }
+            memoListUpdateViewModel.getRecentDetailMemoList(detailMemo.memoId)
         }
     }
 }

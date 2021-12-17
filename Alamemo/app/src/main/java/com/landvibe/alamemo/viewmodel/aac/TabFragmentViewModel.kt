@@ -28,21 +28,13 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
     val removedMemoAndDetailMemoList: LiveData<EventWrapper<RemovedMemoAndDetailMemoList>>
         get() = _removedMemoAndDetailMemoList
 
-    private val _newMemoList = MutableLiveData<MutableList<Memo>>()
-    val newMemoList: LiveData<MutableList<Memo>>
-        get() = _newMemoList
-
     fun setEmpty(isEmpty: Boolean) {
         _memoEmpty.postValue(isEmpty)
     }
 
     fun getMemoList(type: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            val memoList = if(type != 4) {
-                memoRepository.getMemoByType(type)
-            } else {
-                memoRepository.getFinishMemo()
-            }
+            val memoList = memoRepository.getMemoByType(type)
             Log.d("get Memo From Room", memoList.toString())
             _memoList.postValue(memoList.toMutableList())
         }
@@ -85,18 +77,6 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
             4 -> {
                 title = "🏁 종료"
             }
-        }
-    }
-
-    fun getRecentMemoList(type: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val memoList = if(type != 4) {
-                memoRepository.getMemoByType(type)
-            } else {
-                memoRepository.getFinishMemo()
-            }
-            Log.d("get Memo From Room", memoList.toString())
-            _newMemoList.postValue(memoList.toMutableList())
         }
     }
 

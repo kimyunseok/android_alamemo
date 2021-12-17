@@ -87,7 +87,7 @@ class MemoUtil {
     }
 
     fun getMemoTitleInclueTime(memo: Memo): String {
-        return if(!memo.scheduleFinish && (memo.type == 2 || memo.type == 3)) {
+        return if(memo.type != 4 && (memo.type == 2 || memo.type == 3)) {
             MemoUtil().getTimeFormat(memo.scheduleDateHour, memo.scheduleDateMinute) + " " + memo.title
         } else {
             memo.title

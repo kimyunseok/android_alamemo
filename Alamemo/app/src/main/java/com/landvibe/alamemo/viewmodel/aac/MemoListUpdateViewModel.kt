@@ -8,9 +8,6 @@ import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.util.EventWrapper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MemoListUpdateViewModel(private val memoRepository: MemoRepository,
                               private val detailMemoRepository: DetailMemoRepository): ViewModel() {
@@ -26,21 +23,13 @@ class MemoListUpdateViewModel(private val memoRepository: MemoRepository,
 
     fun getRecentMemoList(_type: Int) {
         type = _type
-        CoroutineScope(Dispatchers.IO).launch {
-            val memoList = if(_type != 4) {
-                memoRepository.getMemoByType(_type)
-            } else {
-                memoRepository.getFinishMemo()
-            }
+        val memoList = memoRepository.getMemoByType(_type)
 
-            _recentMemoList.postValue(EventWrapper(memoList.toMutableList()))
-        }
+        _recentMemoList.value = EventWrapper(memoList.toMutableList())
     }
 
     fun getRecentDetailMemoList(memoId: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
-            _recentDetailMemoList.postValue(EventWrapper(detailMemoList.toMutableList()))
-        }
+        val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
+        _recentDetailMemoList.value = EventWrapper(detailMemoList.toMutableList())
     }
 }

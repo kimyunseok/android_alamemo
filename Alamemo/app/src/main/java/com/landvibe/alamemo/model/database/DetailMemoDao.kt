@@ -15,7 +15,9 @@ interface DetailMemoDao {
     fun getDetailMemoById(id: Long): DetailMemo
 
     @Insert
-    suspend fun insertDetailMemo(detailMemo: DetailMemo)
+    suspend fun suspendInsertDetailMemo(detailMemo: DetailMemo)
+    @Insert
+    fun insertDetailMemo(detailMemo: DetailMemo)
 
     @Delete
     suspend fun deleteDetailMemo(detailMemo: DetailMemo)
