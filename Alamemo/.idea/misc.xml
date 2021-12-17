@@ -57,7 +57,7 @@
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_splash.xml" value="0.22" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_helper.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_memo_long_click.xml" value="0.16666666666666666" />
-        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_memo_menu.xml" value="0.22" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_memo_menu.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_select_icon.xml" value="0.16666666666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_add.xml" value="0.16666666666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_detail.xml" value="0.13333333333333333" />
@@ -71,7 +71,7 @@
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_helper.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_icon.xml" value="0.19635416666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_icon_type.xml" value="0.18" />
-        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_long_click_menu.xml" value="0.22" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_long_click_menu.xml" value="0.16666666666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_memo.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_tab_button.xml" value="0.2015625" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/snackbar_layout.xml" value="0.271875" />
