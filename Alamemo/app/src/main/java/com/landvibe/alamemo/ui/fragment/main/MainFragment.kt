@@ -57,7 +57,7 @@ class MainFragment: BaseFragment<FragmentMainBinding>() {
         }
 
         viewDataBinding.mainViewPager.adapter = pagerAdapter
-        viewDataBinding.mainViewPager.offscreenPageLimit = 4 // State 4개 저장
+        viewDataBinding.mainViewPager.offscreenPageLimit = 3 // State 좌 우 3개까지 저장
         viewDataBinding.mainViewPager.isUserInputEnabled = false // 스와이프 막기
     }
 
