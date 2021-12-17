@@ -121,6 +121,8 @@ class DetailMemoLongClickRecyclerViewAdapter (val context: Context,
                 FixNotifyHandler().setMemoFixNotify(context, tmpMemo.id)
             }
 
+            memoListUpdateViewModel.getRecentDetailMemoList(memoID)
+
             (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
                 if(it is DetailFragment) {
                     it.onResume()

@@ -164,6 +164,9 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
             //고성설정 돼 있었다면 알람해제.
             FixNotifyHandler().cancelFixNotify(context, memo.id)
         }
+
+        memoListUpdateViewModel.getRecentMemoList(memo.type) // 해당 타입 메모 리스트 다시 받아옴
+        memoListUpdateViewModel.getRecentMemoList(4) // 종료 시킨 것도 다시 받아옴
     }
 
     private fun modifyMemoBtn() {
@@ -183,6 +186,10 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
 
             val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
+            for(detailMemo in detailMemoList) {
+                AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemo.id)
+            }
+
             if(memo.setAlarm) {
                 //알람설정 돼 있었다면 알람해제.
                 AlarmHandler().cancelAlarm(context, memo.id)
@@ -192,6 +199,8 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
                 //고성설정 돼 있었다면 알람해제.
                 FixNotifyHandler().cancelFixNotify(context, memo.id)
             }
+
+            memoListUpdateViewModel.getRecentMemoList(memo.type) // 해당 타입 메모 리스트 다시 받아옴
 
             (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
                 if(it is MainFragment) {

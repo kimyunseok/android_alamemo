@@ -145,6 +145,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
     private fun setUpExpandAnimation() {
         viewDataBinding.addOrEditMemoLayout.let { it.animation = expandAction(it) }
+        viewDataBinding.addSetDateLayout.let { it.animation = expandAction(it) }
     }
 
     /**

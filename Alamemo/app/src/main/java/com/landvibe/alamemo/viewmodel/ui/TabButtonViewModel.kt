@@ -1,8 +1,6 @@
 package com.landvibe.alamemo.viewmodel.ui
 
-import androidx.lifecycle.ViewModel
-
-class TabButtonViewModel: ViewModel() {
+class TabButtonViewModel {
     var emoji = ""
     var title = ""
 }
