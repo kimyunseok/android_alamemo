@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
         android:textColor="@color/black"
-        android:text="@string/splash_bottom_text"
+        android:text="@string/app_name"
         android:textSize="42sp"
         app:layout_constraintEnd_toEndOf="@+id/splash_image"
         app:layout_constraintStart_toStartOf="@+id/splash_image"
