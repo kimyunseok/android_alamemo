@@ -91,6 +91,12 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
     val detailMemoSaveComplete: LiveData<Boolean>
         get() = _detailMemoSaveComplete
 
+    private val _maxDate = MutableLiveData<Long>()
+    val maxDate: LiveData<Long>
+        get() = _maxDate
+    val maxDateValue: Long
+        get() = maxDate.value?: Calendar.getInstance().timeInMillis
+
     lateinit var memo: Memo
 
     fun initDetailMemo(memoId: Long) {
@@ -116,13 +122,15 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
         detailMemoScheduleDateHour.value = calendar.get(Calendar.HOUR_OF_DAY)
         detailMemoScheduleDateMinute.value = calendar.get(Calendar.MINUTE)
 
-        _memoScheduleDateYear.postValue(memo.scheduleDateYear)
-        _memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
-        _memoScheduleDateDay.postValue(memo.scheduleDateDay)
+        _memoScheduleDateYear.value = memo.scheduleDateYear
+        _memoScheduleDateMonth.value = memo.scheduleDateMonth
+        _memoScheduleDateDay.value = memo.scheduleDateDay
 
         val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
         _detailMemoScheduleDateFormat.postValue("${(calendar.get(Calendar.YEAR))}년 ${(calendar.get(Calendar.MONTH)).plus(1)}월 " +
                 "${(calendar.get(Calendar.DAY_OF_MONTH))}일 ${dayOfWeek}요일")
+
+        setDetailMemoMaxDate()
     }
 
     fun getDetailMemoInfoById(id: Long) {
@@ -142,9 +150,9 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
         detailMemoScheduleDateHour.value = detailMemo.scheduleDateHour
         detailMemoScheduleDateMinute.value = detailMemo.scheduleDateMinute
 
-        _memoScheduleDateYear.postValue(memo.scheduleDateYear)
-        _memoScheduleDateMonth.postValue(memo.scheduleDateMonth)
-        _memoScheduleDateDay.postValue(memo.scheduleDateDay)
+        _memoScheduleDateYear.value = memo.scheduleDateYear
+        _memoScheduleDateMonth.value = memo.scheduleDateMonth
+        _memoScheduleDateDay.value = memo.scheduleDateDay
 
         val dayOfWeek = AboutDay.AboutDayOfWeek().getDayOfWeekByDate(scheduleDateYear, scheduleDateMonth, scheduleDateDay)
 
@@ -152,6 +160,7 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
                 "${memo.scheduleDateDay}일 ${dayOfWeek}요일")
 
         checkScheduleTime()
+        setDetailMemoMaxDate()
     }
 
     fun saveDetailMemo() {
@@ -225,9 +234,9 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
     }
 
     fun setScheduleDate(year: Int, month: Int, day: Int) {
-        detailMemoScheduleDateYear.postValue(year)
-        detailMemoScheduleDateMonth.postValue(month)
-        detailMemoScheduleDateDay.postValue(day)
+        detailMemoScheduleDateYear.value = year
+        detailMemoScheduleDateMonth.value = month
+        detailMemoScheduleDateDay.value = day
         resetMemoScheduleDateFormatByDate()
     }
 
@@ -236,13 +245,13 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
         detailMemoScheduleDateMinute.postValue(minute)
     }
 
-    fun getMaxDate(): Long {
+    private fun setDetailMemoMaxDate() {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.YEAR, memoScheduleDateYearValue)
         calendar.set(Calendar.MONTH, memoScheduleDateMonthValue)
         calendar.set(Calendar.DAY_OF_MONTH, memoScheduleDateDayValue)
 
-        return calendar.time.time
+        _maxDate.value = calendar.timeInMillis
     }
 
     private fun resetMemoScheduleDateFormatByDate() {

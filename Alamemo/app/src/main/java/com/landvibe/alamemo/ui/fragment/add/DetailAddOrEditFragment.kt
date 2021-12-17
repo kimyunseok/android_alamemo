@@ -117,7 +117,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
             val calendarDialog = DatePickerDialog(requireContext(), calendarOnDateSetListener, yearValue, monthValue, dayOfMonthValue)
                 .apply {
                     datePicker.minDate = System.currentTimeMillis()
-                    val maxDate = viewDataBinding.viewModel?.getMaxDate()
+                    val maxDate = viewDataBinding.viewModel?.maxDateValue
                     maxDate?.let { datePicker.maxDate = it }
                 }
             calendarDialog.show()
