@@ -2,7 +2,6 @@ package com.landvibe.alamemo.util
 
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
-import com.landvibe.alamemo.model.database.AppDataBase
 import java.util.*
 
 class MemoUtil {
@@ -21,28 +20,6 @@ class MemoUtil {
                 "D - DAY"
             }
         }
-    }
-
-    fun finishScheduleBeforeCurrentTime(itemList: MutableList<Memo>): Boolean {
-        var ret = false
-        //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-        val today = System.currentTimeMillis()
-        for(data in itemList) {
-            val calendar = Calendar.getInstance()
-            data.scheduleDateYear.let { calendar.set(Calendar.YEAR, it) }
-            data.scheduleDateMonth.let { calendar.set(Calendar.MONTH, it) }
-            data.scheduleDateDay.let { calendar.set(Calendar.DAY_OF_MONTH, it) }
-            //시간은 상관없이 당일의 모든 일정을 보여주도록 하기위해 비교하는 날의 시간은 23:59분으로 맞춤.
-            calendar.set(Calendar.HOUR_OF_DAY, 23)
-            calendar.set(Calendar.MINUTE, 59)
-            val checkDay = calendar.time.time
-
-            if(checkDay < today) {
-                AppDataBase.instance.memoDao().setMemoFinish(data.id)
-                ret = true
-            }
-        }
-        return ret
     }
 
     fun getDDayInteger(scheduleDateYear: Int, scheduleDateMonth: Int, scheduleDateDay: Int): Int {

@@ -30,4 +30,8 @@ class MemoHolderViewModel(val memo: Memo) {
         }
     }
 
+    fun alreadyPassedDate(): Boolean {
+        return (getDDayInteger() < 0)
+    }
+
 }

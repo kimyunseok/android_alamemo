@@ -77,19 +77,10 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     private fun setUpObserver() {
         viewModel.memoList.observe(viewLifecycleOwner) {
             Log.d("get MemoList", "Type : $type -> MemoList has been Loaded.")
-            var needTogetNewList = false
-            if(type == 2) {
-                //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-                needTogetNewList = MemoUtil().finishScheduleBeforeCurrentTime(it)
-            }
-            if(needTogetNewList) {
-                memoListUpdateViewModel.getRecentMemoList(type)
-                memoListUpdateViewModel.getRecentMemoList(4)
-            } else {
-                MemoUtil().sortMemoList(it, type)
-                setRecyclerView(it)
-                viewModel.setEmpty(it.isEmpty())
-            }
+
+            MemoUtil().sortMemoList(it, type)
+            setRecyclerView(it)
+            viewModel.setEmpty(it.isEmpty())
         }
 
         memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
@@ -163,23 +154,16 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
 
     private fun refreshItemList(newItemList: MutableList<Memo>) {
         val oldItemList = recyclerViewAdapter.itemList
-        var needTogetNewList = false
-        if(type == 2) {
-            //일정 중에서 오늘날짜보다 지난것들은 종료처리.
-            needTogetNewList = MemoUtil().finishScheduleBeforeCurrentTime(newItemList)
-        }
-        if(needTogetNewList) {
-            memoListUpdateViewModel.getRecentMemoList(type)
-            memoListUpdateViewModel.getRecentMemoList(4)
-        } else {
-            MemoUtil().sortMemoList(newItemList, type)
-            //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
-            //대체 코드
-            val diffUtil = DiffUtil.calculateDiff(MemoDiffUtil(oldItemList, newItemList), false)
-            diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
-            recyclerViewAdapter.itemList = newItemList
-            viewModel.setEmpty(newItemList.isEmpty())
-        }
+
+        MemoUtil().sortMemoList(newItemList, type)
+        //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
+
+        //대체 코드
+        val diffUtil = DiffUtil.calculateDiff(MemoDiffUtil(oldItemList, newItemList), false)
+        diffUtil.dispatchUpdatesTo(recyclerViewAdapter)
+        recyclerViewAdapter.itemList = newItemList
+
+        //viewModel.setEmpty(newItemList.isEmpty())
 
 
     }
