@@ -17,7 +17,7 @@ class NotificationChannelMaker {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.notification_channel_name)
+            val name = context.getString(R.string.alarm_channel_name)
             val descriptionText = context.getString(R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(
@@ -39,7 +39,7 @@ class NotificationChannelMaker {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.getString(R.string.notification_channel_name)
+            val name = context.getString(R.string.fix_channel_name)
             val descriptionText = context.getString(R.string.app_name)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(

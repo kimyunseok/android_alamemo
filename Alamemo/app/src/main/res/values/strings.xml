@@ -78,7 +78,8 @@
     <!-- Notification 관련 -->
     <string name="alarm_channel_id">alamemo_alarm_notification_id</string>
     <string name="fix_channel_id">alamemo_fix_notification_id</string>
-    <string name="notification_channel_name" >ALAMEMO 알림</string>
+    <string name="alarm_channel_name" >ALAMEMO 알람</string>
+    <string name="fix_channel_name" >ALAMEMO 상단바 고정</string>
     <string name="notification_today">오늘은 </string>
     <string name="notification_today_time_is"> 에 </string>
     <string name="notification_today_is_scheduled">이(가) 예정되어 있습니다!\n</string>
