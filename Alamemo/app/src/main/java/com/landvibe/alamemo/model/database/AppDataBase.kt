@@ -1,12 +1,11 @@
 package com.landvibe.alamemo.model.database
 
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.landvibe.alamemo.common.GlobalApplication
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
 
-@Database(entities = [Memo::class, DetailMemo::class], version = 1)
+@Database(entities = [Memo::class, DetailMemo::class], version = 2)
 @TypeConverters(AppDataBase.Converter::class)
 abstract class AppDataBase: RoomDatabase() {
     abstract fun memoDao(): MemoDao
