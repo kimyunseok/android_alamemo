@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.databinding.HolderHelperBinding
 import com.landvibe.alamemo.viewmodel.ui.HelperViewModel
-import com.landvibe.alamemo.ui.fragment.helper.HelperDialog
+import com.landvibe.alamemo.ui.dialog.HelperDialog
 
 class HelperRecyclerViewAdapter(val fragmentManager: FragmentManager, var itemList: MutableList<HelperViewModel>, ): RecyclerView.Adapter<HelperRecyclerViewAdapter.Holder>() {
 

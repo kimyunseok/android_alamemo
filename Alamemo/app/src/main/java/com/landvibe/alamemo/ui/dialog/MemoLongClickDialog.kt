@@ -26,6 +26,7 @@ class MemoLongClickDialog(val memoListUpdateViewModel: MemoListUpdateViewModel):
         savedInstanceState: Bundle?
     ): View? {
         binding = DialogMemoMenuBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
 
         CoroutineScope(Dispatchers.Main).launch {
             setUpView()
