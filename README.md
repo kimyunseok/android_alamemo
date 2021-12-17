@@ -12,6 +12,7 @@
 - Android 8 이상의 폰에 알람이 갈 수 있도록 NotificationChannel을 만들었다.
 - BaseActivity, BaseFragment를 사용해서 코드의 중복을 줄였다.
 - 2021.12.17 Repository 패턴을 사용해서 Fragment에서는 Room DB에 접근 시 Repository를 이용하였다.
+- AAC ViewModel을 사용해서 Android 생명주기에 맞는 뷰모델을 사용했다.
 ##
 ### 앱 스크린샷
 ##
