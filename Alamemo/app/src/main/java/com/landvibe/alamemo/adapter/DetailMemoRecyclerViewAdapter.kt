@@ -39,7 +39,6 @@ class DetailMemoRecyclerViewAdapter(val context: Context, var itemList: MutableL
                 DetailMemoClickDialog(memoListUpdateViewModel).apply {
                     arguments = Bundle().apply { putLong("detailMemoId", item.id) }
                 }.show((context as MainActivity).supportFragmentManager, "click")
-                true
             }
 
             binding.detailEditBtn.setOnClickListener {

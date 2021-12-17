@@ -89,9 +89,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         }
 
         memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
-            Log.d("memoList Update", "MemoList has been Updated")
-            Log.d("viewModel Type ::", memoListUpdateViewModel.type.toString())
-            Log.d("Fragment Type ::", type.toString())
+            Log.d("memoList Update", "Type : $type -> MemoList has been Updated")
             if(this::recyclerViewAdapter.isInitialized.not()) {
                 it.contentIfNotHandled?.let { newList ->
                     setRecyclerView(newList)
