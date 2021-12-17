@@ -24,10 +24,7 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
                 DetailMemoRepository())).get(DetailMemoAddOrEditViewModel::class.java)
     }
 
-    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
-        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
-            MemoListUpdateViewModel::class.java)
-    }
+    lateinit var memoListUpdateViewModel: MemoListUpdateViewModel
 
     private val memoId: Long by lazy {
         arguments?.getLong("memoId") ?: -1L
@@ -40,6 +37,9 @@ class DetailAddOrEditFragment: BaseFragment<FragmentDetailAddOrEditBinding>() {
     }
 
     private fun initViewModel() {
+        memoListUpdateViewModel = ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
+
         val detailMemoId = arguments?.getLong("detailMemoId", -1)
         var type = arguments?.getInt("memoType")
 

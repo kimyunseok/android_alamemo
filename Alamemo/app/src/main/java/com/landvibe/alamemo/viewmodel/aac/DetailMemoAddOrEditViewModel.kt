@@ -162,7 +162,7 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
                 if (detailMemoIdValue != 0L) {
                     //만일 세부사항 수정하기라면
 
-                    detailMemoRepository.modifyDetailMemo(
+                    detailMemoRepository.suspendModifyDetailMemo(
                         id = detailMemoIdValue,
                         type = type,
                         icon = icon,
@@ -176,7 +176,7 @@ class DetailMemoAddOrEditViewModel(private val memoRepository: MemoRepository,
                 } else {
                     //새로 생성이라면
 
-                    detailMemoRepository.insertDetailMemo(
+                    detailMemoRepository.suspendInsertDetailMemo(
                         DetailMemo(
                             id = detailMemoIdValue,
                             memoId = memoIdValue,

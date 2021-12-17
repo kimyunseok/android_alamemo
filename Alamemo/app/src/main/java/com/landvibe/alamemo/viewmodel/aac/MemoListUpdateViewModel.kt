@@ -1,5 +1,6 @@
 package com.landvibe.alamemo.viewmodel.aac
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,7 @@ class MemoListUpdateViewModel(private val memoRepository: MemoRepository,
         get() = _recentDetailMemoList
 
     fun getRecentMemoList(_type: Int) {
+        Log.d("MemoListUpdate", "get Recent Memo List - type is $_type")
         type = _type
         val memoList = memoRepository.getMemoByType(_type)
 
@@ -33,15 +35,27 @@ class MemoListUpdateViewModel(private val memoRepository: MemoRepository,
         _recentDetailMemoList.value = EventWrapper(detailMemoList.toMutableList())
     }
 
-    fun changeDetailMemoType(memoId: Long, changedType: Int) {
+    fun changeDetailMemoTypeAndDate(memoId: Long, changedType: Int) {
+        val memo = memoRepository.getMemoById(memoId)
         val detailMemoList = detailMemoRepository.getDetailMemoByMemoId(memoId)
 
+        val applyType = if (changedType == 3) {
+            1
+        } else {
+            changedType
+        }
+
         for(detailMemo in detailMemoList) {
-            if(changedType == 3) {
-                detailMemoRepository.modifyDetailMemoType(detailMemo.id, 1)
-            } else {
-                detailMemoRepository.modifyDetailMemoType(detailMemo.id, changedType)
-            }
+            detailMemoRepository.modifyDetailMemoType(
+                detailMemo.id,
+                applyType,
+                detailMemo.icon,
+                detailMemo.title,
+                memo.scheduleDateYear,
+                memo.scheduleDateMonth,
+                memo.scheduleDateDay,
+                memo.scheduleDateHour,
+                memo.scheduleDateMinute)
         }
     }
 }

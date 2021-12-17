@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
 import com.landvibe.alamemo.R
@@ -37,11 +38,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         ViewModelProvider(this, MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
             TabFragmentViewModel::class.java)
     }
-
-    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
-        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
-            MemoListUpdateViewModel::class.java)
-    }
+    lateinit var memoListUpdateViewModel: MemoListUpdateViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +49,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
         viewDataBinding.lifecycleOwner = viewLifecycleOwner
 
         initViewModel()
+
         setUpObserver()
         setTitle()
         getMemoList()
@@ -60,6 +58,8 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
     }
 
     private fun initViewModel() {
+        memoListUpdateViewModel = ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
         viewModel.setEmpty(true)
         viewDataBinding.model = viewModel
     }
@@ -80,14 +80,28 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
             }
 
             MemoUtil().sortMemoList(it)
+
+            //종료 일정은 최신순으로 보여준다.
+            if(type == 3) {
+                it.reverse()
+            }
+
             setRecyclerView(it)
 
             viewModel.setEmpty(it.isEmpty())
         }
 
-        memoListUpdateViewModel.recentMemoList.observe(requireActivity()) {
-            if(this::recyclerViewAdapter.isInitialized && memoListUpdateViewModel.type == type) {
-                Log.d("memoList Update", "MemoList has been Updated")
+        memoListUpdateViewModel.recentMemoList.observe(viewLifecycleOwner) {
+            Log.d("memoList Update", "MemoList has been Updated")
+            Log.d("viewModel Type ::", memoListUpdateViewModel.type.toString())
+            Log.d("Fragment Type ::", type.toString())
+            if(this::recyclerViewAdapter.isInitialized.not()) {
+                it.contentIfNotHandled?.let { newList ->
+                    setRecyclerView(newList)
+                    viewModel.setEmpty(newList.isEmpty())
+                }
+            }
+            else if(memoListUpdateViewModel.type == type) {
                 it.contentIfNotHandled?.let { newList ->
                     refreshItemList(newList)
                     viewModel.setEmpty(newList.isEmpty())

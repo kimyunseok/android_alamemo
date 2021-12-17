@@ -35,10 +35,7 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
         ViewModelProvider(this, MemoAndDetailMemoViewModelFactory(MemoRepository(),  DetailMemoRepository())).get(
             DetailFragmentViewModel::class.java) }
 
-    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
-        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
-            MemoListUpdateViewModel::class.java)
-    }
+    lateinit var memoListUpdateViewModel: MemoListUpdateViewModel
 
     lateinit var recyclerViewAdapter: DetailMemoRecyclerViewAdapter
 
@@ -50,6 +47,9 @@ class DetailFragment: BaseFragment<FragmentDetailBinding>() {
     }
 
     private fun setViewModel() {
+        memoListUpdateViewModel = ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
+
         arguments?.getLong("memoId")?.let { viewModel.memoId = it }
 
         val memoIcon = arguments?.getString("memoIcon", "-")

@@ -2,7 +2,9 @@ package com.landvibe.alamemo.ui.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.ActivityMainBinding
 import com.landvibe.alamemo.ui.base.BaseActivity
@@ -10,7 +12,11 @@ import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.ui.fragment.main.MainFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
+import com.landvibe.alamemo.repository.DetailMemoRepository
+import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.util.NotificationChannelMaker
+import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
 /**
 MainActivity는 자동으로 menifests에 추가됨. 따로 추가할 필요가 없다.
@@ -58,7 +64,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 putString("memoTitle", memoTitle)
                 putInt("memoType", memoType)
             }
-
 
             supportFragmentManager
                 .beginTransaction()

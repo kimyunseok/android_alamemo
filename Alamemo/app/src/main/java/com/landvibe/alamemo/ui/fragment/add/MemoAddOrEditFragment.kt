@@ -27,10 +27,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
         ViewModelProvider(this, MemoViewModelFactory(MemoRepository())).get(MemoAddOrEditViewModel::class.java)
     }
 
-    private val memoListUpdateViewModel: MemoListUpdateViewModel by lazy {
-        ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
-            MemoListUpdateViewModel::class.java)
-    }
+    lateinit var memoListUpdateViewModel: MemoListUpdateViewModel
 
     // 메모 수정 시 불러오는 memoId, 메모 최초 작성시에는 해당 값이 -1
     private val memoId: Long by lazy {
@@ -46,6 +43,8 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     }
 
     private fun initViewModel() {
+        memoListUpdateViewModel = ViewModelProvider(requireActivity(), MemoAndDetailMemoViewModelFactory(MemoRepository(), DetailMemoRepository())).get(
+            MemoListUpdateViewModel::class.java)
         viewDataBinding.viewModel = viewModel
 
         if(memoId != -1L) {
@@ -101,7 +100,7 @@ class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
 
                     if(viewModel.prevType != -1 && viewModel.prevType != viewModel.type) {
                         memoListUpdateViewModel.getRecentMemoList(viewModel.prevType)
-                        memoListUpdateViewModel.changeDetailMemoType(memoId, viewModel.type)
+                        memoListUpdateViewModel.changeDetailMemoTypeAndDate(memoId, viewModel.type)
                     }
                     memoListUpdateViewModel.getRecentMemoList(viewModel.type)
 

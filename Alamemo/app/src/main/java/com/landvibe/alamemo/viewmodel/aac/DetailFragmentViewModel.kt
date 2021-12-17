@@ -51,13 +51,13 @@ class DetailFragmentViewModel(private val memoRepository: MemoRepository,
 
     fun insertDetailMemo(detailMemo: DetailMemo) {
         CoroutineScope(Dispatchers.IO).launch {
-            detailMemoRepository.insertDetailMemo(detailMemo)
+            detailMemoRepository.suspendInsertDetailMemo(detailMemo)
         }
     }
 
     fun deleteDetailMemoByID(detailMemoId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
-            detailMemoRepository.deleteDetailMemoByID(detailMemoId)
+            detailMemoRepository.suspendDeleteDetailMemoByID(detailMemoId)
         }
     }
 
