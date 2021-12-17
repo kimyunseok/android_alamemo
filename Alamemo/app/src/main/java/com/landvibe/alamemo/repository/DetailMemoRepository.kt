@@ -11,7 +11,7 @@ class DetailMemoRepository {
     fun getDetailMemoById(id: Long) = detailMemoDataBase.getDetailMemoById(id)
     suspend fun insertDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.suspendInsertDetailMemo(detailMemo)
     suspend fun deleteDetailMemo(detailMemo: DetailMemo) = detailMemoDataBase.deleteDetailMemo(detailMemo)
-    suspend fun deleteDetailMemoByID(id: Long) = detailMemoDataBase.deleteDetailMemoByID(id)
+    suspend fun deleteDetailMemoByID(id: Long) = detailMemoDataBase.suspendDeleteDetailMemoByID(id)
     suspend fun deleteDetailMemoByMemoID(memoId: Long) = detailMemoDataBase.deleteDetailMemoByMemoID(memoId)
     suspend fun modifyDetailMemo(id: Long, type: Int, icon: String,
                                  title: String, scheduleDateYear: Int,

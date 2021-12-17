@@ -10,7 +10,7 @@ class MemoRepository {
     suspend fun insertMemo(memo: Memo) = memoDataBase.suspendInsertMemo(memo)
     fun getMemoById(id: Long) = memoDataBase.getMemoById(id)
     fun getMemoByType(type: Int) = memoDataBase.getMemoByType(type)
-    suspend fun deleteMemoByID(id: Long) = memoDataBase.deleteMemoByID(id)
+    suspend fun deleteMemoByID(id: Long) = memoDataBase.suspendDeleteMemoByID(id)
     fun setMemoFinish(id: Long) = memoDataBase.setMemoFinish(id)
     suspend fun modifyMemo(id: Long, type: Int, icon: String,
                    title: String, scheduleDateYear: Int,

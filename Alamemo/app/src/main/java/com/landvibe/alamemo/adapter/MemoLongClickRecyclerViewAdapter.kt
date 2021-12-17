@@ -16,7 +16,6 @@ import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.HolderLongClickMenuBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
-import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.viewmodel.ui.LongClickViewModel
 import com.landvibe.alamemo.ui.activity.MainActivity
@@ -25,9 +24,6 @@ import com.landvibe.alamemo.ui.fragment.main.MainFragment
 import com.landvibe.alamemo.ui.snackbar.MemoDeleteSnackBar
 import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MemoLongClickRecyclerViewAdapter (val context: Context,
                                         val dialog: BottomSheetDialogFragment,
@@ -181,31 +177,29 @@ class MemoLongClickRecyclerViewAdapter (val context: Context,
     }
 
     private fun removeMemoBtn() {
-        CoroutineScope(Dispatchers.IO).launch {
-            AppDataBase.instance.memoDao().deleteMemoByID(memo.id)
+        AppDataBase.instance.memoDao().deleteMemoByID(memo.id)
 
-            val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
+        val detailMemoList = AppDataBase.instance.detailMemoDao().getDetailMemoByMemoId(memo.id).toMutableList()
 
-            for(detailMemo in detailMemoList) {
-                AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemo.id)
-            }
+        for(detailMemo in detailMemoList) {
+            AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemo.id)
+        }
 
-            if(memo.setAlarm) {
-                //알람설정 돼 있었다면 알람해제.
-                AlarmHandler().cancelAlarm(context, memo.id)
-            }
+        if(memo.setAlarm) {
+            //알람설정 돼 있었다면 알람해제.
+            AlarmHandler().cancelAlarm(context, memo.id)
+        }
 
-            if(memo.fixNotify) {
-                //고성설정 돼 있었다면 알람해제.
-                FixNotifyHandler().cancelFixNotify(context, memo.id)
-            }
+        if(memo.fixNotify) {
+            //고성설정 돼 있었다면 알람해제.
+            FixNotifyHandler().cancelFixNotify(context, memo.id)
+        }
 
-            memoListUpdateViewModel.getRecentMemoList(memo.type) // 해당 타입 메모 리스트 다시 받아옴
+        memoListUpdateViewModel.getRecentMemoList(memo.type) // 해당 타입 메모 리스트 다시 받아옴
 
-            (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
-                if(it is MainFragment) {
-                    MemoDeleteSnackBar(context, it.viewDataBinding.root, memo, detailMemoList, memoListUpdateViewModel).showSnackBar()
-                }
+        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
+            if(it is MainFragment) {
+                MemoDeleteSnackBar(context, it.viewDataBinding.root, memo, detailMemoList, memoListUpdateViewModel).showSnackBar()
             }
         }
     }

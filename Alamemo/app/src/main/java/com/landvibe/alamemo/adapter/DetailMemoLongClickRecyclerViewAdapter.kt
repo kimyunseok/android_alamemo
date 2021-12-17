@@ -103,33 +103,31 @@ class DetailMemoLongClickRecyclerViewAdapter (val context: Context,
     }
 
     private fun removeMemoBtn() {
-        CoroutineScope(Dispatchers.IO).launch {
 
-            val memoID = detailMemo.memoId
-            val detailMemoID = detailMemo.id
+        val memoID = detailMemo.memoId
+        val detailMemoID = detailMemo.id
 
-            AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemoID)
+        AppDataBase.instance.detailMemoDao().deleteDetailMemoByID(detailMemoID)
 
-            //알람 업데이트
-            val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
-            if(tmpMemo.setAlarm) {
-                //알람설정 돼 있었다면 알람재설정
-                AlarmHandler().setMemoAlarm(context, tmpMemo.id)
-            }
-            if(tmpMemo.fixNotify) {
-                //고성설정 돼 있었다면 고정재설정
-                FixNotifyHandler().setMemoFixNotify(context, tmpMemo.id)
-            }
-
-            memoListUpdateViewModel.getRecentDetailMemoList(memoID)
-
-            (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
-                if(it is DetailFragment) {
-                    it.onResume()
-                    DetailMemoDeleteSnackBar(context, it.viewDataBinding.root, detailMemo, memoListUpdateViewModel).showSnackBar()
-                }
-            }
-
+        //알람 업데이트
+        val tmpMemo = AppDataBase.instance.memoDao().getMemoById(memoID)
+        if(tmpMemo.setAlarm) {
+            //알람설정 돼 있었다면 알람재설정
+            AlarmHandler().setMemoAlarm(context, tmpMemo.id)
         }
+        if(tmpMemo.fixNotify) {
+            //고성설정 돼 있었다면 고정재설정
+            FixNotifyHandler().setMemoFixNotify(context, tmpMemo.id)
+        }
+
+        memoListUpdateViewModel.getRecentDetailMemoList(memoID)
+
+        (context as MainActivity).supportFragmentManager.findFragmentById(R.id.main_container)?.let {
+            if(it is DetailFragment) {
+                it.onResume()
+                DetailMemoDeleteSnackBar(context, it.viewDataBinding.root, detailMemo, memoListUpdateViewModel).showSnackBar()
+            }
+        }
+
     }
 }

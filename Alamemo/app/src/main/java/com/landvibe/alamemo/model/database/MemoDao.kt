@@ -35,7 +35,10 @@ interface MemoDao {
     suspend fun getRepeatScheduleMemo(type: Int = 3): List<Memo>
 
     @Query("DELETE FROM Memo Where id = :id")
-    suspend fun deleteMemoByID(id: Long)
+    suspend fun suspendDeleteMemoByID(id: Long)
+
+    @Query("DELETE FROM Memo Where id = :id")
+    fun deleteMemoByID(id: Long)
 
     @Query("UPDATE Memo SET type = :type Where id = :id")
     suspend fun modifyMemoType(id: Long, type: Int)

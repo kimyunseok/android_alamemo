@@ -23,7 +23,10 @@ interface DetailMemoDao {
     suspend fun deleteDetailMemo(detailMemo: DetailMemo)
 
     @Query("DELETE FROM DetailMemo Where id = :id")
-    suspend fun deleteDetailMemoByID(id: Long)
+    suspend fun suspendDeleteDetailMemoByID(id: Long)
+
+    @Query("DELETE FROM DetailMemo Where id = :id")
+    fun deleteDetailMemoByID(id: Long)
 
     @Query("DELETE FROM DetailMemo Where memoId = :memoId")
     suspend fun deleteDetailMemoByMemoID(memoId: Long)
