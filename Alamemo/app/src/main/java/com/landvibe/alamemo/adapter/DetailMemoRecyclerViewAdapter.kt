@@ -9,8 +9,8 @@ import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.HolderDetailBinding
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.ui.activity.MainActivity
-import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.dialog.DetailMemoClickDialog
+import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.ui.DetailMemoHolderViewModel
 

@@ -3,9 +3,6 @@ package com.landvibe.alamemo.util
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.model.database.AppDataBase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class MemoUtil {

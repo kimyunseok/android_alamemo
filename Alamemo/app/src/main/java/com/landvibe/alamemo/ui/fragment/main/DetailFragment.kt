@@ -14,14 +14,12 @@ import com.landvibe.alamemo.databinding.FragmentDetailBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
-import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.snackbar.DetailMemoDeleteSnackBar
 import com.landvibe.alamemo.util.DetailMemoDiffUtil
-import com.landvibe.alamemo.util.MemoDiffUtil
 import com.landvibe.alamemo.util.MemoUtil
 import com.landvibe.alamemo.util.SwipeAction
 import com.landvibe.alamemo.viewmodel.aac.DetailFragmentViewModel

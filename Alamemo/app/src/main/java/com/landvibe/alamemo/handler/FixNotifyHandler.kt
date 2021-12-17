@@ -7,9 +7,9 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.util.MemoUtil
 import kotlinx.coroutines.CoroutineScope

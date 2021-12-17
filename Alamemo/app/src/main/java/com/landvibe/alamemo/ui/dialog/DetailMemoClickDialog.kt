@@ -9,8 +9,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.DetailMemoLongClickRecyclerViewAdapter
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.DialogMemoMenuBinding
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -11,20 +11,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.databinding.HolderLongClickMenuBinding
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
-import com.landvibe.alamemo.viewmodel.ui.LongClickViewModel
+import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.fragment.add.DetailAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.ui.snackbar.DetailMemoDeleteSnackBar
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.landvibe.alamemo.viewmodel.ui.LongClickViewModel
 
 class DetailMemoLongClickRecyclerViewAdapter (val context: Context,
                                               val dialog: BottomSheetDialogFragment,

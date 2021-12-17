@@ -1,8 +1,6 @@
 package com.landvibe.alamemo.util
 
-import com.landvibe.alamemo.model.data.memo.Memo
 import java.util.*
-import kotlin.Comparator
 
 /**
 * 날짜 관련 기능을 모아놓은 클래스

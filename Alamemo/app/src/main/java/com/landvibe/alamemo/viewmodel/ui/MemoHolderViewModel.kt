@@ -3,7 +3,6 @@ package com.landvibe.alamemo.viewmodel.ui
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.util.AboutDay
 import com.landvibe.alamemo.util.MemoUtil
-import java.util.*
 
 class MemoHolderViewModel(val memo: Memo) {
 

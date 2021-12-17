@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.databinding.HolderIconTypeBinding
-import com.landvibe.alamemo.viewmodel.ui.IconTypeViewModel
 import com.landvibe.alamemo.util.IconTypeDiffUtil
+import com.landvibe.alamemo.viewmodel.ui.IconTypeViewModel
 
 class IconTypeSelectRecyclerViewAdapter(context: Context, val itemList: MutableList<IconTypeViewModel>,
                                         private val iconSelectRecyclerViewAdapter: IconSelectRecyclerViewAdapter): RecyclerView.Adapter<IconTypeSelectRecyclerViewAdapter.Holder>() {

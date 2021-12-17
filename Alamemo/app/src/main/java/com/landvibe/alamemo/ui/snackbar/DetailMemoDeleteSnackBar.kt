@@ -10,9 +10,6 @@ import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.detail.DetailMemo
 import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DetailMemoDeleteSnackBar(context: Context, rootView: View, val detailMemo: DetailMemo?,
                                val memoListUpdateViewModel: MemoListUpdateViewModel) {

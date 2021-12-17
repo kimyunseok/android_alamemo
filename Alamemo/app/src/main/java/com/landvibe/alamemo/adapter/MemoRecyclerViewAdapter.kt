@@ -8,19 +8,16 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.HolderMemoBinding
-import com.landvibe.alamemo.ui.activity.MainActivity
-import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
-import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.model.data.memo.Memo
 import com.landvibe.alamemo.model.database.AppDataBase
-import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
+import com.landvibe.alamemo.ui.activity.MainActivity
 import com.landvibe.alamemo.ui.dialog.MemoLongClickDialog
+import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
+import com.landvibe.alamemo.ui.fragment.main.DetailFragment
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.landvibe.alamemo.viewmodel.ui.MemoHolderViewModel
 
 class MemoRecyclerViewAdapter(val context: Context, var itemList: MutableList<Memo>, val memoListUpdateViewModel: MemoListUpdateViewModel): RecyclerView.Adapter<MemoRecyclerViewAdapter.Holder>() {
 

@@ -1,22 +1,17 @@
 package com.landvibe.alamemo.ui.fragment.main
 
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.FragmentPageAdapter
 import com.landvibe.alamemo.databinding.FragmentMainBinding
 import com.landvibe.alamemo.databinding.FragmentTabBinding
 import com.landvibe.alamemo.databinding.HolderTabButtonBinding
-import com.landvibe.alamemo.repository.DetailMemoRepository
-import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.ui.base.BaseTabFragment
 import com.landvibe.alamemo.ui.fragment.add.MemoAddOrEditFragment
 import com.landvibe.alamemo.ui.fragment.helper.HelperFragment
-import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.ui.TabButtonViewModel
-import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
 
 class MainFragment: BaseFragment<FragmentMainBinding>() {
     override val layoutId: Int = R.layout.fragment_main

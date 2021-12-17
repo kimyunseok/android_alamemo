@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.MemoRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.FragmentTabBinding

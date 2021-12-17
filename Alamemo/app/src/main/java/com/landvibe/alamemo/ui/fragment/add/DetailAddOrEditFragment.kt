@@ -5,11 +5,11 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.databinding.FragmentDetailAddOrEditBinding
-import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
+import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.ui.dialog.SelectIconDialog
 import com.landvibe.alamemo.viewmodel.aac.DetailMemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel

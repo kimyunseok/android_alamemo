@@ -13,12 +13,12 @@ import com.landvibe.alamemo.handler.AlarmHandler
 import com.landvibe.alamemo.handler.FixNotifyHandler
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
-import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
-import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
 import com.landvibe.alamemo.ui.base.BaseFragment
 import com.landvibe.alamemo.ui.dialog.SelectIconDialog
+import com.landvibe.alamemo.viewmodel.aac.MemoAddOrEditViewModel
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
+import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoViewModelFactory
 
 class MemoAddOrEditFragment: BaseFragment<FragmentMemoAddOrEditBinding>() {
     override val layoutId: Int = R.layout.fragment_memo_add_or_edit

@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.landvibe.alamemo.model.data.detail.DetailMemo
-import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.model.data.memo.Memo
+import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.util.EventWrapper
 import kotlinx.coroutines.CoroutineScope
