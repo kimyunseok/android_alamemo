@@ -79,12 +79,7 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
                 MemoUtil().finishScheduleBeforeCurrentTime(it)
             }
 
-            MemoUtil().sortMemoList(it)
-
-            //종료 일정은 최신순으로 보여준다.
-            if(type == 3) {
-                it.reverse()
-            }
+            MemoUtil().sortMemoList(it, type)
 
             setRecyclerView(it)
 
@@ -175,7 +170,8 @@ abstract class BaseTabFragment<T: FragmentTabBinding>() : Fragment() {
             //일정 중에서 오늘날짜보다 지난것들은 종료처리.
             MemoUtil().finishScheduleBeforeCurrentTime(newItemList)
         }
-        MemoUtil().sortMemoList(newItemList)
+
+        MemoUtil().sortMemoList(newItemList, type)
 
         //recyclerViewAdapter.notifyDataSetChanged() - 대체하기 권장하지 않는 코드
 

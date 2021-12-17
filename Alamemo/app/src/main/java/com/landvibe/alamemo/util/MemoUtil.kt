@@ -102,7 +102,7 @@ class MemoUtil {
         }
     }
 
-    fun sortMemoList(itemList: MutableList<Memo>) {
+    fun sortMemoList(itemList: MutableList<Memo>, type: Int) {
         itemList.sortWith(compareBy<Memo> {it.scheduleDateYear}
             .thenBy { it.scheduleDateMonth }
             .thenBy { it.scheduleDateDay }
@@ -111,6 +111,11 @@ class MemoUtil {
             .thenBy { it.alarmStartTimeHour }
             .thenBy { it.alarmStartTimeMinute }
         )
+
+        //종료 일정은 최신순으로 보여준다.
+        if(type == 4) {
+            itemList.reverse()
+        }
     }
 
     fun sortDetailMemoList(itemList: MutableList<DetailMemo>?) {
