@@ -11,6 +11,7 @@
 - BroadcastReceiver를 통해 알람을 설정할 수 있도록 만들었고, PendingIntent를 같이 사용해서 만들었다. 이를 통해 부팅할 때도 설정된 알람들을 설정할 수 있었다.
 - Android 8 이상의 폰에 알람이 갈 수 있도록 NotificationChannel을 만들었다.
 - BaseActivity, BaseFragment를 사용해서 코드의 중복을 줄였다.
+- 2021.12.17 Repository 패턴을 사용해서 Fragment에서는 Room DB에 접근 시 Repository를 이용하였다.
 ##
 ### 앱 스크린샷
 ##
