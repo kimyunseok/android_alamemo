@@ -69,7 +69,7 @@ class AlarmHandler {
 
         alarmCalendar.set(Calendar.HOUR_OF_DAY, alarmHour)
         alarmCalendar.set(Calendar.MINUTE, alarmMinute)
-        alarmCalendar.set(Calendar.SECOND, 1)
+        alarmCalendar.set(Calendar.SECOND, 0)
 
         if(memo.alarmStartTimeType == 1) {
             //매일 알람이 설정됐다면, 매일 정해진 시간에 알람을 울려주면 된다.
@@ -166,7 +166,7 @@ class AlarmHandler {
         if(alarmHour != null && alarmMinute != null) {
             //매일 알람을 울려야하는데, 현재 알람 시간을 지난 경우, 알람 달력에 1일을 더 해준다.
             if( todayCalendar.get(Calendar.HOUR_OF_DAY) > alarmHour ||
-                (todayCalendar.get(Calendar.HOUR_OF_DAY) == alarmHour && todayCalendar.get(Calendar.MINUTE) > alarmMinute ) ) {
+                (todayCalendar.get(Calendar.HOUR_OF_DAY) == alarmHour && todayCalendar.get(Calendar.MINUTE) >= alarmMinute ) ) {
                 alarmCalendar.add(Calendar.DAY_OF_MONTH, 1)
             }
         }
