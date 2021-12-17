@@ -24,37 +24,6 @@ abstract class AppDataBase: RoomDatabase() {
 
     class Converter {
         @TypeConverter
-        fun convertIntegerLiveDataToInt(data: MutableLiveData<Int>): Int {
-            return data.value ?: 0
-        }
-
-        @TypeConverter
-        fun convertIntegerToLiveData(data: Int): MutableLiveData<Int> {
-            return MutableLiveData(data)
-        }
-
-        @TypeConverter
-        fun convertStringLiveDataToString(data: MutableLiveData<String>): String {
-            return data.value.toString()
-        }
-
-        @TypeConverter
-        fun convertStringToLiveData(data: String): MutableLiveData<String> {
-            return MutableLiveData(data)
-        }
-
-
-        @TypeConverter
-        fun convertBooleanLiveDataToBoolean(data: MutableLiveData<Boolean>): Boolean {
-            return data.value ?: false
-        }
-
-        @TypeConverter
-        fun convertBooleanToLiveData(data: Boolean): MutableLiveData<Boolean> {
-            return MutableLiveData(data)
-        }
-
-        @TypeConverter
         fun convertCharMutableListToString(data: MutableList<Char>): String {
             var ret = ""
             for(charData in data) {

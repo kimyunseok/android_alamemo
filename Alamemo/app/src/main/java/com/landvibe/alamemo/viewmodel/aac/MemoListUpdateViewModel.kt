@@ -25,7 +25,11 @@ class MemoListUpdateViewModel(private val memoRepository: MemoRepository,
     fun getRecentMemoList(_type: Int) {
         Log.d("MemoListUpdate", "get Recent Memo List - type is $_type")
         type = _type
-        val memoList = memoRepository.getMemoByType(_type)
+        val memoList = if(type != 4) {
+            memoRepository.getMemoByType(type)
+        } else {
+            memoRepository.getFinishedMemo()
+        }
 
         _recentMemoList.value = EventWrapper(memoList.toMutableList())
     }

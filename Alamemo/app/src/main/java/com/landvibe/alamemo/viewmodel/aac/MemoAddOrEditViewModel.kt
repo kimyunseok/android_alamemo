@@ -119,14 +119,13 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
         _memoId.postValue(id)
 
         // 이전 Type 저장해서 이전 Type도 newList로 Update.
-        prevType = if(memo.type == 4) {
-            _memoType.postValue(1)
+        prevType = if(memo.scheduleFinish) {
             4
         } else {
-            _memoType.postValue(memo.type)
             memo.type
         }
 
+        _memoType.postValue(memo.type)
         memoIcon.postValue(memo.icon)
         memoTitle.postValue(memo.title)
 
@@ -199,7 +198,8 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                         fixNotify = fixNotify,
                         setAlarm = setAlarm,
                         repeatDay = memoRepeatDay,
-                        alarmStartTimeType = memoAlarmStartTimeType
+                        alarmStartTimeType = memoAlarmStartTimeType,
+                        scheduleFinish = false
                     )
                 } else {
                     //메모 새로 생성하기라면 메모 삽입
@@ -219,7 +219,8 @@ class MemoAddOrEditViewModel(private val memoRepository: MemoRepository): ViewMo
                             fixNotify = fixNotify,
                             setAlarm = setAlarm,
                             repeatDay = memoRepeatDay,
-                            alarmStartTimeType = memoAlarmStartTimeType
+                            alarmStartTimeType = memoAlarmStartTimeType,
+                            scheduleFinish = false
                         )
                     )
 

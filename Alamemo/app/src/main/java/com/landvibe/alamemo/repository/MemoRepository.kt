@@ -10,6 +10,7 @@ class MemoRepository {
     suspend fun insertMemo(memo: Memo) = memoDataBase.suspendInsertMemo(memo)
     fun getMemoById(id: Long) = memoDataBase.getMemoById(id)
     fun getMemoByType(type: Int) = memoDataBase.getMemoByType(type)
+    fun getFinishedMemo() = memoDataBase.getFinishedMemo()
     suspend fun deleteMemoByID(id: Long) = memoDataBase.suspendDeleteMemoByID(id)
     fun setMemoFinish(id: Long) = memoDataBase.setMemoFinish(id)
     suspend fun modifyMemo(id: Long, type: Int, icon: String,
@@ -17,7 +18,7 @@ class MemoRepository {
                    scheduleDateMonth: Int, scheduleDateDay: Int,
                    scheduleDateHour: Int, scheduleDateMinute: Int,
                    alarmStartTimeHour: Int, alarmStartTimeMinute: Int,
-                   fixNotify: Boolean, setAlarm: Boolean, repeatDay: MutableList<Char>, alarmStartTimeType: Int)
-            = memoDataBase.modifyMemo(id, type, icon, title, scheduleDateYear, scheduleDateMonth, scheduleDateDay, scheduleDateHour, scheduleDateMinute, alarmStartTimeHour, alarmStartTimeMinute, fixNotify, setAlarm, repeatDay, alarmStartTimeType)
+                   fixNotify: Boolean, setAlarm: Boolean, repeatDay: MutableList<Char>, alarmStartTimeType: Int, scheduleFinish: Boolean)
+            = memoDataBase.modifyMemo(id, type, icon, title, scheduleDateYear, scheduleDateMonth, scheduleDateDay, scheduleDateHour, scheduleDateMinute, alarmStartTimeHour, alarmStartTimeMinute, fixNotify, setAlarm, repeatDay, alarmStartTimeType, scheduleFinish)
 
 }

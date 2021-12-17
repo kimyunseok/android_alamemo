@@ -34,7 +34,11 @@ class TabFragmentViewModel(private val memoRepository: MemoRepository, private v
 
     fun getMemoList(type: Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            val memoList = memoRepository.getMemoByType(type)
+            val memoList = if(type != 4) {
+                memoRepository.getMemoByType(type)
+            } else {
+                memoRepository.getFinishedMemo()
+            }
             Log.d("get Memo From Room", memoList.toString())
             _memoList.postValue(memoList.toMutableList())
         }
