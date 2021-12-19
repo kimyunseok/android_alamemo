@@ -10,17 +10,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.landvibe.alamemo.R
 import com.landvibe.alamemo.adapter.DetailMemoLongClickRecyclerViewAdapter
-import com.landvibe.alamemo.adapter.MemoLongClickRecyclerViewAdapter
 import com.landvibe.alamemo.databinding.DialogMemoMenuBinding
-import com.landvibe.alamemo.model.database.AppDataBase
 import com.landvibe.alamemo.repository.DetailMemoRepository
 import com.landvibe.alamemo.repository.MemoRepository
 import com.landvibe.alamemo.viewmodel.aac.LongClickDialogViewModel
 import com.landvibe.alamemo.viewmodel.aac.MemoListUpdateViewModel
 import com.landvibe.alamemo.viewmodel.viewmodelfactory.MemoAndDetailMemoViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class DetailMemoClickDialog(val memoListUpdateViewModel: MemoListUpdateViewModel): BottomSheetDialogFragment() {
 

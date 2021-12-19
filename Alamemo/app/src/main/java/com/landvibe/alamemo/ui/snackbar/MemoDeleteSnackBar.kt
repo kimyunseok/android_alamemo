@@ -1,7 +1,6 @@
 package com.landvibe.alamemo.ui.snackbar
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
