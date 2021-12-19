@@ -21,4 +21,8 @@ class DetailMemoHolderViewModel(val detailMemo: DetailMemo) {
         return MemoUtil().getScheduleDateFormat(detailMemo.scheduleDateYear, detailMemo.scheduleDateMonth, detailMemo.scheduleDateDay)
     }
 
+    fun alreadyPassedDate(): Boolean {
+        return (getDDayInteger() < 0)
+    }
+
 }
