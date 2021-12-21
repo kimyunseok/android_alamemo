@@ -29,26 +29,28 @@ class MemoDeleteSnackBar(context: Context, rootView: View, val memo: Memo?, val 
 
     private fun undoDelete(context: Context) {
         memo?.let {
-            AppDataBase.instance.memoDao().insertMemo(it)
+            _memo ->
+            AppDataBase.instance.memoDao().insertMemo(_memo)
 
-            if(it.setAlarm) {
+            detailMemoList?.let {
+                _detailMemoList ->
+                for(data in _detailMemoList) {
+                    AppDataBase.instance.detailMemoDao().insertDetailMemo(data)
+                }
+            }
+
+            if(_memo.setAlarm) {
                 //알람설정 돼 있었다면 다시 알람설정
-                AlarmHandler().setMemoAlarm(context, it.id)
+                AlarmHandler().setMemoAlarm(context, _memo.id)
             }
 
-            if(it.fixNotify) {
+            if(_memo.fixNotify) {
                 //고성설정 돼 있었다면 다시 고정설정
-                FixNotifyHandler().setMemoFixNotify(context, it.id)
+                FixNotifyHandler().setMemoFixNotify(context, _memo.id)
             }
-            memoListUpdateViewModel.getRecentMemoList(it.type)
-            if(it.scheduleFinish) {
+            memoListUpdateViewModel.getRecentMemoList(_memo.type)
+            if(_memo.scheduleFinish) {
                 memoListUpdateViewModel.getRecentMemoList(4)
-            }
-        }
-
-        detailMemoList?.let {
-            for(data in it) {
-                AppDataBase.instance.detailMemoDao().insertDetailMemo(data)
             }
         }
     }
