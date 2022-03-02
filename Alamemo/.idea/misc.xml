@@ -55,7 +55,7 @@
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/drawable/text_background.xml" value="0.26481481481481484" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/font/font_memo.xml" value="0.29907407407407405" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_splash.xml" value="0.22" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/activity_splash.xml" value="0.16666666666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_helper.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_memo_long_click.xml" value="0.16666666666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/dialog_memo_menu.xml" value="0.14666666666666667" />
@@ -68,7 +68,7 @@
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_memo_add_or_edit.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/fragment_tab.xml" value="0.18" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_content.xml" value="0.20104166666666667" />
-        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_detail.xml" value="0.3138586956521739" />
+        <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_detail.xml" value="0.22" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_helper.xml" value="0.14666666666666667" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_icon.xml" value="0.19635416666666666" />
         <entry key="..\:/Development/git/alamemo_new/Alamemo/app/src/main/res/layout/holder_icon_type.xml" value="0.18" />

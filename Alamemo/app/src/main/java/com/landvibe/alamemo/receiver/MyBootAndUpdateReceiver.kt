@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.R
@@ -34,8 +35,12 @@ class MyBootAndUpdateReceiver: BroadcastReceiver() {
 
     private fun setBootNotification(context: Context) {
         val splashIntent = Intent(context, SplashActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, BOOT_REQUEST_CODE, splashIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(context, BOOT_REQUEST_CODE, splashIntent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        } else {
+            PendingIntent.getActivity(context, BOOT_REQUEST_CODE, splashIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        }
         val builder = NotificationCompat.Builder(context, context.getString(R.string.alarm_channel_id))
             .setSmallIcon(R.drawable.iconfinder_icon)
             .setContentTitle(context.getString(R.string.memo_emoji) + " " + context.getString(R.string.app_name))

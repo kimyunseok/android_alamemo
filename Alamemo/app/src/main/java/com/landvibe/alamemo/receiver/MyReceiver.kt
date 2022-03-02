@@ -5,6 +5,7 @@ import android.app.TaskStackBuilder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.R
@@ -57,7 +58,11 @@ class MyReceiver: BroadcastReceiver() {
 
         pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(mainActivityIntent)
-            getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            } else {
+                getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+            }
         }
     }
 
@@ -107,7 +112,7 @@ class MyReceiver: BroadcastReceiver() {
                 //dDay < 0
                 builder.setContentText(memo.title
                         + context.getString(R.string.notification_is) + " "
-                        + dDay.toString()
+                        + (0 - dDay).toString()
                         + context.getString(R.string.notification_past_is_over)
                         + detailListText
                 )

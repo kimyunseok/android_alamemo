@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.model.data.memo.Memo
@@ -54,9 +55,17 @@ class AlarmHandler {
     private fun initPendingIntent(context: Context, memoId: Long) {
         val receiverIntent = Intent(context, MyReceiver::class.java).putExtra("memoId", memoId)
 
-        pendingIntent = PendingIntent.getBroadcast(
-            context, memoId.toInt(), receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(
+                context,
+                memoId.toInt(), receiverIntent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        } else {
+            PendingIntent.getBroadcast(
+                context,
+                memoId.toInt(), receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
     }
 
     private fun initAlarmManagerForSchedule(context: Context, memo: Memo) {
@@ -177,10 +186,18 @@ class AlarmHandler {
             context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(context, MyReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            memoId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
+
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(
+                context,
+                memoId.toInt(), intent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        } else {
+            PendingIntent.getBroadcast(
+                context,
+                memoId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
         alarmManager.cancel(pendingIntent) // 알람취소
         
         // 상단바에 띄워져 있는 알람도 삭제.

@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.landvibe.alamemo.R
@@ -55,7 +56,11 @@ class FixNotifyHandler {
         pendingIntent = TaskStackBuilder.create(context).run {
             addParentStack(MainActivity::class.java)
             addNextIntentWithParentStack(mainActivityIntent)
-            getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            } else {
+                getPendingIntent(memo.id.toInt(), PendingIntent.FLAG_UPDATE_CURRENT)
+            }
             //요청 코드를 메모Id를 Int로 변환해서 쓰면 위험하긴 하지만 21억번 메모를 할 일은 없을 것 같다...
         }
     }
